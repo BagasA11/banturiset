@@ -10,19 +10,20 @@ import (
 
 type User struct {
 	gorm.Model
-	ID            uint `gorm:"primaryKey"`
-	FName         string
-	Email         string `gorm:"type:string; size:20; not null; unique"`
+	ID            uint   `gorm:"primaryKey"`
+	FName         string `gorm:"not null"`
+	Email         string `gorm:"type:string; size:20; not null; unique; <-:create"`
 	Password      string `gorm:"not null"`
 	Phone         string `gorm:"not null"`
-	Role          string `gorm:"index not null"`
+	Role          string `gorm:"index; not null; <-:create"`
 	Institute     string `gorm:"not null"`
 	InstituteAddr string `gorm:"not null"`
 	PostCode      string `gorm:"not null"`
 	Bank          *string
+	NoRek         *string
 	ProfileUrl    *string
-	IsVerfied     string `gorm:"not null default:'false'"`
-	IsbBlock      string `gorm:"not null default:'false'"`
+	IsVerfied     string `gorm:"not null; default:'false'"`
+	IsbBlock      string `gorm:"not null; default:'false'"`
 	Penyunting    Penyunting
 	Donatur       Donatur
 }

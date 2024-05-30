@@ -1,0 +1,43 @@
+package repository
+
+import (
+	"github.com/bagasa11/banturiset/api/models"
+	"github.com/bagasa11/banturiset/config"
+	"gorm.io/gorm"
+)
+
+type UserRepo struct {
+	DB *gorm.DB
+}
+
+func NewUserRepo() *UserRepo {
+	return &UserRepo{
+		DB: config.GetDB(),
+	}
+}
+
+func (ur *UserRepo) Create(u models.User) (uint, error) {
+	tx := ur.DB.Begin()
+	if err := tx.Create(&u).Error; err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+	tx.Commit()
+	return u.ID, nil
+}
+
+func (ur *UserRepo) FindID(id uint) (models.User, error) {
+	var user models.User
+	err := ur.DB.Where("id = ?", false).First(&user).Error
+	return user, err
+}
+
+func (ur *UserRepo) SetAvatar(id uint, url string) error {
+	tx := ur.DB.Begin()
+	if err := tx.Model(&models.User{}).Where("id = ?", id).Update("profile_url", url).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+}
