@@ -24,6 +24,7 @@ type User struct {
 	ProfileUrl    *string
 	IsVerfied     string `gorm:"not null; default:'false'"`
 	IsbBlock      string `gorm:"not null; default:'false'"`
+	Peneliti      Peneliti
 	Penyunting    Penyunting
 	Donatur       Donatur
 }
