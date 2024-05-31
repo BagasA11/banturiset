@@ -58,3 +58,7 @@ func (us *UserService) CreatePeneliti(userID uint, req dto.PenelitiRegister) err
 	}
 	return us.Peneliti.Create(p)
 }
+
+func (us *UserService) CheckID(id uint) error {
+	return us.User.CheckID(id)
+}

@@ -71,6 +71,14 @@ func (uc *UsersController) DonaturCreate(c *gin.Context) {
 		return
 	}
 
+	if err := uc.Services.CheckID(uint(userID)); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "user id tidak ditemukan",
+			"error": err.Error(),
+		})
+		return
+	}
+
 	if err := uc.Services.CreateDonatur(uint(userID)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "tidak dapat menambahkan data donatur",
@@ -106,6 +114,14 @@ func (uc *UsersController) PenelitiCreate(c *gin.Context) {
 			break
 		}
 		c.JSON(http.StatusBadRequest, errorMessage)
+		return
+	}
+
+	if err := uc.Services.CheckID(uint(userID)); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "user id tidak ditemukan",
+			"error": err.Error(),
+		})
 		return
 	}
 

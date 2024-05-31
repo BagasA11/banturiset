@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/bagasa11/banturiset/config"
+
+	"github.com/bagasa11/banturiset/routes"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
@@ -13,5 +14,8 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println("error", config.InitDB())
+	config.InitDB()
+
+	r := gin.Default()
+	routes.RegisterRoutes(r)
 }

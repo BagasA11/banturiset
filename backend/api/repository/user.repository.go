@@ -32,6 +32,10 @@ func (ur *UserRepo) FindID(id uint) (models.User, error) {
 	return user, err
 }
 
+func (ur *UserRepo) CheckID(id uint) error {
+	return ur.DB.Select("ID").First(&models.User{}, id).Error
+}
+
 func (ur *UserRepo) SetAvatar(id uint, url string) error {
 	tx := ur.DB.Begin()
 	if err := tx.Model(&models.User{}).Where("id = ?", id).Update("profile_url", url).Error; err != nil {
