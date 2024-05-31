@@ -6,6 +6,6 @@ import (
 
 type Penyunting struct {
 	gorm.Model
-	NIP    string `gorm:"type:string; primaryKey; unique"`
+	NIP    string `gorm:"type:string; primaryKey; <-:create"`
 	UserID uint
 }
