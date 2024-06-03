@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/bagasa11/banturiset/config"
 
@@ -10,20 +11,20 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateToken(userID uint, email string, role string, roleID uint) (string, error) {
+func GenerateToken(userID uint, email string, role string) (string, error) {
 	claims := &config.JwtClaims{
-		ID:     userID,
-		Email:  email,
-		Role:   role,
-		RoleID: roleID,
+		ID:    userID,
+		Email: email,
+		Role:  role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(2 * time.Hour)),
 		},
 	}
 
-	accessToken, err := jwt.NewWithClaims(jwt.SigningMethodRS256, claims).SignedString(config.JWT_KEY)
+	accessToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString(config.JWT_KEY)
 	if err != nil {
 		fmt.Println("error when create jwt.. ", err)
+		log.Fatal(err)
 		return "", err
 	}
 	return accessToken, err
@@ -48,7 +49,7 @@ func UpdateToken(oldToken string) (string, error) {
 		return "", err
 	}
 
-	newToken, err := GenerateToken(claims.ID, claims.Email, claims.Role, claims.RoleID)
+	newToken, err := GenerateToken(claims.ID, claims.Email, claims.Role)
 	if err != nil {
 		return "", err
 	}

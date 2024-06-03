@@ -26,7 +26,7 @@ func ValidatePattern(format string, str string) bool {
 	}
 
 	if slices.Contains([]string{"post", "post code", "kode pos", "pos"}, strings.ToLower(format)) {
-		if match, _ := regexp.MatchString("abcdefghizklmnopqrstuvwxyz@#$;,.}|-_", str); match {
+		if match, _ := regexp.MatchString("0123456789", str); !match {
 			fmt.Println(str)
 			return false
 		}

@@ -45,3 +45,12 @@ func (ur *UserRepo) SetAvatar(id uint, url string) error {
 	tx.Commit()
 	return nil
 }
+
+func (ur *UserRepo) WhereVerified(email string) (models.User, error) {
+	var u models.User
+	if err := ur.DB.Where("email = ?", email).First(&u).Error; err != nil {
+		return u, err
+	}
+
+	return u, nil
+}

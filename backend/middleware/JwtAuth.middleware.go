@@ -37,7 +37,6 @@ func JwtAuth() gin.HandlerFunc {
 		c.Set("id", claims.ID)
 		c.Set("email", claims.Email)
 		c.Set("role", claims.Role)
-		c.Set("rid", claims.RoleID)
 
 		c.Next()
 	}

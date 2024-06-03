@@ -36,7 +36,7 @@ func (us *UserService) UserRegister(req dto.UserRegister) (uint, error) {
 		FName:         req.FName,
 		Email:         req.Email,
 		Password:      req.Password,
-		Phone:         req.Password,
+		Phone:         req.Phone,
 		Role:          req.Role,
 		Institute:     req.Institute,
 		InstituteAddr: req.InstAddr,

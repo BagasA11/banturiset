@@ -13,7 +13,7 @@ type User struct {
 	FName         string `gorm:"not null"`
 	Email         string `gorm:"type:string; size:20; not null; unique; <-:create"`
 	Password      string `gorm:"not null"`
-	Phone         string `gorm:"not null"`
+	Phone         string `gorm:"not null; unique"`
 	Role          string `gorm:"index; not null; <-:create"`
 	Institute     string `gorm:"not null"`
 	InstituteAddr string `gorm:"not null"`

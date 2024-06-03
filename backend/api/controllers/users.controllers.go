@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/bagasa11/banturiset/api/dto"
+
 	"github.com/bagasa11/banturiset/api/services"
 	"github.com/bagasa11/banturiset/helpers"
 	"github.com/gin-gonic/gin"
@@ -190,7 +191,7 @@ func (uc *UsersController) NeedVerify(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "header tidak lengkap")
 		return
 	}
-	if strings.ToLower(role.(string)) != "penyunting" || strings.ToLower(role.(string)) != "reviewer" {
+	if strings.ToLower(role.(string)) != "penyunting" {
 		c.JSON(http.StatusForbidden, "laman khusus admin")
 		return
 	}

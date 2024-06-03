@@ -34,3 +34,8 @@ type DonaturRegister struct {
 type ReviewRegister struct {
 	NIP string `json:"nip" binding:"required,min=5"`
 }
+
+type Login struct {
+	Email    string `json:"email" binding:"required,min=8"`
+	Password string `json:"password" binding:"required,min=8"`
+}
