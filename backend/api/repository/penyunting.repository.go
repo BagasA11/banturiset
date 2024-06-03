@@ -16,9 +16,9 @@ func NewPenyuntingRepo() *PenyuntingRepo {
 	}
 }
 
-func (ur *PenyuntingRepo) NotVerified() ([]models.User, error) {
+func (ur *PenyuntingRepo) NotVerified(page uint) ([]models.User, error) {
 	var users []models.User
-	err := ur.DB.Where("is_verified = ?", false).Find(&users).Error
+	err := ur.DB.Where("is_verified = ?", false).Where("id BETWEEN ? AND ?", page, page+10).Find(&users).Error
 	return users, err
 }
 

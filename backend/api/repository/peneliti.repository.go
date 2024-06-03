@@ -25,3 +25,16 @@ func (pr *PenelitiRepo) Create(p models.Peneliti) error {
 	tx.Commit()
 	return nil
 }
+
+func (pr *PenelitiRepo) IsRedundant(userID uint) (bool, error) {
+	var peneliti []models.Peneliti
+	if err := pr.DB.Where("user_id = ?", userID).Find(&peneliti).Error; err != nil {
+		return false, err
+	}
+	// sudah daftar, berarti sudah ada userID
+	// len(peneliti) > 0
+	if len(peneliti) > 0 {
+		return false, nil
+	}
+	return true, nil
+}

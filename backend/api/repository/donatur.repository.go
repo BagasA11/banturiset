@@ -25,3 +25,17 @@ func (dr *DonaturRepo) Create(u models.Donatur) error {
 	tx.Commit()
 	return nil
 }
+
+func (dr *DonaturRepo) IsRedundant(userID uint) (bool, error) {
+	var donatur []models.Donatur
+
+	if err := dr.DB.Where("user_id = ?", userID).Find(&donatur).Error; err != nil {
+		return false, err
+	}
+	// sudah daftar, berarti sudah ada userID
+	// len(peneliti) > 0
+	if len(donatur) > 0 {
+		return false, nil
+	}
+	return true, nil
+}

@@ -32,8 +32,8 @@ func (ur *UserRepo) FindID(id uint) (models.User, error) {
 	return user, err
 }
 
-func (ur *UserRepo) CheckID(id uint) error {
-	return ur.DB.Select("ID").First(&models.User{}, id).Error
+func (ur *UserRepo) CheckID(id uint, role string) error {
+	return ur.DB.Select("ID").Where("role = ?", role).First(&models.User{}, id).Error
 }
 
 func (ur *UserRepo) SetAvatar(id uint, url string) error {

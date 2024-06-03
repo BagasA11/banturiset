@@ -2,6 +2,8 @@ package services
 
 import (
 	"errors"
+	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/bagasa11/banturiset/api/dto"
@@ -48,6 +50,15 @@ func (us *UserService) CreateDonatur(userID uint) error {
 	d := models.Donatur{
 		UserID: userID,
 	}
+
+	rd, err := us.Donatur.IsRedundant(d.UserID)
+	if err != nil {
+		return err
+	}
+	if !rd {
+		return fmt.Errorf("peneliti dengan userID: %d sudah terdaftar", d.UserID)
+	}
+
 	return us.Donatur.Create(d)
 }
 
@@ -56,9 +67,30 @@ func (us *UserService) CreatePeneliti(userID uint, req dto.PenelitiRegister) err
 		NIP:    req.NIP,
 		UserID: userID,
 	}
+	// redundant check
+	rd, err := us.Peneliti.IsRedundant(p.UserID)
+	if err != nil {
+		return err
+	}
+	if !rd {
+		return fmt.Errorf("peneliti dengan userID: %d sudah terdaftar", p.UserID)
+	}
+
 	return us.Peneliti.Create(p)
 }
 
-func (us *UserService) CheckID(id uint) error {
-	return us.User.CheckID(id)
+func (us *UserService) CheckID(id uint, role string) error {
+	r := strings.ToLower(role)
+	if !slices.Contains([]string{"donatur", "peneliti", "researcher", "saintist"}, strings.ToLower(r)) {
+		return errors.New("role ditolak")
+	}
+	return us.User.CheckID(id, r)
+}
+
+func (us *UserService) Verifikasi(userID uint) error {
+	return us.Penyunting.Verifikasi(userID)
+}
+
+func (us *UserService) NotVerified(page uint) ([]models.User, error) {
+	return us.Penyunting.NotVerified(page)
 }

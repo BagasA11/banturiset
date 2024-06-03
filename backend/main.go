@@ -14,7 +14,9 @@ func main() {
 		panic(err)
 	}
 
-	config.InitDB()
+	if err := config.InitDB(); err != nil {
+		panic(err)
+	}
 
 	r := gin.Default()
 	routes.RegisterRoutes(r)
