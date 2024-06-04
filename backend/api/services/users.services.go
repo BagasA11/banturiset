@@ -87,7 +87,7 @@ func (us *UserService) CheckID(id uint, role string) error {
 	return us.User.CheckID(id, r)
 }
 
-func (us *UserService) Verifikasi(userID uint) error {
+func (us *UserService) Verifikasi(userID uint) (string, error) {
 	return us.Penyunting.Verifikasi(userID)
 }
 

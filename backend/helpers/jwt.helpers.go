@@ -3,6 +3,8 @@ package helpers
 import (
 	"fmt"
 	"log"
+	"slices"
+	"strings"
 
 	"github.com/bagasa11/banturiset/config"
 
@@ -11,11 +13,30 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+const penyunting string = "penyunting"
+const peneliti string = "peneliti"
+const donatur string = "donatur"
+
 func GenerateToken(userID uint, email string, role string) (string, error) {
+
+	r := ""
+	// penyunting
+	if slices.Contains([]string{"penyunting", "admin", "penelaah", "reviewer"}, strings.ToLower(role)) {
+		r = penyunting
+	}
+	// peneliti
+	if slices.Contains([]string{"peneliti", "ilmuwan", "researcher"}, strings.ToLower(role)) {
+		r = peneliti
+	}
+	if slices.Contains([]string{"donatur", "investor", "penyumbang"}, strings.ToLower(role)) {
+		r = donatur
+	}
+
+	fmt.Println("role: ", r)
 	claims := &config.JwtClaims{
 		ID:    userID,
 		Email: email,
-		Role:  role,
+		Role:  r,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(2 * time.Hour)),
 		},

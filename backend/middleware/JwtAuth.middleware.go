@@ -28,6 +28,7 @@ func JwtAuth() gin.HandlerFunc {
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": err.Error(),
+				"pesan": "token invalid",
 			})
 			c.Abort()
 			return

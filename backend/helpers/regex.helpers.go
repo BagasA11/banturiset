@@ -9,9 +9,15 @@ import (
 )
 
 func ValidatePattern(format string, str string) bool {
+	forbidden_char := "{}/|<>"
 	// emailF, _ := regexp.Compile(os.Getenv("REGEX_MAIL"))
 	var email = os.Getenv("REGEX_EMAIL")
 	phoneF := os.Getenv("REGEX_PHONE")
+	postf := os.Getenv("REGEX_POST")
+	if match, _ := regexp.MatchString(forbidden_char, str); match {
+		fmt.Println(match)
+		return false
+	}
 
 	if strings.Contains(strings.ToLower(format), "email") {
 		if match, _ := regexp.MatchString(email, str); !match {
@@ -26,7 +32,7 @@ func ValidatePattern(format string, str string) bool {
 	}
 
 	if slices.Contains([]string{"post", "post code", "kode pos", "pos"}, strings.ToLower(format)) {
-		if match, _ := regexp.MatchString("0123456789", str); !match {
+		if match, _ := regexp.MatchString(postf, str); !match {
 			fmt.Println(str)
 			return false
 		}

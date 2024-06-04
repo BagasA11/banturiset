@@ -1,10 +1,6 @@
 package services
 
 import (
-	"fmt"
-	"slices"
-	"strings"
-
 	"github.com/bagasa11/banturiset/api/dto"
 
 	"errors"
@@ -41,18 +37,8 @@ func (as *AuthService) Login(req dto.Login) (string, error) {
 	if u.IsbBlock {
 		return "", errors.New("akun ini telah diblockir")
 	}
-	r := ""
 
-	if slices.Contains([]string{"penyunting", "reviewer", "admin", "penelaah"}, strings.ToLower(u.Role)) {
-		r = "penyunting"
-	}
-	if slices.Contains([]string{"peneliti", "scientist", "researcher"}, strings.ToLower(u.Role)) {
-		r = "peneliti"
-	} else {
-		r = "donatur"
-	}
-	fmt.Println("role: ", r)
-	token, err := helpers.GenerateToken(u.ID, u.Email, r)
+	token, err := helpers.GenerateToken(u.ID, u.Email, u.Role)
 	if err != nil {
 		return "", err
 	}

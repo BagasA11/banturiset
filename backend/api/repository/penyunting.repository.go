@@ -22,17 +22,19 @@ func (ur *PenyuntingRepo) NotVerified(page uint) ([]models.User, error) {
 	return users, err
 }
 
-func (ur *PenyuntingRepo) Verifikasi(id uint) error {
+func (ur *PenyuntingRepo) Verifikasi(id uint) (string, error) {
+	var u models.User
 	tx := ur.DB.Begin()
-	if err := tx.Model(&models.User{}).Where("id = ?", id).Update("is_verified", true).Error; err != nil {
+	if err := tx.Model(&u).Where("id = ?", id).Update("is_verfied", true).Error; err != nil {
 		tx.Rollback()
-		return err
+		return "", err
 	}
 	tx.Commit()
-	return nil
+	return u.Email, nil
 }
 
 func (ur *PenyuntingRepo) Blokir(id uint) error {
+
 	tx := ur.DB.Begin()
 	if err := tx.Model(&models.User{}).Where("id = ?", id).Update("IsBlock", true).Error; err != nil {
 		tx.Rollback()

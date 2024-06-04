@@ -26,6 +26,7 @@ func NewUsersController() *UsersController {
 }
 
 func (uc *UsersController) UserRegistration(c *gin.Context) {
+
 	req := new(dto.UserRegister)
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
@@ -191,6 +192,9 @@ func (uc *UsersController) NeedVerify(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "header tidak lengkap")
 		return
 	}
+	if role.(string) == "" {
+		c.JSON(http.StatusBadGateway, "header role tidak ditemukan")
+	}
 	if strings.ToLower(role.(string)) != "penyunting" {
 		c.JSON(http.StatusForbidden, "laman khusus admin")
 		return
@@ -215,3 +219,55 @@ func (uc *UsersController) NeedVerify(c *gin.Context) {
 		"data": users,
 	})
 }
+
+func (uc *UsersController) Verifikasi(c *gin.Context) {
+	// admin page
+	role, exist := c.Get("role")
+	if !exist {
+		c.JSON(http.StatusBadRequest, "header tidak lengkap")
+		return
+	}
+	if !slices.Contains([]string{"penyunting", "admin", "penelaah"}, strings.ToLower(role.(string))) {
+		c.JSON(http.StatusForbidden, "laman khusus admin")
+		return
+	}
+
+	userID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "gagal mendapatkan id user",
+			"error": err.Error(),
+		})
+		return
+	}
+	_, err = uc.Services.Verifikasi(uint(userID))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"pesan": "gagal melakukan verifikasi user",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// if email == "" {
+	// 	c.JSON(http.StatusInternalServerError, "gagal mengambil email")
+	// 	return
+	// }
+
+	// if err := mail.Notify("verifikasi", email, 587); err != nil {
+	// 	c.JSON(http.StatusBadGateway, err.Error())
+	// 	return
+	//}
+
+	c.JSON(http.StatusOK, "verifikasi sukses")
+
+}
+
+// func (uc *UsersController) SendMail(c *gin.Context) {
+// 	if err := mail.Notify("verifikasi", "bagasmipa3@gmail.com", 587); err != nil {
+// 		c.JSON(http.StatusBadGateway, err.Error())
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, "ok")
+// }
