@@ -17,7 +17,7 @@ const penyunting string = "penyunting"
 const peneliti string = "peneliti"
 const donatur string = "donatur"
 
-func GenerateToken(userID uint, email string, role string) (string, error) {
+func GenerateToken(userID uint, email string, role string, roleID uint) (string, error) {
 
 	r := ""
 	// penyunting
@@ -34,9 +34,10 @@ func GenerateToken(userID uint, email string, role string) (string, error) {
 
 	fmt.Println("role: ", r)
 	claims := &config.JwtClaims{
-		ID:    userID,
-		Email: email,
-		Role:  r,
+		ID:     userID,
+		Email:  email,
+		Role:   r,
+		RoleID: roleID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(2 * time.Hour)),
 		},
@@ -70,7 +71,7 @@ func UpdateToken(oldToken string) (string, error) {
 		return "", err
 	}
 
-	newToken, err := GenerateToken(claims.ID, claims.Email, claims.Role)
+	newToken, err := GenerateToken(claims.ID, claims.Email, claims.Role, claims.RoleID)
 	if err != nil {
 		return "", err
 	}

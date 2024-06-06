@@ -39,6 +39,11 @@ func (ac *AuthController) Login(c *gin.Context) {
 		return
 	}
 
+	if req == nil {
+		c.JSON(http.StatusUnprocessableEntity, "body request kosong")
+		return
+	}
+
 	token, err := ac.Auth.Login(*req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())

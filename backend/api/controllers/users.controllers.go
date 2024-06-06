@@ -11,6 +11,7 @@ import (
 
 	"github.com/bagasa11/banturiset/api/services"
 	"github.com/bagasa11/banturiset/helpers"
+	"github.com/bagasa11/banturiset/mail"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
@@ -240,7 +241,7 @@ func (uc *UsersController) Verifikasi(c *gin.Context) {
 		})
 		return
 	}
-	_, err = uc.Services.Verifikasi(uint(userID))
+	email, err := uc.Services.Verifikasi(uint(userID))
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -250,24 +251,54 @@ func (uc *UsersController) Verifikasi(c *gin.Context) {
 		return
 	}
 
-	// if email == "" {
-	// 	c.JSON(http.StatusInternalServerError, "gagal mengambil email")
-	// 	return
-	// }
+	if email == "" {
+		c.JSON(http.StatusInternalServerError, "gagal mengambil email")
+		return
+	}
 
-	// if err := mail.Notify("verifikasi", email, 587); err != nil {
-	// 	c.JSON(http.StatusBadGateway, err.Error())
-	// 	return
-	//}
+	if err := mail.Notify("verifikasi", email, 587); err != nil {
+		c.JSON(http.StatusBadGateway, err.Error())
+		return
+	}
 
 	c.JSON(http.StatusOK, "verifikasi sukses")
 
 }
 
-// func (uc *UsersController) SendMail(c *gin.Context) {
-// 	if err := mail.Notify("verifikasi", "bagasmipa3@gmail.com", 587); err != nil {
-// 		c.JSON(http.StatusBadGateway, err.Error())
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, "ok")
-// }
+func (uc *UsersController) CompletePayment(c *gin.Context) {
+	id, exist := c.Get("id")
+	if !exist {
+		c.JSON(http.StatusInternalServerError, "header user id tidak ditemukan")
+		return
+	}
+
+	req := new(dto.PaymentInfos)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		validationErrs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			c.JSON(http.StatusBadRequest, "Invalid request")
+			return
+		}
+		var errorMessage string
+		for _, e := range validationErrs {
+			errorMessage = fmt.Sprintf("error in field %s condition: %s", e.Field(), e.ActualTag())
+			break
+		}
+		c.JSON(http.StatusBadRequest, errorMessage)
+		return
+	}
+
+	if !helpers.ValidateRekening(req.NoRek) {
+		c.JSON(http.StatusUnprocessableEntity, "format nomor rekening invalid")
+		return
+	}
+
+	if err := uc.Services.CompletePayentInfo(id.(uint), *req); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"pesan": "gagal mengupdate info pembayaran",
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, "ok")
+}

@@ -22,7 +22,7 @@ func InitDB() error {
 		return err
 	}
 
-	err = DB.AutoMigrate(&models.User{}, &models.Donatur{}, &models.Peneliti{}, &models.Penyunting{}, &models.Kategori{})
+	err = DB.AutoMigrate(&models.User{}, &models.Donatur{}, &models.Peneliti{}, &models.Penyunting{}, &models.Pengajuan{}, &models.Project{}, &models.BudgetDetails{})
 	// err = DB.AutoMigrate(&models.User{}, &models.Donatur{}, &models.Peneliti{}, &models.Penyunting{}, &models.Project{},
 	// 	&models.Kategori{}, &models.BudgetDetails{})
 	if err != nil {

@@ -6,5 +6,5 @@ type Peneliti struct {
 	NIP    string `gorm:"type:string; <-:create; size:20"`
 	UserID uint
 
-	// Project []Project
+	Project []Project
 }

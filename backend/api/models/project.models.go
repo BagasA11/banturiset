@@ -1,56 +1,55 @@
 package models
 
-// import (
-// 	"errors"
-// 	"slices"
-// 	"strings"
-// 	"time"
+import (
+	"errors"
 
-// 	"gorm.io/gorm"
-// )
+	"time"
 
-// type Project struct {
-// 	ID          uint   `gorm:"primaryKey"`
-// 	Title       string `gorm:"size:50"`
-// 	Desc        *string
-// 	ProposalUrl *string `gorm:"size:170"`
-// 	KlirensUrl  *string `gorm:"size:170"`
-// 	CreatedAt   time.Time
-// 	UpdatedAt   time.Time
-// 	FundUntil   time.Time
-// 	DeadLine    time.Time
-// 	Years       int8 `gorm:"not null; default:1"`
-// 	Milestone   int8 `gorm:"not null; default:1"`
-// 	TktLevel    int8 `gorm:"not null; default:1"`
-// 	Cost        float32
-// 	Status      string `gorm:"not null; size:10 "`
+	"gorm.io/gorm"
+)
 
-// 	PenelitiID uint
-// 	KategoriID uint
+type Project struct {
+	gorm.Model
+	ID          uint   `gorm:"primaryKey"`
+	Title       string `gorm:"size:50"`
+	Desc        string
+	ProposalUrl *string `gorm:"size:170"`
+	KlirensUrl  *string `gorm:"size:170"`
+	FundUntil   time.Time
+	DeadLine    time.Time
+	Milestone   int8    `gorm:"not null; default:1"`
+	TktLevel    int8    `gorm:"not null; default:1"`
+	Cost        float32 `gorm:"not null;"`
+	Status      int8    `gorm:"not null; size:10; default:0 "`
+	PesanRevisi *string
+	Fraud       bool `gorm:"not null; default:false"`
+	PengajuanID uint
+	Pengajuan   Pengajuan
+	PenelitiID  uint
+	Peneliti    Peneliti
 
-// 	Kategori      Kategori `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL; embedded;"`
-// 	Peneliti      Peneliti `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL; embedded"`
-// 	BudgetDetails []BudgetDetails
-// }
+	BudgetDetails []BudgetDetails
+}
 
-// func (u *Project) BeforeCreate(tx *gorm.DB) error {
-// 	tx.Statement.SetColumn("Status", "draft")
-// 	tx.Statement.SetColumn("CreatedAt", time.Now())
-// 	tx.Statement.SetColumn("DeadLine", (u.CreatedAt.Add(time.Duration(u.Years))))
-// 	// if fund > created_at + 3 bulan : error
-// 	// created_at + 1h * 24h * 30d * 3month => created_at + 3 months
-// 	if u.FundUntil.After(u.CreatedAt.Add(time.Hour * 24 * 30 * 4)) {
-// 		return errors.New("durasi pendanaan maksimum 3 bulan")
-// 	}
-// 	return nil
-// }
+func (p *Project) BeforeCreate(tx *gorm.DB) error {
+	if time.Now().After(p.Pengajuan.ClosedAt) {
+		return errors.New("pengajuan sudah ditutup")
+	}
+	if p.Cost < float32(0) {
+		return errors.New("biaya harus > 0")
+	}
+	tx.Statement.SetColumn("CreatedAt", time.Now())
+	tx.Statement.SetColumn("DeletedAt", time.Now())
+	tx.Statement.SetColumn("FundUntil", time.Now().Add(time.Hour*24*30*5))
+	return nil
+}
 
-// func (p *Project) BeforeUpdate(tx *gorm.DB) error {
-// 	status := []string{"diverifikasi", "terverifikasi", "verified", "verify", "valid", "validated", "divalidasi",
-// 		"accepted", "diterima"}
-// 	if slices.Contains(status, strings.ToLower(p.Status)) {
-// 		return errors.New("proyek yang sudah diverifikasi tidak dapat diubah")
-// 	}
-// 	tx.Statement.SetColumn("UpdatedAt", time.Now())
-// 	return nil
-// }
+func (p *Project) BeforeUpdate(tx *gorm.DB) error {
+
+	if p.Status > 0 {
+		return errors.New("project sudah diverifikasi dan tidak dapat diupdate")
+	}
+
+	tx.Statement.SetColumn("UpdatedAt", time.Now())
+	return nil
+}

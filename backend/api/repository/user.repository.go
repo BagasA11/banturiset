@@ -1,6 +1,9 @@
 package repository
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
 	"gorm.io/gorm"
@@ -53,4 +56,42 @@ func (ur *UserRepo) WhereVerified(email string) (models.User, error) {
 	}
 
 	return u, nil
+}
+
+func (ur *UserRepo) AdminLogin(email string) (models.User, error) {
+	fmt.Println("\nemail: ", email)
+	var admin models.User
+	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).Joins("Penyunting").First(&admin).Error; err != nil {
+		return admin, err
+	}
+	return admin, nil
+}
+func (ur *UserRepo) PenelitLogin(email string) (models.User, error) {
+	var peneliti models.User
+	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).Joins("Peneliti").First(&peneliti).Error; err != nil {
+		return peneliti, err
+	}
+	return peneliti, nil
+}
+
+func (ur *UserRepo) DonaturLogin(email string) (models.User, error) {
+	var donatur models.User
+	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).Joins("Donatur").First(&donatur).Error; err != nil {
+		return donatur, err
+	}
+	return donatur, nil
+
+}
+
+func (pr *UserRepo) Update(user *models.User) error {
+	if user == nil {
+		return errors.New("informasi update kosong")
+	}
+	tx := pr.DB.Begin()
+	if err := tx.Model(&models.User{}).Where("id = ?", user.ID).Updates(&user).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
 }

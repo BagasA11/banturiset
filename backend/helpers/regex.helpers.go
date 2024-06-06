@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+const RekeningPattern = "^\\d{10,16}$"
+
 func ValidatePattern(format string, str string) bool {
 	forbidden_char := "{}/|<>"
 	// emailF, _ := regexp.Compile(os.Getenv("REGEX_MAIL"))
@@ -36,6 +38,13 @@ func ValidatePattern(format string, str string) bool {
 			fmt.Println(str)
 			return false
 		}
+	}
+	return true
+}
+
+func ValidateRekening(input string) bool {
+	if match, _ := regexp.MatchString(RekeningPattern, input); !match {
+		return false
 	}
 	return true
 }

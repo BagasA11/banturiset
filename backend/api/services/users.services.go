@@ -94,3 +94,13 @@ func (us *UserService) Verifikasi(userID uint) (string, error) {
 func (us *UserService) NotVerified(page uint) ([]models.User, error) {
 	return us.Penyunting.NotVerified(page)
 }
+
+func (us *UserService) CompletePayentInfo(id uint, req dto.PaymentInfos) error {
+	u := models.User{
+		ID:    id,
+		Bank:  &req.Bank,
+		NoRek: &req.NoRek,
+	}
+
+	return us.User.Update(&u)
+}

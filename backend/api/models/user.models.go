@@ -22,7 +22,7 @@ type User struct {
 	NoRek         *string
 	ProfileUrl    *string
 	IsVerfied     bool       `gorm:"not null; default:false"`
-	IsbBlock      bool       `gorm:"not null; default:false"`
+	IsBlock       bool       `gorm:"not null; default:false"`
 	Peneliti      Peneliti   `gorm:"foreignKey:UserID"`
 	Penyunting    Penyunting `gorm:"foreignKey:UserID"`
 	Donatur       Donatur    `gorm:"foreignKey:UserID"`

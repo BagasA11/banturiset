@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
 	"gorm.io/gorm"
@@ -18,18 +20,19 @@ func NewPenyuntingRepo() *PenyuntingRepo {
 
 func (ur *PenyuntingRepo) NotVerified(page uint) ([]models.User, error) {
 	var users []models.User
-	err := ur.DB.Where("is_verfied = ?", false).Where("id BETWEEN ? AND ?", page, page+10).Find(&users).Error
+	var to = page * 10
+	err := ur.DB.Where("is_verfied = ?", false).Where("id BETWEEN ? AND ?", to-9, to).Find(&users).Error
 	return users, err
 }
 
 func (ur *PenyuntingRepo) Verifikasi(id uint) (string, error) {
 	var u models.User
-	tx := ur.DB.Begin()
-	if err := tx.Model(&u).Where("id = ?", id).Update("is_verfied", true).Error; err != nil {
-		tx.Rollback()
-		return "", err
+	if err := ur.DB.Where("is_verfied = ? AND is_block = ?", false, false).First(&u, id).Error; err != nil {
+		return "", fmt.Errorf("gagal melakukan verifikasi. error: %s", err.Error())
 	}
-	tx.Commit()
+
+	u.IsVerfied = true
+	ur.DB.Save(&u)
 	return u.Email, nil
 }
 

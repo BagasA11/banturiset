@@ -7,10 +7,10 @@ import (
 )
 
 type Penyunting struct {
-	ID       uint   `gorm:"primaryKey"`
-	NIP      string `gorm:"type:string; <-:create; size:20"`
-	UserID   uint
-	Kategori []Kategori
+	ID        uint   `gorm:"primaryKey"`
+	NIP       string `gorm:"type:string; <-:create; size:20"`
+	UserID    uint
+	Pengajuan []Pengajuan
 }
 
 func (p *Penyunting) BeforeCreate(tx *gorm.DB) error {

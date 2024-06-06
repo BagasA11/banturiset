@@ -1,22 +1,23 @@
 package models
 
-// import (
-// 	"errors"
+import (
+	"errors"
 
-// 	"gorm.io/gorm"
-// )
+	"gorm.io/gorm"
+)
 
-// type BudgetDetails struct {
-// 	ID        uint    `gorm:"primaryKey"`
-// 	Cost      float32 `gorm:"not null;"`
-// 	Desc      string  `gorm:"not null; size:265 "`
-// 	ProjectID uint
-// 	Project   Project `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-// }
+type BudgetDetails struct {
+	ID        uint `gorm:"primaryKey"`
+	Deskripsi string
+	Tahap     uint8   `gorm:"not null; default:1"`
+	Cost      float32 `gorm:"not null; default:0"`
+	ProjectID uint
+	Project   Project
+}
 
-// func (bd *BudgetDetails) BeforeCreate(tx *gorm.DB) error {
-// 	if int32(bd.Cost) < 0 {
-// 		return errors.New("budget harus > 0")
-// 	}
-// 	return nil
-// }
+func (bd *BudgetDetails) BeforeCreate(tx *gorm.DB) error {
+	if bd.Tahap > uint8(bd.Project.Milestone) {
+		return errors.New("tahap pendanaan tidak boleh lebih besar drpd milestone proyek")
+	}
+	return nil
+}
