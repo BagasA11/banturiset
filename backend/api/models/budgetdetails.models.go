@@ -11,13 +11,17 @@ type BudgetDetails struct {
 	Deskripsi string
 	Tahap     uint8   `gorm:"not null; default:1"`
 	Cost      float32 `gorm:"not null; default:0"`
+	Percent   uint8   `gorm:"not null; default:0"`
+
 	ProjectID uint
 	Project   Project
 }
 
 func (bd *BudgetDetails) BeforeCreate(tx *gorm.DB) error {
-	if bd.Tahap > uint8(bd.Project.Milestone) {
-		return errors.New("tahap pendanaan tidak boleh lebih besar drpd milestone proyek")
+
+	if bd.Percent >= 100 {
+		return errors.New("percentase budget tidak boleh mendekati 100%")
 	}
+
 	return nil
 }

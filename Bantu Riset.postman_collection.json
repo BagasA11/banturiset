@@ -1,0 +1,708 @@
+{
+	"info": {
+		"_postman_id": "b3262b8c-cb50-46d0-80f5-b6efa4ae1ec2",
+		"name": "Bantu Riset",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" width=\"2162\" height=\"1530\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34412920"
+	},
+	"item": [
+		{
+			"name": "Need Verify",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/user/verify?page=1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"verify"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": [
+				{
+					"name": "Need Verify",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE3ODM0ODYyfQ.Mj6ROpWpv6-LWsDeWwzFArLsET0B7B9kFUPCZHK_Odg"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/api/user/verify?page=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 08 Jun 2024 06:21:48 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "477"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"ID\": 1,\n            \"FName\": \"Bagas\",\n            \"Email\": \"bagasmipa3@gmail.com\",\n            \"Password\": \"$2a$10$hZTy0WjQieaozWEs1E/S3e/Gn5KDo2m06sTmfL4s4/deMwmdUVgpG\",\n            \"Phone\": \"+6282112897283\",\n            \"Role\": \"donatur\",\n            \"Institute\": \"Udinus\",\n            \"InstituteAddr\": \"jl. Imam Bonjol\",\n            \"PostCode\": \"13340\",\n            \"Bank\": null,\n            \"NoRek\": null,\n            \"ProfileUrl\": null,\n            \"IsVerfied\": false,\n            \"IsBlock\": false,\n            \"Peneliti\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Project\": null\n            },\n            \"Penyunting\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Pengajuan\": null\n            },\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Registrasi",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fname\": \"Bagas RS\",\n    \"email\":\"bagas321@gmail.com\",\n    \"role\":\"peneliti\",\n    \"phone\":\"+6282112897283\",\n    \"password\":\"12345678\",\n    \"institute\":\"Udinus\",\n    \"institute_address\":\"jl. Imam Bonjol\",\n    \"post\":\"13-34x0_$\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/register",
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Donatur",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"role\":\"donatur\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/user/donatur/create/1",
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Penelit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fname\": \"Bagas\",\n    \"email\":\"bagas123gmail.com\",\n    \"role\":\"donatur\",\n    \"phone\":\"082112897283\",\n    \"password\":\"12345678\",\n    \"institute\":\"Udinus\",\n    \"institute_address\":\"jl. Imam Bonjol\",\n    \"post\":\"13340\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/register",
+				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "verifikasi user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwiZXhwIjoxNzE3NDgyMzY3fQ.1rpFLQsSPlaTcT4PzreXalUV47Cm_XTEXsCjaEM8SGs"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/verifikasi/5",
+				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Melengkapi Informasi pembayaran",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful PUT request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwiZXhwIjoxNzE3NDgyMzY3fQ.1rpFLQsSPlaTcT4PzreXalUV47Cm_XTEXsCjaEM8SGs"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"bank\":\"BSI\",\n    \"no_rek\":\"7257491159\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/user/complete-payment",
+				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/info?id=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"info"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"oldToken\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/refresh"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\":\"admin01@gmail.com\",\r\n    \"role\":\"penyunting\",\r\n    \"password\":\"12345678\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/login"
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"admin01@gmail.com\",\r\n    \"role\":\"penyunting\",\r\n    \"password\":\"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/login"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 08 Jun 2024 06:21:02 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "230"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"pesan\": \"login sukses\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE3ODM0ODYyfQ.Mj6ROpWpv6-LWsDeWwzFArLsET0B7B9kFUPCZHK_Odg\"\n}"
+				}
+			]
+		},
+		{
+			"name": "create pengajuan",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE3NjgzOTcwfQ.UWP781o_Hx-0v58Et0UQJ9mpuFQSmr64s_w2jCs0wKY"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Teknologi Komputer dan AI\",\r\n    \"desc\":\"skema penelitian ini bertujuan untuk meneliti teknoloi Komputer dan AI\",\r\n    \"linkwa\":\"web.whatsapp.com\",\r\n    \"panduan\":\"\",\r\n    \"icon\":\"https://developers.xendit.co/api-reference/images/logo.png\",\r\n    \"closed_at\":\"1999-01-01T10:00:10+02:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/pengajuan/create"
+			},
+			"response": []
+		},
+		{
+			"name": "upload",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE3ODYwNTYwfQ.OmSc_pe6vKBYB2oKU-2LHRcNPJzmEC50wkjhVR-A8v8"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/Asus/OneDrive/Documents/Pictures/markleTree-Root.PNG"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/upload?folder=icon",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"upload"
+					],
+					"query": [
+						{
+							"key": "folder",
+							"value": "icon"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "upload",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Asus/Downloads/Bantu Riset (1).pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/upload?folder=proposal",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"upload"
+							],
+							"query": [
+								{
+									"key": "folder",
+									"value": "proposal"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 08 Jun 2024 13:30:26 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "66"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"pesan\": \"upload file sukses\",\n    \"url\": \"./file/proposal/d2h34be.pdf\"\n}"
+				}
+			]
+		},
+		{
+			"name": "upload Multi",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE3ODQzNTU1fQ.AQdjL6T15nngFFk5niU4YP2dI6K6sYlHZ7fpEyhYB3I"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files[]",
+							"type": "file",
+							"src": [
+								"/C:/Users/Asus/OneDrive/Documents/Pictures/markleTree-Root.PNG",
+								"/C:/Users/Asus/Downloads/Bantu Riset (1).pdf"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/upload/multi?folders=icon&folders=proposal",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"upload",
+						"multi"
+					],
+					"query": [
+						{
+							"key": "folders",
+							"value": "icon"
+						},
+						{
+							"key": "folders",
+							"value": "proposal"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "pengajuan dibuka",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxNzY4NDMzMX0.uou82rXd-Y_7cT2JQaOZt0-JYEh5CE7WY9HvGwdtKs"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/pengajuan/open"
+			},
+			"response": [
+				{
+					"name": "pengajuan dibuka",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/pengajuan/open"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 08 Jun 2024 06:21:26 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "455"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n            \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n            \"DeletedAt\": null,\n            \"ID\": 2,\n            \"Title\": \"Teknologi Komputer d\",\n            \"Desc\": \"skema penelitian ini bertujuan untuk meneliti teknoloi Komputer dan AI\",\n            \"LinkWa\": \"\",\n            \"LinkPanduan\": \"\",\n            \"IconUrl\": \"https://developers.xendit.co/api-reference/images/logo.png\",\n            \"ClosedAt\": \"2024-07-09T19:41:53+07:00\",\n            \"PenyuntingID\": 0,\n            \"Penyunting\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Pengajuan\": null\n            },\n            \"Project\": null\n        }\n    ],\n    \"len\": 1\n}"
+				}
+			]
+		},
+		{
+			"name": "Membuat project",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxNzg2MTUzM30.nQywXkn447bje4pQb0nJnpe4piRNEWfAEPPHwMEJs5A"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Membuat Model Prediksi Cuaca dengan Algoritma Naive Bayes\",\r\n    \"desc\":\"Cuaca merupakan aspek penting dalam berbagai kehidupan manusia. Maka memprediksi cuaca dengan akurat sangat penting. Untuk itu perlu adanya model yang dapat memprediksi cuaca dengan akurat\",\r\n    \"deadline\":\"2025-06-29T03:15:59T\",\r\n    \"milestone\":4,\r\n    \"tkt\":9,\r\n    \"cost\":13000000.005,\r\n    \"pengajuan_id\":2\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/project/create"
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Proposal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxNzg2MTUzM30.nQywXkn447bje4pQb0nJnpe4piRNEWfAEPPHwMEJs5A"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"url\":\"./file/proposal/d2h34be.pdf\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/project/1/upload/proposal"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}

@@ -29,6 +29,30 @@ func (ur *UserRepo) Create(u models.User) (uint, error) {
 	return u.ID, nil
 }
 
+func (ur *UserRepo) IsDonatur(userID uint) error {
+	var u *models.User
+	err := ur.DB.Where("id = ?", userID).Preload("Donatur").Limit(1).Find(&u).Error
+	if err != nil {
+		return err
+	}
+	if u != nil {
+		return fmt.Errorf("user dengan id %d sudah memiliki peran sebagai donatur", userID)
+	}
+	return nil
+}
+
+func (ur *UserRepo) IsPeneliti(userID uint) error {
+	var u *models.User
+	err := ur.DB.Where("id = ?", userID).Preload("Peneliti").Limit(1).Find(&u).Error
+	if err != nil {
+		return err
+	}
+	if u != nil {
+		return fmt.Errorf("user dengan id %d sudah memiliki peran sebagai peneliti", userID)
+	}
+	return nil
+}
+
 func (ur *UserRepo) FindID(id uint) (models.User, error) {
 	var user models.User
 	err := ur.DB.Where("id = ?", false).First(&user).Error
@@ -59,7 +83,7 @@ func (ur *UserRepo) WhereVerified(email string) (models.User, error) {
 }
 
 func (ur *UserRepo) AdminLogin(email string) (models.User, error) {
-	fmt.Println("\nemail: ", email)
+
 	var admin models.User
 	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).Joins("Penyunting").First(&admin).Error; err != nil {
 		return admin, err

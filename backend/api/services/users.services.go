@@ -59,6 +59,10 @@ func (us *UserService) CreateDonatur(userID uint) error {
 		return fmt.Errorf("peneliti dengan userID: %d sudah terdaftar", d.UserID)
 	}
 
+	if err := us.User.IsPeneliti(userID); err != nil {
+		return err
+	}
+
 	return us.Donatur.Create(d)
 }
 
@@ -74,6 +78,10 @@ func (us *UserService) CreatePeneliti(userID uint, req dto.PenelitiRegister) err
 	}
 	if !rd {
 		return fmt.Errorf("peneliti dengan userID: %d sudah terdaftar", p.UserID)
+	}
+
+	if err := us.User.IsDonatur(userID); err != nil {
+		return err
 	}
 
 	return us.Peneliti.Create(p)

@@ -7,7 +7,7 @@ type UserRegister struct {
 	Email     string `json:"email" binding:"required,min=8" `
 	Role      string `json:"role" binding:"required" `
 	Password  string `json:"password" binding:"required,min=8"`
-	Phone     string `json:"phone" binding:"required,min=11"`
+	Phone     string `json:"phone" binding:"required,min=10"`
 	Institute string `json:"institute" binding:"required"`
 	InstAddr  string `json:"institute_address" binding:"required"`
 	PostCode  string `json:"post" binding:"required,min=4"`
