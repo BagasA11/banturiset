@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"fmt"
 	"slices"
 	"strings"
 
@@ -54,7 +53,7 @@ func (as *AuthService) Login(req dto.Login) (string, error) {
 	}
 
 	if err != nil {
-		return "", fmt.Errorf("gagal login email:%s", req.Email)
+		return "", err
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(req.Password)); err != nil {

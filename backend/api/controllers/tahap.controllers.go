@@ -14,27 +14,30 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type BudgetDetailsController struct {
-	Service *services.BudgetDetailService
+type TahapControllers struct {
+	Service *services.TahapService
 }
 
-func NewBudgetDetailsController() *BudgetDetailsController {
-	return &BudgetDetailsController{
-		Service: services.NewBudgetDetailService(),
+func NewTahapControllers() *TahapControllers {
+	return &TahapControllers{
+		Service: services.NewTahapService(),
 	}
 }
 
-func (bdc *BudgetDetailsController) Create(c *gin.Context) {
-	role, exist := c.Get("role")
-	if !exist {
-		c.JSON(http.StatusBadRequest, "header role diperlukan")
-		return
-	}
+func (tc *TahapControllers) Create(c *gin.Context) {
+	role, _ := c.Get("role")
 	if strings.ToLower(role.(string)) != "peneliti" {
 		c.JSON(http.StatusForbidden, "laman khusus peneliti")
+		return
 	}
 
-	projectID, err := strconv.Atoi(c.Param("id"))
+	roleID, _ := c.Get("role_id")
+	if roleID.(uint) == 0 {
+		c.JSON(http.StatusBadRequest, "id peneliti diperlukan")
+		return
+	}
+
+	projectID, err := strconv.Atoi(c.Param("project_id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"pesan": "parameter id diperlukan",
@@ -43,7 +46,7 @@ func (bdc *BudgetDetailsController) Create(c *gin.Context) {
 		return
 	}
 
-	req := new(dto.BudgetDetailsCreate)
+	req := new(dto.TahapCreate)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		validationErrs, ok := err.(validator.ValidationErrors)
 		if !ok {
@@ -59,27 +62,59 @@ func (bdc *BudgetDetailsController) Create(c *gin.Context) {
 		return
 	}
 
-	if err := bdc.Service.Create(uint(projectID), *req); err != nil {
+	if err := tc.Service.Create(uint(projectID), roleID.(uint), *req); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"pesan": "gagal menambahkan data detail budget",
+			"pesan": "gagal menambahkan data tahapan penelitian",
 			"error": err.Error(),
 		})
 		return
 	}
-	c.JSON(200, "ok")
+
+	c.JSON(200, "request sukses")
 }
 
-func (bc *BudgetDetailsController) Updates(c *gin.Context) {
-	role, _ := c.Get("role")
-
-	if strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusForbidden, "laman khusus peneliti")
+func (tc *TahapControllers) List(c *gin.Context) {
+	projectID, err := strconv.Atoi(c.Param("project_id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "parameter id diperlukan",
+			"error": err.Error(),
+		})
+		return
 	}
 
-	// roleID
-	roleID, exist := c.Get("role_id")
-	if !exist {
-		c.JSON(http.StatusBadRequest, "header role_id diperlukan")
+	limit, err := strconv.Atoi(c.Query("limit"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "parameter limit diperlukan",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	tahap, err := tc.Service.List(uint(projectID), uint(limit))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"pesan": "galat!!!",
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": tahap,
+	})
+}
+
+func (tc *TahapControllers) Update(c *gin.Context) {
+	role, _ := c.Get("role")
+	if strings.ToLower(role.(string)) != "peneliti" {
+		c.JSON(http.StatusForbidden, "laman khusus peneliti")
+		return
+	}
+
+	roleID, _ := c.Get("role_id")
+	if roleID.(uint) == 0 {
+		c.JSON(http.StatusBadRequest, "role_id diperlukan")
 		return
 	}
 
@@ -92,7 +127,7 @@ func (bc *BudgetDetailsController) Updates(c *gin.Context) {
 		return
 	}
 
-	req := new(dto.BudgetDetailsCreate)
+	req := new(dto.TahapCreate)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		validationErrs, ok := err.(validator.ValidationErrors)
 		if !ok {
@@ -108,26 +143,27 @@ func (bc *BudgetDetailsController) Updates(c *gin.Context) {
 		return
 	}
 
-	if err := bc.Service.Updates(uint(id), *req, roleID.(uint)); err != nil {
+	if err := tc.Service.Update(uint(id), *req, roleID.(uint)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"pesan": "gagal mengupdate detail budget",
+			"pesan": "gagal menambahkan data tahapan penelitian",
 			"error": err.Error(),
 		})
 		return
 	}
-	c.JSON(200, "ok")
+
+	c.JSON(200, "request sukses")
 }
 
-func (bc *BudgetDetailsController) Delete(c *gin.Context) {
+func (tc *TahapControllers) Delete(c *gin.Context) {
 	role, _ := c.Get("role")
 	if strings.ToLower(role.(string)) != "peneliti" {
 		c.JSON(http.StatusForbidden, "laman khusus peneliti")
+		return
 	}
 
-	// role id
-	roleID, exist := c.Get("role_id")
-	if !exist {
-		c.JSON(400, "header role_id diperlukan")
+	roleID, _ := c.Get("role_id")
+	if roleID.(uint) == 0 {
+		c.JSON(http.StatusBadRequest, "role_id diperlukan")
 		return
 	}
 
@@ -140,12 +176,12 @@ func (bc *BudgetDetailsController) Delete(c *gin.Context) {
 		return
 	}
 
-	if err := bc.Service.Delete(uint(id), roleID.(uint)); err != nil {
+	if err := tc.Service.Delete(uint(id), roleID.(uint)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"pesan": "gagal menghapus detail budget",
+			"pesan": "gagal menghapus data",
 			"error": err.Error(),
 		})
 		return
 	}
-	c.JSON(200, "ok")
+	c.JSON(http.StatusOK, "ok")
 }

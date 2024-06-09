@@ -15,12 +15,9 @@ type ProjectDitolak struct {
 }
 
 type BudgetDetailsCreate struct {
-	Desc    string  `json:"desc" binding:"required"`
-	Tahap   uint8   `json:"tahap" binding:"required"`
-	Cost    float32 `json:"cost" binding:"required"`
-	Percent uint8   `json:"persen" binding:"required"`
-	Start   string  `json:"mulai" binding:"required"`
-	End     string  `json:"selesai" binding:"required"`
+	Desc string `json:"desc" binding:"required"`
+
+	Cost float32 `json:"cost" binding:"required"`
 }
 
 type Proposal struct {
@@ -29,4 +26,10 @@ type Proposal struct {
 
 type Klirens struct {
 	Url string `json:"url" binding:"required"`
+}
+
+type TahapCreate struct {
+	CostPercent uint8  `json:"percent" binding:"required"`
+	Start       string `json:"awal" binding:"required"`
+	End         string `json:"akhir" binding:"required"`
 }

@@ -36,6 +36,11 @@ func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) error {
 	return ps.Repo.Create(p)
 }
 
+func IsMyProject(id uint, penelitiID uint) error {
+	ps := NewProjectService()
+	return ps.Repo.IsMyProject(id, penelitiID)
+}
+
 func (ps *ProjectService) MyProject(penelitiID uint, limit uint) ([]models.Project, error) {
 
 	return ps.Repo.MyProject(penelitiID, limit)
@@ -84,4 +89,8 @@ func (ps *ProjectService) Update(id uint, penelitiID uint, req dto.CreateProject
 	}
 
 	return ps.Repo.Update(&p)
+}
+
+func (ps *ProjectService) Detail(id uint) (models.Project, error) {
+	return ps.Repo.Detail(id)
 }

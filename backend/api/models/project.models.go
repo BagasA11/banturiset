@@ -30,6 +30,8 @@ type Project struct {
 	Peneliti    Peneliti  `gorm:"foreignKey:PenelitiID"`
 
 	BudgetDetails []BudgetDetails
+	Tahapan       []Tahapan
+	Progress      []Progress
 }
 
 func (p *Project) BeforeCreate(tx *gorm.DB) error {

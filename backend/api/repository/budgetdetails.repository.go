@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
 	"gorm.io/gorm"
@@ -16,20 +18,6 @@ func NewBudgetDetailsRepo() *BudgetDetailsRepo {
 	}
 }
 
-func (bdr *BudgetDetailsRepo) Percentage(projectID uint) (int8, error) {
-	var sum int64
-	err := bdr.DB.Select("SUM(percent)").Where("project_id = ?", projectID).Table("budget_details").Error
-	return int8(sum), err
-}
-
-func (bdr *BudgetDetailsRepo) CountRows(projectID uint) (uint8, error) {
-	var count int64
-	if err := bdr.DB.Model(&models.BudgetDetails{}).Where("project_id = ?", projectID).Count(&count).Error; err != nil {
-		return 0, err
-	}
-	return uint8(count), nil
-}
-
 func (bdr *BudgetDetailsRepo) Create(bd models.BudgetDetails) error {
 	tx := bdr.DB.Begin()
 	if err := tx.Create(&bd).Error; err != nil {
@@ -40,8 +28,25 @@ func (bdr *BudgetDetailsRepo) Create(bd models.BudgetDetails) error {
 	return nil
 }
 
-func (bdr *BudgetDetailsRepo) Updates(bd models.BudgetDetails) error {
+// func (bdr *BudgetDetailsRepo) Sum(projectID uint) (float32, error) {
+// 	var sum float32
+// 	if err := bdr.DB.Where("project_id = ?", projectID).Select("SELECT SUM(cost) FROM budget_details").Row().Scan(&sum); err != nil {
+// 		return 0, err
+// 	}
+// 	return float32(sum), nil
+// }
+
+func (bdr *BudgetDetailsRepo) Updates(bd models.BudgetDetails, penelitiID uint) error {
+	bd2 := models.BudgetDetails{}
 	tx := bdr.DB.Begin()
+
+	if err := bdr.DB.Where("id = ?", bd.ID).Joins("Project").First(&bd2).Error; err != nil {
+		return err
+	}
+	if bd2.Project.PenelitiID != penelitiID {
+		return errors.New("id peneliti tidak sama")
+	}
+
 	if err := tx.Model(&models.BudgetDetails{}).Where("id = ?", bd.ID).Updates(&bd).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -50,12 +55,22 @@ func (bdr *BudgetDetailsRepo) Updates(bd models.BudgetDetails) error {
 	return nil
 }
 
-func (bdr *BudgetDetailsRepo) Delete(id uint) error {
+func (bdr *BudgetDetailsRepo) Delete(id uint, penelitiID uint) error {
+	bd := models.BudgetDetails{}
 	tx := bdr.DB.Begin()
-	if err := tx.Where("id = ?", id).Delete(&models.BudgetDetails{}).Error; err != nil {
+
+	if err := bdr.DB.Where("id = ?", id).Joins("Project").First(&bd).Error; err != nil {
+		return err
+	}
+	if bd.Project.PenelitiID != penelitiID {
+		return errors.New("id peneliti tidak sama")
+	}
+
+	if err := tx.Delete(&models.BudgetDetails{}, id).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
+
 	tx.Commit()
 	return nil
 }

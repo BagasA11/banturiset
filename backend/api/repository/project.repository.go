@@ -31,6 +31,12 @@ func (pr *ProjectRepository) Create(p models.Project) error {
 		tx.Rollback()
 		return err
 	}
+
+	if p.Pengajuan.ClosedAt.Nanosecond() < p.CreatedAt.Nanosecond() {
+		tx.Rollback()
+		return errors.New("waktu pengajuan sudah ditutup")
+	}
+
 	tx.Commit()
 	return nil
 }
@@ -44,6 +50,10 @@ func (pr *ProjectRepository) MyProject(penelitiID uint, limit uint) ([]models.Pr
 
 	err := pr.DB.Where("peneliti_id = ?", penelitiID).Limit(int(limit)).Find(&ps).Error
 	return ps, err
+}
+
+func (pr *ProjectRepository) IsMyProject(id uint, penelitiID uint) error {
+	return pr.DB.Where("peneliti_id = ?", penelitiID).First(&models.Project{}, id).Error
 }
 
 func (pr *ProjectRepository) Diverifikasi(page uint) ([]models.Project, error) {
@@ -66,9 +76,24 @@ func (pr *ProjectRepository) Diverifikasi(page uint) ([]models.Project, error) {
 func (pr *ProjectRepository) Review(id uint) (models.Project, error) {
 	// project{}
 	// []budget{}
+	// []tahapan{}
 
 	var p models.Project
-	if err := pr.DB.Where("id = ? AND status = ?", id, Draft).Preload("BudgetDetails").Joins("Pengajuan").First(&p).Error; err != nil {
+	if err := pr.DB.Where("id = ? AND status BETWEEN ? AND ?", id, Tolak, Draft).Where("fraud = ?", false).Preload("BudgetDetails").
+		Preload("Tahapan").Joins("Pengajuan").First(&p).Error; err != nil {
+		return p, err
+	}
+	return p, nil
+}
+
+func (pr *ProjectRepository) Detail(id uint) (models.Project, error) {
+	// project{}
+	// []budget{}
+	// []tahapan{}
+
+	var p models.Project
+	if err := pr.DB.Where("id = ? AND status >= ? AND fraud = ?", id, Verifikasi, false).Preload("BudgetDetails").
+		Preload("Tahapan").Joins("Pengajuan").First(&p).Error; err != nil {
 		return p, err
 	}
 	return p, nil
@@ -98,7 +123,7 @@ func (pr *ProjectRepository) Update(p *models.Project) error {
 
 func (pr *ProjectRepository) UploadKlirens(id uint, penelitiID uint, klirens_url string) error {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ?", id, penelitiID).Update("klirens_url", klirens_url).Error; err != nil {
+	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", id, penelitiID, Verifikasi).Update("klirens_url", klirens_url).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -108,7 +133,8 @@ func (pr *ProjectRepository) UploadKlirens(id uint, penelitiID uint, klirens_url
 
 func (pr *ProjectRepository) UploadProposal(id uint, penelitiID uint, proposalUrl string) error {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ?", id, penelitiID).Update("proposal_url", proposalUrl).Error; err != nil {
+	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", id, penelitiID, Verifikasi).
+		Update("proposal_url", proposalUrl).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

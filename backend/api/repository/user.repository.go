@@ -31,7 +31,7 @@ func (ur *UserRepo) Create(u models.User) (uint, error) {
 
 func (ur *UserRepo) IsDonatur(userID uint) error {
 	var u *models.User
-	err := ur.DB.Where("id = ?", userID).Preload("Donatur").Limit(1).Find(&u).Error
+	err := ur.DB.Where("id = ?", userID).Preload("Donatur").Select("id", "role").Limit(1).Find(&u).Error
 	if err != nil {
 		return err
 	}
@@ -43,7 +43,7 @@ func (ur *UserRepo) IsDonatur(userID uint) error {
 
 func (ur *UserRepo) IsPeneliti(userID uint) error {
 	var u *models.User
-	err := ur.DB.Where("id = ?", userID).Preload("Peneliti").Limit(1).Find(&u).Error
+	err := ur.DB.Where("id = ?", userID).Preload("Peneliti").Select("id", "role").Limit(1).Find(&u).Error
 	if err != nil {
 		return err
 	}
@@ -85,14 +85,18 @@ func (ur *UserRepo) WhereVerified(email string) (models.User, error) {
 func (ur *UserRepo) AdminLogin(email string) (models.User, error) {
 
 	var admin models.User
-	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).Joins("Penyunting").First(&admin).Error; err != nil {
+	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).
+		Select("id", "role", "email", "f_name", "post_code", "institute").
+		Joins("Penyunting").First(&admin).Error; err != nil {
 		return admin, err
 	}
 	return admin, nil
 }
 func (ur *UserRepo) PenelitLogin(email string) (models.User, error) {
 	var peneliti models.User
-	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).Joins("Peneliti").First(&peneliti).Error; err != nil {
+	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).
+		Select("id", "role", "email", "f_name", "post_code", "institute").
+		Joins("Peneliti").First(&peneliti).Error; err != nil {
 		return peneliti, err
 	}
 	return peneliti, nil
@@ -100,7 +104,9 @@ func (ur *UserRepo) PenelitLogin(email string) (models.User, error) {
 
 func (ur *UserRepo) DonaturLogin(email string) (models.User, error) {
 	var donatur models.User
-	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).Joins("Donatur").First(&donatur).Error; err != nil {
+	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).
+		Select("id", "role", "email", "f_name", "post_code", "institute").
+		Joins("Donatur").First(&donatur).Error; err != nil {
 		return donatur, err
 	}
 	return donatur, nil

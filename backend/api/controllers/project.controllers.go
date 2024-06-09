@@ -242,3 +242,58 @@ func (pc *ProjectControllers) Reject(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, "sukses")
 }
+
+func (pc *ProjectControllers) Review(c *gin.Context) {
+	if role, _ := c.Get("role"); strings.ToLower(role.(string)) != "penyunting" {
+		c.JSON(http.StatusForbidden, "laman khusus admin")
+		return
+	}
+
+	pID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "format id tidak benar, harus angka",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	project, err := pc.Service.Review(uint(pID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"pesan": "gagal mengambil data proyek",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"pesan": "sukses",
+		"data":  project,
+	})
+}
+
+func (pc *ProjectControllers) Detail(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "paramater id tidak ditemukan",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	p, err := pc.Service.Detail(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"pesan": "data project tidak ditemukan",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"data":  p,
+		"pesan": "sukses",
+	})
+}
