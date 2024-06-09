@@ -156,3 +156,7 @@ func multi_file(folders []string, files []*multipart.FileHeader) ([]string, erro
 
 	return filenames, nil
 }
+
+func Download(c *gin.Context) {
+	println(c.Query("path"))
+}

@@ -37,7 +37,7 @@ func (tc *TahapControllers) Create(c *gin.Context) {
 		return
 	}
 
-	projectID, err := strconv.Atoi(c.Param("project_id"))
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"pesan": "parameter id diperlukan",
@@ -74,7 +74,7 @@ func (tc *TahapControllers) Create(c *gin.Context) {
 }
 
 func (tc *TahapControllers) List(c *gin.Context) {
-	projectID, err := strconv.Atoi(c.Param("project_id"))
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"pesan": "parameter id diperlukan",

@@ -8,7 +8,7 @@ import (
 
 func BudgetRoutes(r *gin.RouterGroup) {
 	bc := controllers.NewBudgetDetailsController()
-	r.POST("/project/:project_id/budget/create", middleware.JwtAuth(), bc.Create)
+	r.POST("/project/:id/budget/create", middleware.JwtAuth(), bc.Create)
 	r.PUT("/project/budget/:id/update", middleware.JwtAuth(), bc.Updates)
 	r.DELETE("/project/budget/:id/delete", middleware.JwtAuth(), bc.Delete)
 }
