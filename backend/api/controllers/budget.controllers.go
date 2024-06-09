@@ -14,6 +14,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// e1656c8eff36f4260a3a155f2263299911b38db
+
 type BudgetDetailsController struct {
 	Service *services.BudgetDetailService
 }
@@ -25,13 +27,16 @@ func NewBudgetDetailsController() *BudgetDetailsController {
 }
 
 func (bdc *BudgetDetailsController) Create(c *gin.Context) {
-	role, exist := c.Get("role")
-	if !exist {
-		c.JSON(http.StatusBadRequest, "header role diperlukan")
-		return
-	}
+	role, _ := c.Get("role")
 	if strings.ToLower(role.(string)) != "peneliti" {
 		c.JSON(http.StatusForbidden, "laman khusus peneliti")
+		return
+	}
+
+	roleID, _ := c.Get("role_id")
+	if roleID.(uint) == 0 {
+		c.JSON(http.StatusBadRequest, "id peneliti diperlukan")
+		return
 	}
 
 	projectID, err := strconv.Atoi(c.Param("id"))
@@ -59,7 +64,7 @@ func (bdc *BudgetDetailsController) Create(c *gin.Context) {
 		return
 	}
 
-	if err := bdc.Service.Create(uint(projectID), *req); err != nil {
+	if err := bdc.Service.Create(uint(projectID), roleID.(uint), *req); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal menambahkan data detail budget",
 			"error": err.Error(),
