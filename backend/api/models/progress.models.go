@@ -1,5 +1,11 @@
 package models
 
+import (
+	"errors"
+
+	"gorm.io/gorm"
+)
+
 type Progress struct {
 	ID          uint   `gorm:"primaryKey"`
 	FileUrl     string `gorm:"not null"`
@@ -10,4 +16,11 @@ type Progress struct {
 
 	ProjectID uint
 	Project   Project
+}
+
+func (p *Progress) BeforeDelete(tx *gorm.DB) error {
+	if p.Status >= Verifikasi {
+		return errors.New("tidak boleh menghapus laporan yang sudah divalidasi")
+	}
+	return nil
 }

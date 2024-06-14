@@ -26,10 +26,6 @@ func NewProjectControllers() *ProjectControllers {
 
 func (pc *ProjectControllers) Create(c *gin.Context) {
 	// role validation
-	if role, _ := c.Get("role"); strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusUnauthorized, "laman khusus peneliti")
-		return
-	}
 
 	role_id, exist := c.Get("role_id")
 	if !exist {
@@ -72,12 +68,6 @@ func (pc *ProjectControllers) MyProject(c *gin.Context) {
 		return
 	}
 
-	// role validation
-	if role, _ := c.Get("role"); strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusUnauthorized, "laman khusus peneliti")
-		return
-	}
-
 	role_id, exist := c.Get("role_id")
 	if !exist {
 		c.JSON(http.StatusBadRequest, "detail user tidak ditemukan")
@@ -98,11 +88,6 @@ func (pc *ProjectControllers) MyProject(c *gin.Context) {
 }
 
 func (pc *ProjectControllers) UploadProposal(c *gin.Context) {
-	// role validation
-	if role, _ := c.Get("role"); strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusUnauthorized, "laman khusus peneliti")
-		return
-	}
 
 	role_id, exist := c.Get("role_id")
 	if !exist {
@@ -147,11 +132,6 @@ func (pc *ProjectControllers) UploadProposal(c *gin.Context) {
 }
 
 func (pc *ProjectControllers) UploadKlirens(c *gin.Context) {
-	// role validation
-	if role, _ := c.Get("role"); strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusUnauthorized, "laman khusus peneliti")
-		return
-	}
 
 	role_id, exist := c.Get("role_id")
 	if !exist {
@@ -196,17 +176,6 @@ func (pc *ProjectControllers) UploadKlirens(c *gin.Context) {
 }
 
 func (pc *ProjectControllers) Reject(c *gin.Context) {
-	// role validation
-	role, exist := c.Get("role")
-	if !exist {
-		c.JSON(http.StatusBadRequest, "header role diperlukan")
-		return
-	}
-
-	if strings.ToLower(role.(string)) != "penyunting" {
-		c.JSON(http.StatusForbidden, "laman khusus admin")
-		return
-	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

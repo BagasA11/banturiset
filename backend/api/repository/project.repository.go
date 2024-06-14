@@ -8,12 +8,12 @@ import (
 	"gorm.io/gorm"
 )
 
-const Fraud = true
-const Abort = -2
-const Tolak = -1
-const Draft = 0
-const Verifikasi = 1
-const Selesai = 2
+// const Fraud = true
+// const Abort = -2
+// const Tolak = -1
+// const Draft = 0
+// const Verifikasi = 1
+// const Selesai = 2
 
 type ProjectRepository struct {
 	DB *gorm.DB
@@ -48,7 +48,7 @@ func (pr *ProjectRepository) MyProject(penelitiID uint, limit uint) ([]models.Pr
 		return ps, errors.New("limit item harus > 0")
 	}
 
-	err := pr.DB.Where("peneliti_id = ?", penelitiID).Limit(int(limit)).Find(&ps).Error
+	err := pr.DB.Where("peneliti_id = ?", penelitiID).Limit(int(limit)).Joins("Balance").Find(&ps).Error
 	return ps, err
 }
 
@@ -67,7 +67,7 @@ func (pr *ProjectRepository) Diverifikasi(page uint) ([]models.Project, error) {
 	}
 	var to = page * 10
 
-	if err := pr.DB.Where("id BETWEEN ? AND ?", to-9, to).Where("status >= ?", Verifikasi).Find(&ps).Error; err != nil {
+	if err := pr.DB.Where("id BETWEEN ? AND ?", to-9, to).Where("status >= ?", models.Verifikasi).Find(&ps).Error; err != nil {
 		return ps, err
 	}
 	return ps, nil
@@ -79,7 +79,7 @@ func (pr *ProjectRepository) Review(id uint) (models.Project, error) {
 	// []tahapan{}
 
 	var p models.Project
-	if err := pr.DB.Where("id = ? AND status BETWEEN ? AND ?", id, Tolak, Draft).Where("fraud = ?", false).Preload("BudgetDetails").
+	if err := pr.DB.Where("id = ? AND status BETWEEN ? AND ?", id, models.Tolak, models.Draft).Where("fraud = ?", false).Preload("BudgetDetails").
 		Preload("Tahapan").Joins("Pengajuan").First(&p).Error; err != nil {
 		return p, err
 	}
@@ -92,7 +92,7 @@ func (pr *ProjectRepository) Detail(id uint) (models.Project, error) {
 	// []tahapan{}
 
 	var p models.Project
-	if err := pr.DB.Where("id = ? AND status >= ? AND fraud = ?", id, Verifikasi, false).Preload("BudgetDetails").
+	if err := pr.DB.Where("id = ? AND status >= ? AND fraud = ?", id, models.Verifikasi, false).Preload("BudgetDetails").
 		Preload("Tahapan").Joins("Pengajuan").First(&p).Error; err != nil {
 		return p, err
 	}
@@ -101,9 +101,9 @@ func (pr *ProjectRepository) Detail(id uint) (models.Project, error) {
 
 func (pr *ProjectRepository) Verifikasi(id uint) error {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND fraud = ?", id, !Fraud).
+	if err := tx.Model(&models.Project{}).Where("id = ? AND fraud = ?", id, !models.Fraud).
 		Where("klirens_url IS NOT NULL AND proposal_url IS NOT NULL").
-		Update("status", Verifikasi).Error; err != nil {
+		Update("status", models.Verifikasi).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -113,7 +113,7 @@ func (pr *ProjectRepository) Verifikasi(id uint) error {
 
 func (pr *ProjectRepository) Update(p *models.Project) error {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", p.ID, p.Peneliti.ID, Verifikasi).Updates(&p).Error; err != nil {
+	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", p.ID, p.Peneliti.ID, models.Verifikasi).Updates(&p).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -123,7 +123,7 @@ func (pr *ProjectRepository) Update(p *models.Project) error {
 
 func (pr *ProjectRepository) UploadKlirens(id uint, penelitiID uint, klirens_url string) error {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", id, penelitiID, Verifikasi).Update("klirens_url", klirens_url).Error; err != nil {
+	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", id, penelitiID, models.Verifikasi).Update("klirens_url", klirens_url).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -133,8 +133,24 @@ func (pr *ProjectRepository) UploadKlirens(id uint, penelitiID uint, klirens_url
 
 func (pr *ProjectRepository) UploadProposal(id uint, penelitiID uint, proposalUrl string) error {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", id, penelitiID, Verifikasi).
+	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", id, penelitiID, models.Verifikasi).
 		Update("proposal_url", proposalUrl).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+}
+
+func (pr *ProjectRepository) TambahSaldo(id uint, saldo float32) error {
+	tx := pr.DB.Begin()
+	p := models.Project{}
+	if err := pr.DB.First(&p, id).Error; err != nil {
+		return err
+	}
+
+	p.CollectedFund += saldo
+	if err := tx.Save(&p).Error; err != nil {
 		tx.Rollback()
 		return err
 	}

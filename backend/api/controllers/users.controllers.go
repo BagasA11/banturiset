@@ -188,18 +188,7 @@ func (uc *UsersController) PenelitiCreate(c *gin.Context) {
 }
 
 func (uc *UsersController) NeedVerify(c *gin.Context) {
-	role, exist := c.Get("role")
-	if !exist {
-		c.JSON(http.StatusBadRequest, "header tidak lengkap")
-		return
-	}
-	if role.(string) == "" {
-		c.JSON(http.StatusBadGateway, "header role tidak ditemukan")
-	}
-	if strings.ToLower(role.(string)) != "penyunting" {
-		c.JSON(http.StatusForbidden, "laman khusus admin")
-		return
-	}
+
 	page, err := strconv.Atoi(c.Query("page"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -223,15 +212,6 @@ func (uc *UsersController) NeedVerify(c *gin.Context) {
 
 func (uc *UsersController) Verifikasi(c *gin.Context) {
 	// admin page
-	role, exist := c.Get("role")
-	if !exist {
-		c.JSON(http.StatusBadRequest, "header tidak lengkap")
-		return
-	}
-	if !slices.Contains([]string{"penyunting", "admin", "penelaah"}, strings.ToLower(role.(string))) {
-		c.JSON(http.StatusForbidden, "laman khusus admin")
-		return
-	}
 
 	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -290,6 +270,12 @@ func (uc *UsersController) CompletePayment(c *gin.Context) {
 
 	if !helpers.ValidateRekening(req.NoRek) {
 		c.JSON(http.StatusUnprocessableEntity, "format nomor rekening invalid")
+		return
+	}
+
+	if !slices.Contains([]string{"bca", "bsi", "mandiri", "bri", "bni", "bjb"}, strings.ToLower(req.Bank)) {
+		c.JSON(http.StatusUnprocessableEntity,
+			fmt.Sprintf("hanya menerima provider bank %v", []string{"bca", "bsi", "mandiri", "bri", "bni", "bjb"}))
 		return
 	}
 

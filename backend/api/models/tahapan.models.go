@@ -31,3 +31,17 @@ func (t *Tahapan) BeforeCreate(tx *gorm.DB) error {
 	}
 	return nil
 }
+
+func (t *Tahapan) BeforeUpdate(tx *gorm.DB) error {
+	if t.Project.Status >= Verifikasi {
+		return errors.New("proyek sudah disetujui. tidak dapat mengedit tahapan")
+	}
+	return nil
+}
+
+func (t *Tahapan) BeforeDelete(tx *gorm.DB) error {
+	if t.Project.Status >= Verifikasi {
+		return errors.New("proyek sudah disetujui. tidak dapat mengedit tahapan")
+	}
+	return nil
+}

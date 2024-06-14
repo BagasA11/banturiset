@@ -104,9 +104,15 @@ func (us *UserService) NotVerified(page uint) ([]models.User, error) {
 }
 
 func (us *UserService) CompletePayentInfo(id uint, req dto.PaymentInfos) error {
+
+	if !slices.Contains([]string{"bca", "bsi", "mandiri", "bri", "bni", "bjb"}, strings.ToLower(req.Bank)) {
+		return fmt.Errorf("hanya menerima provider bank %v",
+			fmt.Sprintf("hanya menerima provider bank %v", []string{"bca", "bsi", "mandiri", "bri", "bni", "bjb"}))
+	}
+	bank := strings.ToUpper(req.Bank)
 	u := models.User{
 		ID:    id,
-		Bank:  &req.Bank,
+		Bank:  &bank,
 		NoRek: &req.NoRek,
 	}
 

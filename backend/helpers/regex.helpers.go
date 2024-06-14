@@ -9,11 +9,12 @@ import (
 )
 
 const RekeningPattern = "^\\d{10,16}$"
+const EmailPattern = "@"
 
 func ValidatePattern(format string, str string) bool {
 	forbidden_char := "{}/|<>"
 	// emailF, _ := regexp.Compile(os.Getenv("REGEX_MAIL"))
-	var email = os.Getenv("REGEX_EMAIL")
+
 	phoneF := os.Getenv("REGEX_PHONE")
 	postf := os.Getenv("REGEX_POST")
 	if match, _ := regexp.MatchString(forbidden_char, str); match {
@@ -22,7 +23,7 @@ func ValidatePattern(format string, str string) bool {
 	}
 
 	if strings.Contains(strings.ToLower(format), "email") {
-		if match, _ := regexp.MatchString(email, str); !match {
+		if match, _ := regexp.MatchString(EmailPattern, str); !match {
 			return false
 		}
 	}

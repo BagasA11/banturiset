@@ -10,12 +10,12 @@ import (
 func UserRoutes(r *gin.RouterGroup) {
 	uc := controllers.NewUsersController()
 	r.POST("/register", uc.UserRegistration)
-	r.PUT("/verifikasi/:id", middleware.JwtAuth(), uc.Verifikasi)
+	r.PUT("/verifikasi/:id", middleware.JwtAuth(), middleware.AdminOnly(), uc.Verifikasi)
 	// create donatur data
 	r.POST("/user/donatur/create/:id", uc.DonaturCreate)
 	r.POST("/user/peneliti/create/:id", uc.PenelitiCreate)
 
-	r.GET("/user/verify", middleware.JwtAuth(), uc.NeedVerify)
+	r.GET("/user/verify", middleware.JwtAuth(), middleware.AdminOnly(), uc.NeedVerify)
 
 	r.PUT("/user/complete-payment", middleware.JwtAuth(), uc.CompletePayment)
 	// r.POST("/mail", uc.SendMail)

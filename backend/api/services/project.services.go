@@ -19,17 +19,18 @@ func NewProjectService() *ProjectService {
 }
 
 func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) error {
-	dl, err := time.Parse(time.RFC3339, req.DeadLine)
-	if err != nil {
-		return err
-	}
+
+	deadline := time.Now().AddDate(int(req.Year), int(time.Now().Month()), time.Now().Day())                   // t->now + year + t->now->month + t->now->day
+	fundUntil := time.Now().Add(time.Duration((deadline.Year() + int(deadline.Month()) + deadline.Day()) / 3)) // t->now + duration( deadline->y + deadline->m + deadline->y)
+
 	p := models.Project{
 		Title:       req.Title,
 		Desc:        req.Desc,
 		Milestone:   int8(req.Milestone),
 		TktLevel:    req.Tkt,
 		Cost:        req.Cost,
-		DeadLine:    dl,
+		DeadLine:    deadline,
+		FundUntil:   fundUntil,
 		PengajuanID: req.PengajuanID,
 		PenelitiID:  penelitiID,
 	}
@@ -54,7 +55,7 @@ func (ps *ProjectService) Tolak(id uint, req dto.ProjectDitolak) error {
 	p := models.Project{
 		ID:          id,
 		PesanRevisi: &req.PesanRevisi,
-		Status:      repository.Tolak,
+		Status:      models.Tolak,
 	}
 	return ps.Repo.Update(&p)
 }
@@ -72,10 +73,7 @@ func (ps *ProjectService) UploadKlirens(id uint, penelitiID uint, klirens_url st
 }
 
 func (ps *ProjectService) Update(id uint, penelitiID uint, req dto.CreateProject) error {
-	dl, err := time.Parse(time.RFC3339, req.DeadLine)
-	if err != nil {
-		return err
-	}
+	deadline := time.Now().AddDate(int(req.Year), int(time.Now().Month()), time.Now().Day())
 
 	p := models.Project{
 		ID:         id,
@@ -85,7 +83,7 @@ func (ps *ProjectService) Update(id uint, penelitiID uint, req dto.CreateProject
 		Milestone:  req.Milestone,
 		TktLevel:   req.Tkt,
 		Cost:       req.Cost,
-		DeadLine:   dl,
+		DeadLine:   deadline,
 	}
 
 	return ps.Repo.Update(&p)

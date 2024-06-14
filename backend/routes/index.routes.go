@@ -15,5 +15,6 @@ func RegisterRoutes(r *gin.Engine) {
 	ProjectRoutes(apiGroup)
 	TahapRoutes(apiGroup)
 	BudgetRoutes(apiGroup)
+	DonasiRoutes(apiGroup)
 	r.Run(":" + os.Getenv("LOC_PORT"))
 }

@@ -8,10 +8,14 @@ import (
 
 func ProjectRoutes(r *gin.RouterGroup) {
 	pc := controllers.NewProjectControllers()
-	r.POST("/project/create", middleware.JwtAuth(), pc.Create)
-	r.GET("/project/myproject", middleware.JwtAuth(), pc.MyProject)
+	// peneliti
+	r.POST("/project/create", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.Create)
+	r.GET("/project/myproject", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.MyProject)
+	// umum
 	r.GET("/project/:id/detail", middleware.JwtAuth(), pc.Detail)
-	r.PUT("/project/:id/upload/proposal", middleware.JwtAuth(), pc.UploadProposal)
-	r.PUT("/project/:id/upload/klirens", middleware.JwtAuth(), pc.UploadProposal)
-	r.PUT("/project/:id/reject", middleware.JwtAuth(), pc.Reject)
+	// peneliti
+	r.PUT("/project/:id/upload/proposal", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.UploadProposal)
+	r.PUT("/project/:id/upload/klirens", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.UploadKlirens)
+	// admin
+	r.PUT("/project/:id/reject", middleware.JwtAuth(), middleware.AdminOnly(), pc.Reject)
 }

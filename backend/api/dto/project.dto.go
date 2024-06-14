@@ -1,9 +1,11 @@
 package dto
 
+import "time"
+
 type CreateProject struct {
 	Title       string  `json:"title" binding:"required,min=10,max=50"`
 	Desc        string  `json:"desc" binding:"required"`
-	DeadLine    string  `json:"deadline" binding:"required"`
+	Year        int16   `json:"year" binding:"required"`
 	Milestone   int8    `json:"milestone" binding:"required,min=1"`
 	Tkt         int8    `json:"tkt" binding:"required,min=1,max=12"`
 	Cost        float32 `json:"cost" binding:"required,min=0.0"`
@@ -32,4 +34,22 @@ type TahapCreate struct {
 	CostPercent uint8  `json:"percent" binding:"required"`
 	Start       string `json:"awal" binding:"required"`
 	End         string `json:"akhir" binding:"required"`
+}
+
+type CreateDonasi struct {
+	Jml    float32 `json:"jml"`
+	Method string  `json:"method"`
+}
+
+type InvoicePage struct {
+	ID        string
+	Jml       float32
+	Fee       float32
+	CreatedAt time.Time
+}
+
+type NotifInvoice struct {
+	ExternalID string  `json:"external_id"`
+	Status     string  `json:"status"`
+	Amount     float32 `json:"amount"`
 }
