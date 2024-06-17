@@ -23,6 +23,10 @@ func (bds *BudgetDetailService) Create(projectID uint, penelitiID uint, req dto.
 		return err
 	}
 
+	if err := IsEditable(projectID); err != nil {
+		return err
+	}
+
 	bd := models.BudgetDetails{
 		ProjectID: projectID,
 		Deskripsi: req.Desc,

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"time"
 
 	"github.com/bagasa11/banturiset/api/dto"
@@ -24,6 +25,10 @@ func (ts *TahapService) Create(projectID uint, penelitiID uint, req dto.TahapCre
 		return err
 	}
 
+	if IsEditable(projectID) != nil {
+		return errors.New("tidak dapat menambah data tahap pada proyek yang sudah diverifikasi")
+	}
+
 	mulai, err := time.Parse(time.RFC3339, req.Start)
 	if err != nil {
 		return err
@@ -37,6 +42,7 @@ func (ts *TahapService) Create(projectID uint, penelitiID uint, req dto.TahapCre
 	t := models.Tahapan{
 		ProjectID:   projectID,
 		CostPercent: req.CostPercent,
+		Tahap:       req.Tahap,
 		Start:       mulai,
 		End:         selesai,
 	}

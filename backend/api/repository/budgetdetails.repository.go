@@ -47,6 +47,10 @@ func (bdr *BudgetDetailsRepo) Updates(bd models.BudgetDetails, penelitiID uint) 
 		return errors.New("id peneliti tidak sama")
 	}
 
+	if bd2.Project.Status >= models.Verifikasi {
+		return errors.New("tidak dapat mengedit detail budget pada proyek yang sudah diverifikasi")
+	}
+
 	if err := tx.Model(&models.BudgetDetails{}).Where("id = ?", bd.ID).Updates(&bd).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -64,6 +68,10 @@ func (bdr *BudgetDetailsRepo) Delete(id uint, penelitiID uint) error {
 	}
 	if bd.Project.PenelitiID != penelitiID {
 		return errors.New("id peneliti tidak sama")
+	}
+
+	if bd.Project.Status >= models.Verifikasi {
+		return errors.New("tidak dapat menghapus detail budget pada proyek yang sudah diverifikasi")
 	}
 
 	if err := tx.Delete(&models.BudgetDetails{}, id).Error; err != nil {

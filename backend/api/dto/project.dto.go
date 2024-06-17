@@ -32,6 +32,7 @@ type Klirens struct {
 
 type TahapCreate struct {
 	CostPercent uint8  `json:"percent" binding:"required"`
+	Tahap       uint8  `json:"tahap" binding:"required"`
 	Start       string `json:"awal" binding:"required"`
 	End         string `json:"akhir" binding:"required"`
 }

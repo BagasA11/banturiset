@@ -23,6 +23,10 @@ func (ur *UserRepo) Create(u models.User) (uint, error) {
 	tx := ur.DB.Begin()
 	if err := tx.Create(&u).Error; err != nil {
 		tx.Rollback()
+
+		if errors.Is(err, gorm.ErrDuplicatedKey) {
+			return 0, errors.New("data email atau nomor telepon duplikat")
+		}
 		return 0, err
 	}
 	tx.Commit()
@@ -56,7 +60,10 @@ func (ur *UserRepo) IsPeneliti(userID uint) error {
 func (ur *UserRepo) FindID(id uint) (models.User, error) {
 	var user models.User
 	err := ur.DB.Where("id = ?", false).First(&user).Error
-	return user, err
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return user, errors.New("data user tidak ditemukan")
+	}
+	return user, nil
 }
 
 func (ur *UserRepo) CheckID(id uint, role string) error {
@@ -86,8 +93,7 @@ func (ur *UserRepo) AdminLogin(email string) (models.User, error) {
 
 	var admin models.User
 	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).
-		Select("id", "role", "email", "f_name", "post_code", "institute").
-		Joins("Penyunting").First(&admin).Error; err != nil {
+		Preload("Penyunting").First(&admin).Error; err != nil {
 		return admin, err
 	}
 	return admin, nil
@@ -95,8 +101,7 @@ func (ur *UserRepo) AdminLogin(email string) (models.User, error) {
 func (ur *UserRepo) PenelitLogin(email string) (models.User, error) {
 	var peneliti models.User
 	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).
-		Select("id", "role", "email", "f_name", "post_code", "institute").
-		Joins("Peneliti").First(&peneliti).Error; err != nil {
+		Preload("Peneliti").First(&peneliti).Error; err != nil {
 		return peneliti, err
 	}
 	return peneliti, nil
@@ -105,12 +110,44 @@ func (ur *UserRepo) PenelitLogin(email string) (models.User, error) {
 func (ur *UserRepo) DonaturLogin(email string) (models.User, error) {
 	var donatur models.User
 	if err := ur.DB.Where("email = ? AND is_verfied = ? AND is_block = ?", email, true, false).
-		Select("id", "role", "email", "f_name", "post_code", "institute").
-		Joins("Donatur").First(&donatur).Error; err != nil {
+		Preload("Donatur").First(&donatur).Error; err != nil {
 		return donatur, err
 	}
 	return donatur, nil
 
+}
+
+func (ur *UserRepo) DonaturProfile(userID uint) (*models.User, error) {
+	u := models.User{}
+	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Donatur").First(&u).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("data user tidak ditemukan")
+		}
+		return nil, err
+	}
+	return &u, nil
+}
+
+func (ur *UserRepo) PenelitiProfile(userID uint) (*models.User, error) {
+	u := models.User{}
+	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Peneliti").First(&u).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("data user tidak ditemukan")
+		}
+		return nil, err
+	}
+	return &u, nil
+}
+
+func (ur *UserRepo) AdminProfile(userID uint) (*models.User, error) {
+	u := models.User{}
+	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Penyunting").First(&u).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("data user tidak ditemukan")
+		}
+		return nil, err
+	}
+	return &u, nil
 }
 
 func (pr *UserRepo) Update(user *models.User) error {

@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/bagasa11/banturiset/api/models"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 
 	"gorm.io/gorm"
 )
@@ -24,10 +24,10 @@ func get_postgresDsn() string {
 }
 
 func InitDB() error {
-	dsn := get_postgresDsn()
+	dsn := getMysqlDsn()
 
 	var err error
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println("error when connect to database: ", err.Error())
 		return err

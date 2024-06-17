@@ -57,6 +57,11 @@ func (tr *TahapRepo) Update(t models.Tahapan, penelitiID uint) error {
 	if t2.Project.PenelitiID != penelitiID {
 		return errors.New("id peneliti tidak sama")
 	}
+
+	if t2.Project.Status >= models.Verifikasi {
+		return errors.New("tidak dapat mengedit data tahapan pada proyek yang telah diverifikasi")
+	}
+
 	if err := tx.Model(&models.Tahapan{}).Where("id = ?", t.ID).Updates(&t).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -74,6 +79,10 @@ func (tr *TahapRepo) Delete(id uint, penelitiID uint) error {
 	}
 	if t2.Project.PenelitiID != penelitiID {
 		return errors.New("id peneliti tidak sama")
+	}
+
+	if t2.Project.Status >= models.Verifikasi {
+		return errors.New("tidak dapat menghapus data tahapan pada proyek yang telah diverifikasi")
 	}
 
 	if err := tx.Delete(&models.Tahapan{}, id).Error; err != nil {

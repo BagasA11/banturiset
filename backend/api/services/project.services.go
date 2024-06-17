@@ -34,6 +34,12 @@ func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) error {
 		PengajuanID: req.PengajuanID,
 		PenelitiID:  penelitiID,
 	}
+
+	skema := NewPengajuanService()
+	if err := skema.IsOpen(req.PengajuanID); err != nil {
+		return err
+	}
+
 	return ps.Repo.Create(p)
 }
 
@@ -64,6 +70,10 @@ func (ps *ProjectService) Review(projectID uint) (models.Project, error) {
 	return ps.Repo.Review(projectID)
 }
 
+func (ps *ProjectService) Verifikasi(projectID uint) error {
+	return ps.Repo.Verifikasi(projectID)
+}
+
 func (ps *ProjectService) UploadProposal(id uint, penelitiID uint, proposalUrl string) error {
 	return ps.Repo.UploadProposal(id, penelitiID, proposalUrl)
 }
@@ -91,4 +101,17 @@ func (ps *ProjectService) Update(id uint, penelitiID uint, req dto.CreateProject
 
 func (ps *ProjectService) Detail(id uint) (models.Project, error) {
 	return ps.Repo.Detail(id)
+}
+
+func (ps *ProjectService) Preview(id uint, penelitiID uint) (models.Project, error) {
+	return ps.Repo.ProjectPreview(id, penelitiID)
+}
+
+func (ps *ProjectService) SubmitToReviewed(ProjectID uint, penelitiID uint) error {
+	return ps.Repo.SubmitToReviewed(penelitiID, ProjectID)
+}
+
+func IsEditable(id uint) error {
+	ps := NewProjectService()
+	return ps.Repo.IsEditable(id)
 }

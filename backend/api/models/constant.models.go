@@ -1,8 +1,9 @@
 package models
 
 const Fraud = true
-const Abort = -2
+const Abort = -3
+const Draft = -2
 const Tolak = -1
-const Draft = 0
-const Verifikasi = 1
-const Selesai = 2
+const Submit = 0
+const Verifikasi = 2
+const Selesai = 3

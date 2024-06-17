@@ -288,3 +288,28 @@ func (uc *UsersController) CompletePayment(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, "ok")
 }
+
+func (uc *UsersController) GetProfile(c *gin.Context) {
+	role, _ := c.Get("role")
+	if role.(string) == "" {
+		c.JSON(http.StatusBadRequest, "header role diperlukan")
+		return
+	}
+	id, _ := c.Get("id")
+	if id.(uint) == 0 {
+		c.JSON(http.StatusBadRequest, "id user diperlukan")
+		return
+	}
+
+	u, err := uc.Services.GetProfile(id.(uint), role.(string))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": *u,
+	})
+}

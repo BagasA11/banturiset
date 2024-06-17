@@ -118,3 +118,26 @@ func (us *UserService) CompletePayentInfo(id uint, req dto.PaymentInfos) error {
 
 	return us.User.Update(&u)
 }
+
+func (us *UserService) GetProfile(id uint, role string) (*models.User, error) {
+	u := new(models.User)
+	var err error
+
+	if slices.Contains([]string{"donatur", "investor", "dermawan", "sponsor"}, strings.ToLower(role)) {
+		u, err = us.User.DonaturProfile(id)
+	}
+	if strings.ToLower(role) == "peneliti" {
+		u, err = us.User.PenelitiProfile(id)
+	}
+	if slices.Contains([]string{"admin", "penyunting"}, strings.ToLower(role)) {
+		u, err = us.User.AdminProfile(id)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+	if u == nil {
+		return nil, errors.New("gagal mengambil data user")
+	}
+	return u, nil
+}

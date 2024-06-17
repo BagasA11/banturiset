@@ -7,6 +7,7 @@ import (
 )
 
 func UploadRoutes(r *gin.RouterGroup) {
-	r.POST("/upload", middleware.JwtAuth(), controllers.Upload)
-	r.POST("/upload/multi", middleware.JwtAuth(), controllers.UploadMulti)
+	r.POST("file/upload", middleware.JwtAuth(), controllers.Upload)
+	// r.POST("/upload/multi", middleware.JwtAuth(), controllers.UploadMulti)
+	r.GET("file/download", middleware.JwtAuth(), controllers.Download)
 }

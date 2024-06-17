@@ -20,7 +20,7 @@ type Project struct {
 	Milestone     int8      `gorm:"not null; default:1"`
 	TktLevel      int8      `gorm:"not null; default:1"`
 	Cost          float32   `gorm:"not null;"`
-	Status        int8      `gorm:"not null; size:10; default:0 "`
+	Status        int8      `gorm:"not null; size:10;"`
 	PesanRevisi   *string
 	Fraud         bool    `gorm:"not null; default:false"`
 	CollectedFund float32 `gorm:"not null"`
@@ -42,6 +42,7 @@ func (p *Project) BeforeCreate(tx *gorm.DB) error {
 		return errors.New("biaya harus > 0")
 	}
 	tx.Statement.SetColumn("CreatedAt", time.Now())
+	tx.Statement.SetColumn("Status", Draft)
 	tx.Statement.SetColumn("CollectedFund", float32(0))
 
 	return nil

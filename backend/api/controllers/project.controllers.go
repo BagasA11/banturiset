@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/bagasa11/banturiset/api/dto"
 
@@ -84,6 +83,7 @@ func (pc *ProjectControllers) MyProject(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"data": projects,
+		"len":  limit,
 	})
 }
 
@@ -164,7 +164,7 @@ func (pc *ProjectControllers) UploadKlirens(c *gin.Context) {
 		return
 	}
 
-	if err := pc.Service.UploadProposal(uint(id), role_id.(uint), req.Url); err != nil {
+	if err := pc.Service.UploadKlirens(uint(id), role_id.(uint), req.Url); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "gagal mengunggah proposal",
 			"error":  err.Error(),
@@ -173,6 +173,35 @@ func (pc *ProjectControllers) UploadKlirens(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, "ok")
+}
+
+func (pc *ProjectControllers) Preview(c *gin.Context) {
+	role_id, _ := c.Get("role_id")
+
+	if role_id.(uint) == 0 {
+		c.JSON(http.StatusBadRequest, "id peran diperlukan")
+		return
+	}
+
+	projectID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "id project invalid",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	project, err := pc.Service.Preview(uint(projectID), role_id.(uint))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": project,
+	})
 }
 
 func (pc *ProjectControllers) Reject(c *gin.Context) {
@@ -212,11 +241,30 @@ func (pc *ProjectControllers) Reject(c *gin.Context) {
 	c.JSON(http.StatusOK, "sukses")
 }
 
-func (pc *ProjectControllers) Review(c *gin.Context) {
-	if role, _ := c.Get("role"); strings.ToLower(role.(string)) != "penyunting" {
-		c.JSON(http.StatusForbidden, "laman khusus admin")
+func (pc *ProjectControllers) Submit(c *gin.Context) {
+	projectID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "format id pada url invalid")
 		return
 	}
+
+	role_id, _ := c.Get("role_id")
+	if role_id.(uint) == 0 {
+		c.JSON(http.StatusBadRequest, "role_id diperlukan")
+		return
+	}
+
+	if err := pc.Service.SubmitToReviewed(uint(projectID), role_id.(uint)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"pesan": "gagal mensubmit proyek",
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, "ok")
+}
+
+func (pc *ProjectControllers) Review(c *gin.Context) {
 
 	pID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -264,5 +312,40 @@ func (pc *ProjectControllers) Detail(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"data":  p,
 		"pesan": "sukses",
+	})
+}
+
+func (pc *ProjectControllers) Verfikasi(c *gin.Context) {
+	projectID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "id project invalid")
+		return
+	}
+
+	if pc.Service.Verifikasi(uint(projectID)) != nil {
+		c.JSON(http.StatusInternalServerError, "gagal memverifikasi proyek")
+		return
+	}
+	c.JSON(http.StatusOK, "ok")
+}
+
+func (pc *ProjectControllers) Diverifikasi(c *gin.Context) {
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "parameter page diperlukan")
+		fmt.Println("[controller] error : ", err.Error())
+		return
+	}
+
+	projects, err := pc.Service.Diverifikasi(uint(page))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": projects,
+		"len":  len(projects),
 	})
 }

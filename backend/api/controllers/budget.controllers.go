@@ -27,11 +27,6 @@ func NewBudgetDetailsController() *BudgetDetailsController {
 }
 
 func (bdc *BudgetDetailsController) Create(c *gin.Context) {
-	role, _ := c.Get("role")
-	if strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusForbidden, "laman khusus peneliti")
-		return
-	}
 
 	roleID, _ := c.Get("role_id")
 	if roleID.(uint) == 0 {

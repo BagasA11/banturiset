@@ -1,6 +1,9 @@
 package repository
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
 	"gorm.io/gorm"
@@ -20,6 +23,9 @@ func (dr *DonaturRepo) Create(u models.Donatur) error {
 	tx := dr.DB.Begin()
 	if err := tx.Create(&u).Error; err != nil {
 		tx.Rollback()
+		if errors.Is(err, gorm.ErrForeignKeyViolated) {
+			return fmt.Errorf("foreing key %d tidak ada", u.UserID)
+		}
 		return err
 	}
 	tx.Commit()

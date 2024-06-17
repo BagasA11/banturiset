@@ -3,8 +3,10 @@ package controllers
 import (
 	"errors"
 	"fmt"
+
 	"mime/multipart"
 	"net/http"
+
 	"slices"
 	"strings"
 
@@ -16,6 +18,8 @@ const pdf string = "pdf"
 const jpg = "jpg"
 const jpeg = "jpeg"
 const png = "png"
+
+const download_path = "Downloads/"
 
 func Upload(c *gin.Context) {
 
@@ -158,5 +162,17 @@ func multi_file(folders []string, files []*multipart.FileHeader) ([]string, erro
 }
 
 func Download(c *gin.Context) {
-	println(c.Query("path"))
+	fileurl := c.Query("fileurl")
+	if fileurl == "" {
+		c.JSON(http.StatusBadRequest, "file url diperlukan")
+		return
+	}
+	filename := (strings.Split(fileurl, "/"))[len(strings.Split(fileurl, "/"))-1]
+	fmt.Println(filename)
+
+	c.Header("Content-Description", "File Transfer")
+	c.Header("Content-Transfer-Encoding", "binary")
+	c.Header("Content-Disposition", "attachment; filename="+filename)
+	c.Header("Content-Type", "application/octet-stream")
+	c.FileAttachment(fileurl, filename)
 }

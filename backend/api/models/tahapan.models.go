@@ -11,6 +11,7 @@ import (
 type Tahapan struct {
 	ID          uint      `gorm:"primaryKey"`
 	CostPercent uint8     `gorm:"not null; default:0"`
+	Tahap       uint8     `gorm:"not null; default:0"`
 	Start       time.Time `gorm:"not null"`
 	End         time.Time `gorm:"not null"`
 

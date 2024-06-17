@@ -40,3 +40,7 @@ func (ps *PengajuanServices) Create(req dto.Pengajuan, penyuntingID uint) error 
 func (ps *PengajuanServices) Open() ([]models.Pengajuan, error) {
 	return ps.Repo.Open()
 }
+
+func (ps *PengajuanServices) IsOpen(id uint) error {
+	return ps.Repo.IsOpen(id)
+}

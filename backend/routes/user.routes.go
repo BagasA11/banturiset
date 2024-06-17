@@ -16,6 +16,7 @@ func UserRoutes(r *gin.RouterGroup) {
 	r.POST("/user/peneliti/create/:id", uc.PenelitiCreate)
 
 	r.GET("/user/verify", middleware.JwtAuth(), middleware.AdminOnly(), uc.NeedVerify)
+	r.GET("/user/profile", middleware.JwtAuth(), uc.GetProfile)
 
 	r.PUT("/user/complete-payment", middleware.JwtAuth(), uc.CompletePayment)
 	// r.POST("/mail", uc.SendMail)

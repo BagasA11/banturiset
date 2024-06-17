@@ -26,13 +26,15 @@ func NewDonasiRepo() *DonasiRepo {
 func (dr *DonasiRepo) Create(d models.Donasi) (*models.Donasi, error) {
 	d.ID = fmt.Sprintf("invoice-%s", helpers.RandStr(7))
 	tx := dr.DB.Begin()
+
+	// mencari proyek dengan id = $id, waktu pendanaan masih dibuka, dan diverifikasi dan diblokir = false
+	if tx.Where("fund_until >= ? AND status >= ? AND is_block = ", time.Now(), models.Verifikasi, false).First(&models.Project{}, d.ProjectID) != nil {
+		return nil, errors.New("waktu pendanaan proyek ini sudah ditutup")
+	}
+
 	if err := tx.Create(&d).Error; err != nil {
 		tx.Rollback()
 		return nil, err
-	}
-
-	if time.Now().After(d.Project.FundUntil) {
-		return nil, errors.New("pendanaan sudah ditutup")
 	}
 
 	tx.Commit()
@@ -74,5 +76,12 @@ func (dr *DonasiRepo) FindByUserID(trID string, donaturID uint) (models.Donasi, 
 func (dr *DonasiRepo) FindID(trID string) (models.Donasi, error) {
 	var d models.Donasi
 	err := dr.DB.First(&d, trID).Error
+	return d, err
+}
+
+func (dr *DonasiRepo) Contributors(projectID uint) ([]models.Donasi, error) {
+	var d []models.Donasi
+	// select * from donasis WHERE status = 'PAID' AND project_id = $projectID order by
+	err := dr.DB.Where("status = ? AND project_id = ?", "PAID", projectID).Order("jml desc").Find(&d).Error
 	return d, err
 }
