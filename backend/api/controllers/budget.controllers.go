@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/bagasa11/banturiset/api/dto"
 
@@ -70,12 +69,6 @@ func (bdc *BudgetDetailsController) Create(c *gin.Context) {
 }
 
 func (bc *BudgetDetailsController) Updates(c *gin.Context) {
-	role, _ := c.Get("role")
-
-	if strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusForbidden, "laman khusus peneliti")
-	}
-
 	// roleID
 	roleID, exist := c.Get("role_id")
 	if !exist {
@@ -83,10 +76,19 @@ func (bc *BudgetDetailsController) Updates(c *gin.Context) {
 		return
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"pesan": "parameter id diperlukan",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	budgetID, err := strconv.Atoi(c.Param("budgetid"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "parameter budgetid diperlukan",
 			"error": err.Error(),
 		})
 		return
@@ -108,7 +110,7 @@ func (bc *BudgetDetailsController) Updates(c *gin.Context) {
 		return
 	}
 
-	if err := bc.Service.Updates(uint(id), *req, roleID.(uint)); err != nil {
+	if err := bc.Service.Updates(uint(budgetID), *req, uint(projectID), roleID.(uint)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal mengupdate detail budget",
 			"error": err.Error(),
@@ -119,10 +121,6 @@ func (bc *BudgetDetailsController) Updates(c *gin.Context) {
 }
 
 func (bc *BudgetDetailsController) Delete(c *gin.Context) {
-	role, _ := c.Get("role")
-	if strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusForbidden, "laman khusus peneliti")
-	}
 
 	// role id
 	roleID, exist := c.Get("role_id")
@@ -131,7 +129,7 @@ func (bc *BudgetDetailsController) Delete(c *gin.Context) {
 		return
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"pesan": "parameter id diperlukan",
@@ -140,7 +138,16 @@ func (bc *BudgetDetailsController) Delete(c *gin.Context) {
 		return
 	}
 
-	if err := bc.Service.Delete(uint(id), roleID.(uint)); err != nil {
+	budgetID, err := strconv.Atoi(c.Param("budgetid"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "parameter id diperlukan",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if err := bc.Service.Delete(uint(budgetID), uint(projectID), roleID.(uint)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal menghapus detail budget",
 			"error": err.Error(),

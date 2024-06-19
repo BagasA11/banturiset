@@ -58,6 +58,34 @@ func (pc *ProjectControllers) Create(c *gin.Context) {
 	c.JSON(http.StatusOK, "sukses")
 }
 
+func (pc *ProjectControllers) OpenDonate(c *gin.Context) {
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+			"pesan": "format page invalid",
+		})
+		return
+	}
+
+	if page <= 0 {
+		c.JSON(http.StatusBadRequest, "page tidak boleh 0")
+		return
+	}
+
+	data, err := pc.Service.OpenDonate(uint(page))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"data": data,
+	})
+}
+
 func (pc *ProjectControllers) MyProject(c *gin.Context) {
 	limit, err := strconv.Atoi(c.Query("limit"))
 	if err != nil {
@@ -347,5 +375,111 @@ func (pc *ProjectControllers) Diverifikasi(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data": projects,
 		"len":  len(projects),
+	})
+}
+
+func (pc *ProjectControllers) HasSubmit(c *gin.Context) {
+	// validasi di middleware
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "page invalid",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	project, err := pc.Service.HasSubmit(uint(page))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": project,
+	})
+
+}
+
+func (pc *ProjectControllers) Update(c *gin.Context) {
+	projectID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	roleID, _ := c.Get("role_id")
+	if roleID == 0 {
+		c.JSON(http.StatusBadRequest, "id peneliti diperlukan")
+		return
+	}
+
+	req := new(dto.EditProject)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		validationErrs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			c.JSON(http.StatusBadRequest, "Invalid request")
+			return
+		}
+		var errorMessage string
+		for _, e := range validationErrs {
+			errorMessage = fmt.Sprintf("error in field %s condition: %s", e.Field(), e.ActualTag())
+			break
+		}
+		c.JSON(http.StatusBadRequest, errorMessage)
+		return
+	}
+
+	if err = pc.Service.Update(uint(projectID), roleID.(uint), *req); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, "ok")
+}
+
+func (pc *ProjectControllers) OnGoing(c *gin.Context) {
+	// tidak perlu hak akses
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "page invalid",
+			"error": err.Error(),
+		})
+		return
+	}
+	project, err := pc.Service.OnGoing(uint(page))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"data": project,
+	})
+}
+
+func (pc *ProjectControllers) Revisi(c *gin.Context) {
+	roleID, _ := c.Get("role_id")
+	if roleID.(uint) == 0 {
+		c.JSON(400, "header id peneliti diperlukan")
+		return
+	}
+
+	projects, err := pc.Service.Revisi(roleID.(uint))
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"data": projects,
 	})
 }

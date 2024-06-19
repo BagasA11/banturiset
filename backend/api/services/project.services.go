@@ -1,6 +1,8 @@
 package services
 
 import (
+	"errors"
+	"fmt"
 	"time"
 
 	"github.com/bagasa11/banturiset/api/dto"
@@ -20,9 +22,10 @@ func NewProjectService() *ProjectService {
 
 func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) error {
 
-	deadline := time.Now().AddDate(int(req.Year), int(time.Now().Month()), time.Now().Day())                   // t->now + year + t->now->month + t->now->day
-	fundUntil := time.Now().Add(time.Duration((deadline.Year() + int(deadline.Month()) + deadline.Day()) / 3)) // t->now + duration( deadline->y + deadline->m + deadline->y)
+	deadline := time.Now().AddDate(int(req.Year), int(time.Now().Month()), time.Now().Day()) // t->now + year + t->now->month + t->now->day
 
+	fundUntil := time.Now().Add(time.Until(deadline) / 3)
+	fmt.Println("mont ", int(deadline.Month()/3))
 	p := models.Project{
 		Title:       req.Title,
 		Desc:        req.Desc,
@@ -82,14 +85,16 @@ func (ps *ProjectService) UploadKlirens(id uint, penelitiID uint, klirens_url st
 	return ps.Repo.UploadKlirens(id, penelitiID, klirens_url)
 }
 
-func (ps *ProjectService) Update(id uint, penelitiID uint, req dto.CreateProject) error {
-	deadline := time.Now().AddDate(int(req.Year), int(time.Now().Month()), time.Now().Day())
+func (ps *ProjectService) Update(id uint, penelitiID uint, req dto.EditProject) error {
+	deadline := time.Now().AddDate(int(req.Year), int(time.Now().Month()), time.Now().Day()) // t->now + year + t->now->month + t->now->day
+
+	fundUntil := time.Now().Add(time.Until(deadline) / 3)
 
 	p := models.Project{
 		ID:         id,
 		PenelitiID: penelitiID,
-		Title:      req.Title,
 		Desc:       req.Desc,
+		FundUntil:  fundUntil,
 		Milestone:  req.Milestone,
 		TktLevel:   req.Tkt,
 		Cost:       req.Cost,
@@ -107,6 +112,10 @@ func (ps *ProjectService) Preview(id uint, penelitiID uint) (models.Project, err
 	return ps.Repo.ProjectPreview(id, penelitiID)
 }
 
+func (ps *ProjectService) OpenDonate(page uint) ([]models.Project, error) {
+	return ps.Repo.OpenDonate(page)
+}
+
 func (ps *ProjectService) SubmitToReviewed(ProjectID uint, penelitiID uint) error {
 	return ps.Repo.SubmitToReviewed(penelitiID, ProjectID)
 }
@@ -114,4 +123,34 @@ func (ps *ProjectService) SubmitToReviewed(ProjectID uint, penelitiID uint) erro
 func IsEditable(id uint) error {
 	ps := NewProjectService()
 	return ps.Repo.IsEditable(id)
+}
+
+func IsOpenFund(id uint) error {
+	ps := NewProjectService()
+	return ps.Repo.IsOpentoFund(id)
+}
+
+func (ps *ProjectService) HasSubmit(page uint) ([]models.Project, error) {
+	if page == 0 {
+		return []models.Project{}, errors.New("page harus > 0")
+	}
+	end := page * 10
+	start := end - 9
+
+	return ps.Repo.HasSubmit(start, end)
+}
+
+func (ps *ProjectService) OnGoing(page uint) ([]models.Project, error) {
+	// []models.Project{}
+	if page == 0 {
+		return []models.Project{}, errors.New("page harus > 0")
+	}
+	end := page * 10
+	start := end - 9
+
+	return ps.Repo.OnGoing(start, end)
+}
+
+func (ps *ProjectService) Revisi(penelitiID uint) ([]models.Project, error) {
+	return ps.Repo.Revisi(penelitiID)
 }

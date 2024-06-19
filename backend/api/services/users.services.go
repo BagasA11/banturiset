@@ -141,3 +141,8 @@ func (us *UserService) GetProfile(id uint, role string) (*models.User, error) {
 	}
 	return u, nil
 }
+
+func GetPaymentInfo(userID uint) (models.PaymentInfo, error) {
+	us := NewUserService()
+	return us.User.GetPayment(userID)
+}

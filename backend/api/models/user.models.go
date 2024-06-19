@@ -43,3 +43,9 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 func (u *User) BeforeDelete(tx *gorm.DB) error {
 	return errors.New("tidak boleh menghapus data user")
 }
+
+type PaymentInfo struct {
+	Bank          string
+	AccountNumber string
+	Phone         string
+}

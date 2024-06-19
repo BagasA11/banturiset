@@ -62,6 +62,10 @@ func (ds *DonasiService) Create(donaturID uint, ProjectID uint, req dto.CreateDo
 		Fee:       fee,
 	}
 
+	if IsOpenFund(ProjectID) != nil {
+		return nil, fmt.Errorf("waktu pendanaan proyek id %d sudah ditutup", ProjectID)
+	}
+
 	return ds.Repo.Create(d)
 }
 
@@ -71,6 +75,7 @@ func (ds *DonasiService) CreateInvoice(tr *models.Donasi, email string) (*dto.In
 		return nil, errors.New("tidak ada input yang dikenali")
 	}
 
+	// create body payload
 	fee := map[string]interface{}{
 		"type":  "ADMIN",
 		"value": tr.Fee,
@@ -92,6 +97,7 @@ func (ds *DonasiService) CreateInvoice(tr *models.Donasi, email string) (*dto.In
 		"fees":            []interface{}{fee},
 	}
 
+	// encode payload to json
 	jsondata, err := json.Marshal(&data)
 	if err != nil {
 		return nil, err
@@ -104,7 +110,7 @@ func (ds *DonasiService) CreateInvoice(tr *models.Donasi, email string) (*dto.In
 	}
 
 	httpReq.Header.Set("Content-Type", "application/json")
-	key := os.Getenv("SKEY") + ":"
+	key := os.Getenv("XENDIT_SKEY") + ":"
 	encodedString := base64.StdEncoding.EncodeToString([]byte(key))
 	httpReq.Header.Set("Authorization", encodedString)
 
@@ -116,6 +122,10 @@ func (ds *DonasiService) CreateInvoice(tr *models.Donasi, email string) (*dto.In
 
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		return nil, fmt.Errorf("response status = %d", resp.StatusCode)
+	}
 
 	var createTransactionResponse *dto.InvoicePage
 	decoder := json.NewDecoder(resp.Body)
@@ -136,8 +146,10 @@ func (ds *DonasiService) GetTransaction(id string, donaturID uint) (interface{},
 	if err != nil {
 		return nil, err
 	}
-	httpreq.Header.Set("for-user-id", fmt.Sprintf("%d", tr.DonaturID))
-	key := os.Getenv("SKEY") + ":"
+
+	httpreq.Header.Set("for-user-id", fmt.Sprintf("%d", tr.DonaturID)) // ex:"1"
+	key := os.Getenv("XENDIT_SKEY") + ":"                              // ex: xxxxx:
+	fmt.Println("skey: ", key)
 	encodedString := base64.StdEncoding.EncodeToString([]byte(key))
 	httpreq.Header.Set("Authorization", encodedString)
 
@@ -148,7 +160,7 @@ func (ds *DonasiService) GetTransaction(id string, donaturID uint) (interface{},
 		return nil, err
 	}
 	if resp.StatusCode >= 400 {
-		return nil, errors.New("response code >= 400")
+		return nil, fmt.Errorf("response kode = %d", resp.StatusCode)
 	}
 	defer resp.Body.Close()
 

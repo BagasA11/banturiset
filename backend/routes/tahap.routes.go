@@ -8,8 +8,8 @@ import (
 
 func TahapRoutes(r *gin.RouterGroup) {
 	tc := controllers.NewTahapControllers()
-	r.POST("/project/:id/tahap/create", middleware.JwtAuth(), tc.Create)
+	r.POST("/project/:id/tahap/create", middleware.JwtAuth(), middleware.PenelitiOnly(), tc.Create)
 	r.GET("/project/:id/tahap/list", middleware.JwtAuth(), tc.List)
-	r.PUT("/project/tahap/update/:id", middleware.JwtAuth(), tc.Update)
-	r.DELETE("/project/tahap/delete/:id", middleware.JwtAuth(), tc.Delete)
+	r.PUT("/project/:id/tahap/update/:tahapid", middleware.JwtAuth(), middleware.PenelitiOnly(), tc.Update)
+	r.DELETE("/project/:id/tahap/delete/:tahapid", middleware.JwtAuth(), middleware.PenelitiOnly(), tc.Delete)
 }

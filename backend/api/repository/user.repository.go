@@ -162,3 +162,9 @@ func (pr *UserRepo) Update(user *models.User) error {
 	tx.Commit()
 	return nil
 }
+
+func (ur *UserRepo) GetPayment(userID uint) (models.PaymentInfo, error) {
+	p := models.PaymentInfo{}
+	err := ur.DB.Table("users").Where("id = ?", userID).Scan(&p).Error
+	return p, err
+}

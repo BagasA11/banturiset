@@ -69,7 +69,7 @@ func (ts *TahapService) List(projectID uint, limit uint) ([]models.Tahapan, erro
 	return t, nil
 }
 
-func (ts *TahapService) Update(id uint, req dto.TahapCreate, penelitiID uint) error {
+func (ts *TahapService) Update(id uint, req dto.TahapCreate, projectID uint, penelitiID uint) error {
 	mulai, err := time.Parse(time.RFC3339, req.Start)
 	if err != nil {
 		return err
@@ -80,6 +80,15 @@ func (ts *TahapService) Update(id uint, req dto.TahapCreate, penelitiID uint) er
 		return err
 	}
 
+	// memeriksa apakah proyek milik peneliti
+	if err = IsMyProject(projectID, penelitiID); err != nil {
+		return err
+	}
+	// memeriksa apakah proyek sudah diverifikasi
+	if err = IsEditable(projectID); err != nil {
+		return err
+	}
+
 	t := models.Tahapan{
 		ID:          id,
 		CostPercent: req.CostPercent,
@@ -87,9 +96,15 @@ func (ts *TahapService) Update(id uint, req dto.TahapCreate, penelitiID uint) er
 		End:         selesai,
 	}
 
-	return ts.Repo.Update(t, penelitiID)
+	return ts.Repo.Update(t)
 }
 
-func (ts *TahapService) Delete(id uint, penelitID uint) error {
-	return ts.Repo.Delete(id, penelitID)
+func (ts *TahapService) Delete(id uint, projectID uint, penelitID uint) error {
+	if IsMyProject(projectID, penelitID) != nil {
+		return errors.New("tidak boleh mengedit/menghapus detail proyek yang bukan milik anda")
+	}
+	if err := IsEditable(projectID); err != nil {
+		return err
+	}
+	return ts.Repo.Delete(id)
 }

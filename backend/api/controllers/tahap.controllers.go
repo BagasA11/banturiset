@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/bagasa11/banturiset/api/dto"
 
@@ -25,11 +24,6 @@ func NewTahapControllers() *TahapControllers {
 }
 
 func (tc *TahapControllers) Create(c *gin.Context) {
-	role, _ := c.Get("role")
-	if strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusForbidden, "laman khusus peneliti")
-		return
-	}
 
 	roleID, _ := c.Get("role_id")
 	if roleID.(uint) == 0 {
@@ -106,11 +100,6 @@ func (tc *TahapControllers) List(c *gin.Context) {
 }
 
 func (tc *TahapControllers) Update(c *gin.Context) {
-	role, _ := c.Get("role")
-	if strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusForbidden, "laman khusus peneliti")
-		return
-	}
 
 	roleID, _ := c.Get("role_id")
 	if roleID.(uint) == 0 {
@@ -118,7 +107,16 @@ func (tc *TahapControllers) Update(c *gin.Context) {
 		return
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	projectID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "parameter id diperlukan",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	tahapID, err := strconv.Atoi(c.Param("tahapid"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"pesan": "parameter id diperlukan",
@@ -143,7 +141,7 @@ func (tc *TahapControllers) Update(c *gin.Context) {
 		return
 	}
 
-	if err := tc.Service.Update(uint(id), *req, roleID.(uint)); err != nil {
+	if err := tc.Service.Update(uint(tahapID), *req, uint(projectID), roleID.(uint)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal menambahkan data tahapan penelitian",
 			"error": err.Error(),
@@ -155,11 +153,6 @@ func (tc *TahapControllers) Update(c *gin.Context) {
 }
 
 func (tc *TahapControllers) Delete(c *gin.Context) {
-	role, _ := c.Get("role")
-	if strings.ToLower(role.(string)) != "peneliti" {
-		c.JSON(http.StatusForbidden, "laman khusus peneliti")
-		return
-	}
 
 	roleID, _ := c.Get("role_id")
 	if roleID.(uint) == 0 {
@@ -167,7 +160,7 @@ func (tc *TahapControllers) Delete(c *gin.Context) {
 		return
 	}
 
-	id, err := strconv.Atoi(c.Param("id"))
+	projectID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"pesan": "parameter id diperlukan",
@@ -176,7 +169,16 @@ func (tc *TahapControllers) Delete(c *gin.Context) {
 		return
 	}
 
-	if err := tc.Service.Delete(uint(id), roleID.(uint)); err != nil {
+	tahapID, err := strconv.Atoi(c.Param("tahapid"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "parameter id diperlukan",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if err := tc.Service.Delete(uint(tahapID), uint(projectID), roleID.(uint)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal menghapus data",
 			"error": err.Error(),

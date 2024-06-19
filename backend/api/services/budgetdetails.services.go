@@ -1,6 +1,8 @@
 package services
 
 import (
+	"errors"
+
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/api/repository"
@@ -36,16 +38,30 @@ func (bds *BudgetDetailService) Create(projectID uint, penelitiID uint, req dto.
 	return bds.Repo.Create(bd)
 }
 
-func (bds *BudgetDetailService) Updates(id uint, req dto.BudgetDetailsCreate, penelitiID uint) error {
+func (bds *BudgetDetailService) Updates(bdID uint, req dto.BudgetDetailsCreate, projectID uint, penelitiID uint) error {
+
+	if err := IsMyProject(projectID, penelitiID); err != nil {
+		return err
+	}
+	if err := IsEditable(projectID); err != nil {
+		return err
+	}
 
 	bd := models.BudgetDetails{
-		ID:        id,
+		ID:        bdID,
 		Deskripsi: req.Desc,
 		Cost:      req.Cost,
 	}
-	return bds.Repo.Updates(bd, penelitiID)
+	return bds.Repo.Updates(bd)
 }
 
-func (bds *BudgetDetailService) Delete(id uint, penelitiID uint) error {
-	return bds.Repo.Delete(id, penelitiID)
+func (bds *BudgetDetailService) Delete(id uint, projectID uint, penelitiID uint) error {
+	if IsMyProject(projectID, penelitiID) != nil {
+		return errors.New("tidak diperbolehkan mengubah/menghapus item proyek yang bukan milik anda")
+	}
+	if err := IsEditable(projectID); err != nil {
+		return err
+	}
+
+	return bds.Repo.Delete(id)
 }

@@ -35,7 +35,11 @@ func InitDB() error {
 
 	err = DB.AutoMigrate(&models.User{}, &models.Donatur{}, &models.Peneliti{},
 		&models.Penyunting{}, &models.Pengajuan{}, &models.Project{}, &models.BudgetDetails{},
-		&models.Tahapan{}, &models.Progress{}, &models.Donasi{})
+		&models.Tahapan{}, &models.Progress{}, &models.Donasi{}, &models.TokenList{}, &models.Payout{})
+
+	// err = DB.AutoMigrate(&models.User{}, &models.Donatur{}, &models.Peneliti{},
+	// 	&models.Penyunting{}, &models.Pengajuan{}, &models.Project{}, &models.BudgetDetails{},
+	// 	&models.Tahapan{}, &models.Progress{}, &models.Donasi{})
 
 	if err != nil {
 		fmt.Println("error when running migration: ", err.Error())

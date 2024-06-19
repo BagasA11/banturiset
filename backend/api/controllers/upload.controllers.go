@@ -19,7 +19,7 @@ const jpg = "jpg"
 const jpeg = "jpeg"
 const png = "png"
 
-const download_path = "Downloads/"
+// const download_path = "Downloads/"
 
 func Upload(c *gin.Context) {
 
@@ -123,7 +123,11 @@ func generateFileName(folder string, filename string) (string, error) {
 		return "", errors.New("format file bukan jpg, jpeg, png, atau pdf")
 	}
 
-	if slices.Contains([]string{"proposal", "klirens", "laporan", "panduan"}, foldername) && ext != pdf {
+	if !slices.Contains([]string{"proposal", "klirens", "laporan", "panduan"}, foldername) {
+		return "", errors.New("format file harus pdf")
+	}
+
+	if slices.Contains([]string{"proposal", "klirens", "laporan", "panduan", "gambar", "profil", "icon"}, foldername) && ext != pdf {
 		return "", errors.New("format file harus pdf")
 	}
 	if slices.Contains([]string{"gambar", "profil", "icon"}, foldername) && !slices.Contains([]string{png, jpeg, jpg}, ext) {

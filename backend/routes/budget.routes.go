@@ -9,6 +9,6 @@ import (
 func BudgetRoutes(r *gin.RouterGroup) {
 	bc := controllers.NewBudgetDetailsController()
 	r.POST("/project/:id/budget/create", middleware.JwtAuth(), middleware.PenelitiOnly(), bc.Create)
-	r.PUT("/project/budget/:id/update", middleware.JwtAuth(), bc.Updates)
-	r.DELETE("/project/budget/:id/delete", middleware.JwtAuth(), bc.Delete)
+	r.PUT("/project/:id/budget/:budgetid/update", middleware.JwtAuth(), middleware.PenelitiOnly(), bc.Updates)
+	r.DELETE("/project/:id/budget/:budgetid/delete", middleware.JwtAuth(), middleware.PenelitiOnly(), bc.Delete)
 }

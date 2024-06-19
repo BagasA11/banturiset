@@ -33,6 +33,7 @@ type Project struct {
 	Donasi        []Donasi
 	BudgetDetails []BudgetDetails
 	Tahapan       []Tahapan
+	Payout        []Payout
 	Progress      []Progress
 }
 
@@ -41,6 +42,13 @@ func (p *Project) BeforeCreate(tx *gorm.DB) error {
 	if p.Cost < float32(0) {
 		return errors.New("biaya harus > 0")
 	}
+	if p.Milestone < 1 {
+		return errors.New("milestones minimum adalah 1")
+	}
+	if p.TktLevel < 1 {
+		return errors.New("level tkt minimum adalah 1")
+	}
+
 	tx.Statement.SetColumn("CreatedAt", time.Now())
 	tx.Statement.SetColumn("Status", Draft)
 	tx.Statement.SetColumn("CollectedFund", float32(0))

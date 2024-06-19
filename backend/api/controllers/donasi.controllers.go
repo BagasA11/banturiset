@@ -122,7 +122,7 @@ func (dc *Donasi) Notif(c *gin.Context) {
 		return
 	}
 
-	if c.GetHeader("x-callback-token") != os.Getenv("CALLBACK") {
+	if c.GetHeader("x-callback-token") != os.Getenv("XENDIT_CALLBACK") {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"message": "invalid callback token",
 		})

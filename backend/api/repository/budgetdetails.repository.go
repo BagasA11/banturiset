@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
@@ -36,47 +37,27 @@ func (bdr *BudgetDetailsRepo) Create(bd models.BudgetDetails) error {
 // 	return float32(sum), nil
 // }
 
-func (bdr *BudgetDetailsRepo) Updates(bd models.BudgetDetails, penelitiID uint) error {
-	bd2 := models.BudgetDetails{}
+func (bdr *BudgetDetailsRepo) Updates(bd models.BudgetDetails) error {
+
 	tx := bdr.DB.Begin()
-
-	if err := bdr.DB.Where("id = ?", bd.ID).Joins("Project").First(&bd2).Error; err != nil {
-		return err
-	}
-	if bd2.Project.PenelitiID != penelitiID {
-		return errors.New("id peneliti tidak sama")
-	}
-
-	if bd2.Project.Status >= models.Verifikasi {
-		return errors.New("tidak dapat mengedit detail budget pada proyek yang sudah diverifikasi")
-	}
 
 	if err := tx.Model(&models.BudgetDetails{}).Where("id = ?", bd.ID).Updates(&bd).Error; err != nil {
 		tx.Rollback()
-		return err
+		fmt.Println("[repo] budget_details->update: ", err.Error())
+		return errors.New("gagal mengupdate detail budget")
 	}
+
 	tx.Commit()
 	return nil
 }
 
-func (bdr *BudgetDetailsRepo) Delete(id uint, penelitiID uint) error {
-	bd := models.BudgetDetails{}
+func (bdr *BudgetDetailsRepo) Delete(id uint) error {
+
 	tx := bdr.DB.Begin()
-
-	if err := bdr.DB.Where("id = ?", id).Joins("Project").First(&bd).Error; err != nil {
-		return err
-	}
-	if bd.Project.PenelitiID != penelitiID {
-		return errors.New("id peneliti tidak sama")
-	}
-
-	if bd.Project.Status >= models.Verifikasi {
-		return errors.New("tidak dapat menghapus detail budget pada proyek yang sudah diverifikasi")
-	}
-
 	if err := tx.Delete(&models.BudgetDetails{}, id).Error; err != nil {
 		tx.Rollback()
-		return err
+		fmt.Println("[repo] BudgetDetails->delete(): ", err.Error())
+		return errors.New("gagal menghapus budget detail")
 	}
 
 	tx.Commit()

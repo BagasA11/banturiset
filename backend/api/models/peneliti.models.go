@@ -7,4 +7,5 @@ type Peneliti struct {
 	UserID uint
 
 	Project []Project
+	Payout  []Payout
 }

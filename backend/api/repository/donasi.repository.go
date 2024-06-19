@@ -1,9 +1,6 @@
 package repository
 
 import (
-	"errors"
-	"time"
-
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
 	"gorm.io/gorm"
@@ -26,11 +23,6 @@ func NewDonasiRepo() *DonasiRepo {
 func (dr *DonasiRepo) Create(d models.Donasi) (*models.Donasi, error) {
 	d.ID = fmt.Sprintf("invoice-%s", helpers.RandStr(7))
 	tx := dr.DB.Begin()
-
-	// mencari proyek dengan id = $id, waktu pendanaan masih dibuka, dan diverifikasi dan diblokir = false
-	if tx.Where("fund_until >= ? AND status >= ? AND is_block = ", time.Now(), models.Verifikasi, false).First(&models.Project{}, d.ProjectID) != nil {
-		return nil, errors.New("waktu pendanaan proyek ini sudah ditutup")
-	}
 
 	if err := tx.Create(&d).Error; err != nil {
 		tx.Rollback()
@@ -69,7 +61,7 @@ func (dr *DonasiRepo) UpdateStatus(id string, status string) error {
 
 func (dr *DonasiRepo) FindByUserID(trID string, donaturID uint) (models.Donasi, error) {
 	var d models.Donasi
-	err := dr.DB.Where("donatur_id = ?", donaturID).First(&d, trID).Error
+	err := dr.DB.Where("id = ? AND donatur_id = ?", trID, donaturID).First(&d).Error
 	return d, err
 }
 

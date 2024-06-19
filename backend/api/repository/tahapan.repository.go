@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
@@ -46,48 +47,25 @@ func (tr *TahapRepo) List(projectID uint, limit uint) ([]models.Tahapan, error) 
 	return t, err
 }
 
-func (tr *TahapRepo) Update(t models.Tahapan, penelitiID uint) error {
-	var t2 models.Tahapan
+func (tr *TahapRepo) Update(t models.Tahapan) error {
 	tx := tr.DB.Begin()
-	// validasi hak milik
-	err := tr.DB.Where("id = ?", t.ID).Joins("Project").First(&t2).Error
-	if err != nil {
-		return err
-	}
-	if t2.Project.PenelitiID != penelitiID {
-		return errors.New("id peneliti tidak sama")
-	}
-
-	if t2.Project.Status >= models.Verifikasi {
-		return errors.New("tidak dapat mengedit data tahapan pada proyek yang telah diverifikasi")
-	}
-
 	if err := tx.Model(&models.Tahapan{}).Where("id = ?", t.ID).Updates(&t).Error; err != nil {
 		tx.Rollback()
-		return err
+		fmt.Println("[repo] tahap->Update(): ", err.Error())
+		return errors.New("gagal mengubah tahap")
 	}
 	tx.Commit()
 	return nil
 }
 
-func (tr *TahapRepo) Delete(id uint, penelitiID uint) error {
-	var t2 models.Tahapan
+func (tr *TahapRepo) Delete(id uint) error {
+
 	tx := tr.DB.Begin()
-
-	if err := tr.DB.Where("id = ?", id).Joins("Project").First(&t2).Error; err != nil {
-		return err
-	}
-	if t2.Project.PenelitiID != penelitiID {
-		return errors.New("id peneliti tidak sama")
-	}
-
-	if t2.Project.Status >= models.Verifikasi {
-		return errors.New("tidak dapat menghapus data tahapan pada proyek yang telah diverifikasi")
-	}
 
 	if err := tx.Delete(&models.Tahapan{}, id).Error; err != nil {
 		tx.Rollback()
-		return err
+		fmt.Println("[repo] tahapan->delete(): ", err.Error())
+		return errors.New("gagal menghapus tahap")
 	}
 	tx.Commit()
 	return nil

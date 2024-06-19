@@ -11,7 +11,8 @@ import (
 func PenelitiOnly() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if role, _ := c.Get("role"); strings.ToLower(role.(string)) != "peneliti" {
-			c.JSON(http.StatusUnauthorized, "laman khusus peneliti")
+			c.JSON(http.StatusForbidden, "laman khusus peneliti")
+			c.Abort()
 			return
 		}
 		c.Next()
@@ -23,12 +24,14 @@ func AdminOnly() gin.HandlerFunc {
 		// role validation
 		role, exist := c.Get("role")
 		if !exist {
-			c.JSON(http.StatusBadRequest, "header role diperlukan")
+			c.JSON(http.StatusForbidden, "header role diperlukan")
+			c.Abort()
 			return
 		}
 
 		if !slices.Contains([]string{"penyunting", "admin", "penelaah"}, strings.ToLower(role.(string))) {
 			c.JSON(http.StatusForbidden, "laman khusus admin")
+			c.Abort()
 			return
 		}
 
@@ -41,6 +44,7 @@ func DonaturOnly() gin.HandlerFunc {
 		role, _ := c.Get("role")
 		if strings.ToLower(role.(string)) != "donatur" {
 			c.JSON(http.StatusForbidden, "laman khusus donatur")
+			c.Abort()
 			return
 		}
 		c.Next()

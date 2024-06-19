@@ -1,0 +1,29 @@
+1. ketika peneliti membuat proyek, maka proyek berstatus draft
+2. peneliti dapat melihat daftar proyek miliknya
+3. peneliti dapat melakukan preview terkait proyek yang baru saja dibuat
+4. Peneliti dapat melakukan edit terhadap proyek yang baru saja dibuat
+5. peneliti dapat menambahkan detail item seperti detail budget dan tahapan selama belum disubmit
+6. peneliti melakukan submit untuk direview
+7. daftar project yang disubmit semua peneliti masuk ke laman admin
+8. Admin melihat detail dan melakukan review proyek
+9. admin memverifikasi atau menolak proyek. Jika ditolak, peneliti harus merevisi proyek sesuai arahan admin.
+10. proyek yang sudah diverifikasi masuk ke tahap pendanaan.
+11. daftar proyek beserta detail proyek yang diverifikasi dapat dilihat oleh semua user yang sudah login, namun 
+    tidak dapat melihat laporan karena hanya kontributor yang dapat melihat laporan proyek
+12. daftar proyek yang masih memiliki timeline pendanaan akan terlihat dan dapat didanai oleh donatur
+13. donatur memberikan donasi kepada proyek dan akan menjadi kontributor. Kontributor dapat melihat laporan dan hasil penelitian
+14. peneliti dapat melakukan penarikan dana pada tahap pertama jika timeline pendanaan sudah ditutup.
+15. Proyek yang timeline pendanaan sudah ditutup, maka proses penelitian harus dijalankan oleh peneliti. Proyek yang sedang berjalan [ongoing]
+    dapat dilihat oleh semua user yang sudah login, mirip dengan nomor 11
+16. jumlah dana yang dapat ditarik oleh peneliti harus sesuai dengan persentase pada tahap yang sedang berjalan.
+    ex: jika peneliti sedang melaksanakan tahap 1 dan pada proyek persentase dana yang diperlukan untuk melakukan tahap 1
+    adalah 20% dari total biaya, maka peneliti hanya dapat menarik dana sebesar 20% dari biaya yang diajukan dan 
+    tidak melebihi jumlah dana yang terkumpul.
+17. Jika peneliti ingin menarik dana untuk tahap berikutnya, maka peneliti harus membuat laporan pada tahap yang sedang 
+    berjalan dan menunggu laporan divalidasi oleh admin.
+    ex: jika peneliti ingin menarik dana pada untuk tahap kedua, maka peneliti harus membuat laporan tahap 1 dan 
+    divalidasi.
+18. Kontributor berhak melihat laporan dan hasil penelitian    
+
+
+
