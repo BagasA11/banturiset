@@ -56,7 +56,114 @@
 					"description": "Tahapan memerinci dan menjelaskan ulang tahap apa saya yang dilakukan akan dilakukan dalam kegiatan penelitian"
 				},
 				{
+					"name": "Donasi",
+					"item": [
+						{
+							"name": "Create Donasi",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiYWdhc21pcGEzQGdtYWlsLmNvbSIsInJvbGUiOiJkb25hdHVyIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4NjQ2MDE2fQ.wtF_Xeq-zGYj4gsOl-FVoWlAPLxqUmqqxOkDWmHkK4Q"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"jml\":25000,\r\n    \"method\":\"ovo\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/project/6/donasi/create"
+							},
+							"response": []
+						},
+						{
+							"name": "Melihat Invoice",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiYWdhc21pcGEzQGdtYWlsLmNvbSIsInJvbGUiOiJkb25hdHVyIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4NjQ2MDE2fQ.wtF_Xeq-zGYj4gsOl-FVoWlAPLxqUmqqxOkDWmHkK4Q"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "localhost:8080/api/donasi/invoice-28fc8ge"
+							},
+							"response": []
+						}
+					],
+					"description": "Folder donasi berisi tentang request donasi"
+				},
+				{
 					"name": "myproject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODUxNzcxN30.0ZKZysS-ivTJB_cR-rZZxx0lmAr2rg3v_7SLPIEY7Vs"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/project/myproject?limit=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"project",
+								"myproject"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "myproject",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/project/myproject?limit=2",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"project",
+										"myproject"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "revisi",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -244,34 +351,15 @@
 				{
 					"name": "Review",
 					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "Diverifikasi",
-					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODY0NDc5NX0.N-yNhTlQgyAyXFPHhnxikJDAk7Wc2w24_-I11d_j1hc"
+							}
+						},
 						"method": "GET",
 						"header": [],
-						"url": {
-							"raw": "localhost:8080/api/project/diverifikasi?page=1",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"project",
-								"diverifikasi"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								}
-							]
-						}
+						"url": "localhost:8080/api/project/6/review"
 					},
 					"response": [
 						{
@@ -279,24 +367,7 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"url": {
-									"raw": "localhost:8080/api/project/diverifikasi?page=1",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"project",
-										"diverifikasi"
-									],
-									"query": [
-										{
-											"key": "page",
-											"value": "1"
-										}
-									]
-								}
+								"url": "localhost:8080/api/project/6/review"
 							},
 							"status": "OK",
 							"code": 200,
@@ -308,15 +379,15 @@
 								},
 								{
 									"key": "Date",
-									"value": "Sun, 16 Jun 2024 05:22:24 GMT"
+									"value": "Mon, 17 Jun 2024 13:20:59 GMT"
 								},
 								{
-									"key": "Content-Length",
-									"value": "19"
+									"key": "Transfer-Encoding",
+									"value": "chunked"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"data\": [],\n    \"len\": 0\n}"
+							"body": "{\n    \"data\": {\n        \"CreatedAt\": \"2024-06-16T11:04:34.75+07:00\",\n        \"UpdatedAt\": \"2024-06-17T20:20:23.136+07:00\",\n        \"DeletedAt\": null,\n        \"ID\": 6,\n        \"Title\": \"Weather Forecasting dengan svm\",\n        \"Desc\": \"Cuaca merupakan aspek penting dalam berbagai kehidupan manusia. Maka memprediksi cuaca dengan akurat sangat penting. Untuk itu perlu adanya model yang dapat memprediksi cuaca dengan akurat\",\n        \"ProposalUrl\": \"./file/klirens/84gfh62.pdf\",\n        \"KlirensUrl\": \"./file/klirens/84gfh62.pdf\",\n        \"FundUntil\": \"2024-06-16T11:04:34.745+07:00\",\n        \"DeadLine\": \"2027-01-01T11:04:34.745+07:00\",\n        \"Milestone\": 4,\n        \"TktLevel\": 9,\n        \"Cost\": 13000000,\n        \"Status\": 0,\n        \"PesanRevisi\": null,\n        \"Fraud\": false,\n        \"CollectedFund\": 0,\n        \"PengajuanID\": 2,\n        \"Pengajuan\": {\n            \"CreatedAt\": \"2024-06-06T19:26:47.601+07:00\",\n            \"UpdatedAt\": \"2024-06-06T19:26:47.602+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": 2,\n            \"Title\": \"Teknologi Komputer d\",\n            \"Desc\": \"skema penelitian ini bertujuan untuk meneliti teknoloi Komputer dan AI\",\n            \"LinkWa\": \"web.whatsapp.com\",\n            \"LinkPanduan\": \"\",\n            \"IconUrl\": \"https://developers.xendit.co/api-reference/images/logo.png\",\n            \"ClosedAt\": \"2024-07-09T19:41:53+07:00\",\n            \"PenyuntingID\": 1,\n            \"Penyunting\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Pengajuan\": null\n            },\n            \"Project\": null\n        },\n        \"PenelitiID\": 5,\n        \"Peneliti\": {\n            \"ID\": 0,\n            \"NIP\": \"\",\n            \"UserID\": 0,\n            \"Project\": null\n        },\n        \"Donasi\": null,\n        \"BudgetDetails\": [\n            {\n                \"ID\": 1,\n                \"Deskripsi\": \"Membeli Radar Cuaca: Radar cuaca akan digunakan untuk mengambil data cuaca\",\n                \"Cost\": 1000000,\n                \"ProjectID\": 6,\n                \"Project\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"ProposalUrl\": null,\n                    \"KlirensUrl\": null,\n                    \"FundUntil\": \"0001-01-01T00:00:00Z\",\n                    \"DeadLine\": \"0001-01-01T00:00:00Z\",\n                    \"Milestone\": 0,\n                    \"TktLevel\": 0,\n                    \"Cost\": 0,\n                    \"Status\": 0,\n                    \"PesanRevisi\": null,\n                    \"Fraud\": false,\n                    \"CollectedFund\": 0,\n                    \"PengajuanID\": 0,\n                    \"Pengajuan\": {\n                        \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"DeletedAt\": null,\n                        \"ID\": 0,\n                        \"Title\": \"\",\n                        \"Desc\": \"\",\n                        \"LinkWa\": \"\",\n                        \"LinkPanduan\": null,\n                        \"IconUrl\": \"\",\n                        \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                        \"PenyuntingID\": 0,\n                        \"Penyunting\": {\n                            \"ID\": 0,\n                            \"NIP\": \"\",\n                            \"UserID\": 0,\n                            \"Pengajuan\": null\n                        },\n                        \"Project\": null\n                    },\n                    \"PenelitiID\": 0,\n                    \"Peneliti\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Project\": null\n                    },\n                    \"Donasi\": null,\n                    \"BudgetDetails\": null,\n                    \"Tahapan\": null,\n                    \"Progress\": null\n                }\n            },\n            {\n                \"ID\": 2,\n                \"Deskripsi\": \"Biaya Observasi Lapangan\",\n                \"Cost\": 500000,\n                \"ProjectID\": 6,\n                \"Project\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"ProposalUrl\": null,\n                    \"KlirensUrl\": null,\n                    \"FundUntil\": \"0001-01-01T00:00:00Z\",\n                    \"DeadLine\": \"0001-01-01T00:00:00Z\",\n                    \"Milestone\": 0,\n                    \"TktLevel\": 0,\n                    \"Cost\": 0,\n                    \"Status\": 0,\n                    \"PesanRevisi\": null,\n                    \"Fraud\": false,\n                    \"CollectedFund\": 0,\n                    \"PengajuanID\": 0,\n                    \"Pengajuan\": {\n                        \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"DeletedAt\": null,\n                        \"ID\": 0,\n                        \"Title\": \"\",\n                        \"Desc\": \"\",\n                        \"LinkWa\": \"\",\n                        \"LinkPanduan\": null,\n                        \"IconUrl\": \"\",\n                        \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                        \"PenyuntingID\": 0,\n                        \"Penyunting\": {\n                            \"ID\": 0,\n                            \"NIP\": \"\",\n                            \"UserID\": 0,\n                            \"Pengajuan\": null\n                        },\n                        \"Project\": null\n                    },\n                    \"PenelitiID\": 0,\n                    \"Peneliti\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Project\": null\n                    },\n                    \"Donasi\": null,\n                    \"BudgetDetails\": null,\n                    \"Tahapan\": null,\n                    \"Progress\": null\n                }\n            }\n        ],\n        \"Tahapan\": [\n            {\n                \"ID\": 1,\n                \"CostPercent\": 30,\n                \"Tahap\": 1,\n                \"Start\": \"2024-06-16T19:38:48.123+07:00\",\n                \"End\": \"2024-07-16T19:38:48.123+07:00\",\n                \"ProjectID\": 6,\n                \"Project\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"ProposalUrl\": null,\n                    \"KlirensUrl\": null,\n                    \"FundUntil\": \"0001-01-01T00:00:00Z\",\n                    \"DeadLine\": \"0001-01-01T00:00:00Z\",\n                    \"Milestone\": 0,\n                    \"TktLevel\": 0,\n                    \"Cost\": 0,\n                    \"Status\": 0,\n                    \"PesanRevisi\": null,\n                    \"Fraud\": false,\n                    \"CollectedFund\": 0,\n                    \"PengajuanID\": 0,\n                    \"Pengajuan\": {\n                        \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"DeletedAt\": null,\n                        \"ID\": 0,\n                        \"Title\": \"\",\n                        \"Desc\": \"\",\n                        \"LinkWa\": \"\",\n                        \"LinkPanduan\": null,\n                        \"IconUrl\": \"\",\n                        \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                        \"PenyuntingID\": 0,\n                        \"Penyunting\": {\n                            \"ID\": 0,\n                            \"NIP\": \"\",\n                            \"UserID\": 0,\n                            \"Pengajuan\": null\n                        },\n                        \"Project\": null\n                    },\n                    \"PenelitiID\": 0,\n                    \"Peneliti\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Project\": null\n                    },\n                    \"Donasi\": null,\n                    \"BudgetDetails\": null,\n                    \"Tahapan\": null,\n                    \"Progress\": null\n                }\n            }\n        ],\n        \"Progress\": null\n    },\n    \"pesan\": \"sukses\"\n}"
 						}
 					]
 				},
@@ -332,6 +403,68 @@
 						"method": "GET",
 						"header": [],
 						"url": "localhost:8080/api/project/6/preview"
+					},
+					"response": []
+				},
+				{
+					"name": "verifikasi",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4NjQzNjU2fQ.f2qvenv6uSzhuXJynXYk5xdbF4rK9L1q3L7oQPx6ijM"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "localhost:8080/api/project/6/verifikasi"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODUxNzcxN30.0ZKZysS-ivTJB_cR-rZZxx0lmAr2rg3v_7SLPIEY7Vs"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"desc\":\"\",\r\n    \"milestone\":2,\r\n    \"cost\":2000000.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/project/12/edit"
+					},
+					"response": []
+				},
+				{
+					"name": "Open Donasi",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiYWdhc21pcGEzQGdtYWlsLmNvbSIsInJvbGUiOiJkb25hdHVyIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4NjQ2MDE2fQ.wtF_Xeq-zGYj4gsOl-FVoWlAPLxqUmqqxOkDWmHkK4Q"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/project/opendonasi"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}

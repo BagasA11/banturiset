@@ -86,19 +86,14 @@ func (ps *ProjectService) UploadKlirens(id uint, penelitiID uint, klirens_url st
 }
 
 func (ps *ProjectService) Update(id uint, penelitiID uint, req dto.EditProject) error {
-	deadline := time.Now().AddDate(int(req.Year), int(time.Now().Month()), time.Now().Day()) // t->now + year + t->now->month + t->now->day
-
-	fundUntil := time.Now().Add(time.Until(deadline) / 3)
 
 	p := models.Project{
 		ID:         id,
 		PenelitiID: penelitiID,
 		Desc:       req.Desc,
-		FundUntil:  fundUntil,
 		Milestone:  req.Milestone,
 		TktLevel:   req.Tkt,
 		Cost:       req.Cost,
-		DeadLine:   deadline,
 	}
 
 	return ps.Repo.Update(&p)

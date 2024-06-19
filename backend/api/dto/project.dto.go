@@ -13,12 +13,10 @@ type CreateProject struct {
 }
 
 type EditProject struct {
-	Desc        string  `json:"desc" binding:"required"`
-	Year        int16   `json:"year" binding:"required"`
-	Milestone   int8    `json:"milestone" binding:"required,min=1"`
-	Tkt         int8    `json:"tkt" binding:"required,min=1,max=12"`
-	Cost        float32 `json:"cost" binding:"required,min=0.0"`
-	PengajuanID uint    `json:"pengajuan_id" binding:"required"`
+	Desc      string  `json:"desc" binding:"required"`
+	Milestone int8    `json:"milestone" binding:"required,min=1"`
+	Tkt       int8    `json:"tkt" binding:"required,min=1,max=12"`
+	Cost      float32 `json:"cost" binding:"required,min=0.0"`
 }
 
 type ProjectDitolak struct {
