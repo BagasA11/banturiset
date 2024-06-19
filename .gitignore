@@ -3,3 +3,5 @@
 .env.production
 env.txt
 .gitignore
+./backend/.env.local
+./.gitignore
