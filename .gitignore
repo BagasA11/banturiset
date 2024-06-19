@@ -1,7 +1,6 @@
-./.env.local
+# ./.env.local
 .env.staging
 .env.production
 env.txt
 .gitignore
-./backend/.env.local
-./.gitignore
+# ./backend/.env.local
