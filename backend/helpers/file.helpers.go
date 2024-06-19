@@ -21,7 +21,7 @@ func ValidateFileSize(r *http.Request) (bool, error) {
 		return false, err
 	}
 
-	if fileheader.Size > oneMB {
+	if fileheader.Size > 5*oneMB {
 		return false, errors.New("file melebihi 1 mb")
 	}
 

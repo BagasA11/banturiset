@@ -61,12 +61,14 @@ func (ps *ProjectService) Diverifikasi(page uint) ([]models.Project, error) {
 }
 
 func (ps *ProjectService) Tolak(id uint, req dto.ProjectDitolak) error {
-	p := models.Project{
-		ID:          id,
-		PesanRevisi: &req.PesanRevisi,
-		Status:      models.Tolak,
+	if err := ps.Repo.SetStatusReject(id); err != nil {
+		return err
 	}
-	return ps.Repo.Update(&p)
+	if err := ps.Repo.FillRevMsg(id, req.PesanRevisi); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (ps *ProjectService) Review(projectID uint) (models.Project, error) {
@@ -89,6 +91,7 @@ func (ps *ProjectService) Update(id uint, penelitiID uint, req dto.EditProject) 
 
 	p := models.Project{
 		ID:         id,
+		Title:      req.Title,
 		PenelitiID: penelitiID,
 		Desc:       req.Desc,
 		Milestone:  req.Milestone,

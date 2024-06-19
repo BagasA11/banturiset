@@ -105,7 +105,7 @@ func (pr *ProjectRepository) Review(id uint) (models.Project, error) {
 	// []tahapan{}
 
 	var p models.Project
-	err := pr.DB.Where("status BETWEEN ? AND ? AND fraud = ?", models.Tolak, models.Submit, !models.Fraud).
+	err := pr.DB.Where("status = ? AND fraud = ?", models.Submit, !models.Fraud).
 		Preload("Pengajuan").Preload("Tahapan").Preload("BudgetDetails").Limit(1).Find(&p, id).Error
 	if err != nil {
 		fmt.Println("error project->Review(): ", err.Error())
@@ -122,7 +122,7 @@ func (pr *ProjectRepository) Detail(id uint) (models.Project, error) {
 
 	var p models.Project
 	if err := pr.DB.Where("id = ? AND status >= ? AND fraud = ?", id, models.Verifikasi, false).Preload("BudgetDetails").
-		Preload("Tahapan").Joins("Pengajuan").First(&p).Error; err != nil {
+		Preload("Tahapan").Preload("Pengajuan").First(&p).Error; err != nil {
 		return p, err
 	}
 	return p, nil
@@ -146,6 +146,31 @@ func (pr *ProjectRepository) Update(p *models.Project) error {
 	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", p.ID, p.Peneliti.ID, models.Submit).Updates(&p).Error; err != nil {
 		tx.Rollback()
 		return err
+	}
+	tx.Commit()
+	return nil
+}
+
+func (pr *ProjectRepository) SetStatusReject(id uint) error {
+	tx := pr.DB.Begin()
+	if err := tx.Model(&models.Project{}).Where("id = ? AND status = ?", id, models.Draft).Update("status", -1).Error; err != nil {
+		tx.Rollback()
+		return errors.New("gagal menset status -> tolak")
+	}
+	if err := tx.Commit().Error; err != nil {
+		fmt.Println("error during commit: ")
+		tx.Rollback()
+		return errors.New("gagal melakukan commit")
+	}
+	return nil
+}
+
+func (pr *ProjectRepository) FillRevMsg(id uint, msg string) error {
+	tx := pr.DB.Begin()
+	if err := tx.Model(&models.Project{}).Where("id = ?", id).
+		Update("pesan_revisi", msg).Error; err != nil {
+		tx.Rollback()
+		return errors.New("gagal menset pesan revisi")
 	}
 	tx.Commit()
 	return nil

@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
 	"gorm.io/gorm"
@@ -49,14 +51,26 @@ func (dr *DonasiRepo) ConfirmPayment(id uint) (float32, error) {
 	return d.Jml, nil
 }
 
-func (dr *DonasiRepo) UpdateStatus(id string, status string) error {
+func (dr *DonasiRepo) UpdateStatus(id string, status string) (models.Donasi, error) {
 	tx := dr.DB.Begin()
-	if err := tx.Model(&models.Donasi{}).Where("id = ?", id).Update("status", status).Error; err != nil {
-		tx.Rollback()
-		return err
+	// fetch data from db
+	var d models.Donasi
+	if err := dr.DB.Where("id = ?", id).First(&d).Error; err != nil {
+		fmt.Println("error ketika mengambil data: ", err.Error())
+		return d, errors.New("error when update status")
 	}
-	tx.Commit()
-	return nil
+
+	d.Status = status
+	if err := tx.Where("id = ?", d.ID).Save(&d).Error; err != nil {
+		tx.Rollback()
+		fmt.Println("error", err.Error())
+		return d, errors.New("error when update status")
+	}
+	if err := tx.Commit().Error; err != nil {
+		fmt.Println("gagal melakukan rollback", err.Error())
+		return d, errors.New("error when update status")
+	}
+	return d, nil
 }
 
 func (dr *DonasiRepo) FindByUserID(trID string, donaturID uint) (models.Donasi, error) {
@@ -71,9 +85,18 @@ func (dr *DonasiRepo) FindID(trID string) (models.Donasi, error) {
 	return d, err
 }
 
-func (dr *DonasiRepo) Contributors(projectID uint) ([]models.Donasi, error) {
+func (dr *DonasiRepo) GetHistory(projectID uint) ([]models.Donasi, error) {
+	var d []models.Donasi
+	if err := dr.DB.Where("project_id = ?", projectID).Find(&d).Error; err != nil {
+		fmt.Println("error: ", err.Error())
+		return d, errors.New("gagal mendapatkan histori donasi")
+	}
+	return d, nil
+}
+
+func (dr *DonasiRepo) Contributors(projectID uint, limit uint) ([]models.Donasi, error) {
 	var d []models.Donasi
 	// select * from donasis WHERE status = 'PAID' AND project_id = $projectID order by
-	err := dr.DB.Where("status = ? AND project_id = ?", "PAID", projectID).Order("jml desc").Find(&d).Error
+	err := dr.DB.Where("status = ? AND project_id = ?", "PAID", projectID).Limit(int(limit)).Order("jml desc").Find(&d).Error
 	return d, err
 }

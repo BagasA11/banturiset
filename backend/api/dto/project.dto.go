@@ -13,6 +13,7 @@ type CreateProject struct {
 }
 
 type EditProject struct {
+	Title     string  `json:"title" binding:"required,min=10"`
 	Desc      string  `json:"desc" binding:"required"`
 	Milestone int8    `json:"milestone" binding:"required,min=1"`
 	Tkt       int8    `json:"tkt" binding:"required,min=1,max=12"`

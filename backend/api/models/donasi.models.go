@@ -27,6 +27,10 @@ func (d *Donasi) BeforeCreate(tx *gorm.DB) error {
 	if d.Jml < float32(20000) {
 		return errors.New("sumbangan minimum 20k")
 	}
+	if d.Jml+d.Fee > float32(2000000) {
+		return errors.New("total sumbangan maksimum (jml + fee) 2jt")
+	}
+
 	tx.Statement.SetColumn("status", "PENDING")
 	tx.Statement.SetColumn("UpdatedAt", time.Now())
 	return nil

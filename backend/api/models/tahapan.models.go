@@ -23,8 +23,8 @@ func (t *Tahapan) BeforeCreate(tx *gorm.DB) error {
 	if t.CostPercent > 100 {
 		return errors.New("persentase harus < 100")
 	}
-	if t.End.Nanosecond() < time.Now().Nanosecond() {
-		return errors.New("deadline tahapan harus lebih dari masa kini")
+	if !t.End.After(time.Now()) {
+		return fmt.Errorf("deadline tahapan: %v tidak boleh dibelakang masa kini %v", t.End, time.Now())
 	}
 
 	if t.Start.After(t.End) {

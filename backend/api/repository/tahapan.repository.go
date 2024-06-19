@@ -26,6 +26,11 @@ func NewTahapRepo() *TahapRepo {
 }
 
 func (tr *TahapRepo) Create(t models.Tahapan) error {
+	// ensure cost not more than 100%
+	if err := tr.isGT100(t.ProjectID, uint(t.CostPercent)); err != nil {
+		return err
+	}
+
 	tx := tr.DB.Begin()
 	if err := tx.Create(&t).Error; err != nil {
 		tx.Rollback()
@@ -49,12 +54,44 @@ func (tr *TahapRepo) List(projectID uint, limit uint) ([]models.Tahapan, error) 
 
 func (tr *TahapRepo) Update(t models.Tahapan) error {
 	tx := tr.DB.Begin()
+	if err := tr.isGT100(t.ProjectID, uint(t.CostPercent)); err != nil {
+		return err
+	}
+
 	if err := tx.Model(&models.Tahapan{}).Where("id = ?", t.ID).Updates(&t).Error; err != nil {
 		tx.Rollback()
 		fmt.Println("[repo] tahap->Update(): ", err.Error())
 		return errors.New("gagal mengubah tahap")
 	}
 	tx.Commit()
+	return nil
+}
+
+// ... ... ++
+// >= ... ++ ... atau ++ ... ... (gak boleh)
+// <= ... ... ++ (boleh)
+func (tr *TahapRepo) HasTahap(ProjectID uint, tahap uint) error {
+	t := []models.Tahapan{}
+	if err := tr.DB.Where("project_id = ? AND tahap >= ?", ProjectID, tahap).Find(&t).Error; err != nil {
+		fmt.Println("error tahap->isommited: ", err.Error())
+		return errors.New("someting error when checking tTahap")
+	}
+	if len(t) > 0 {
+		return fmt.Errorf("tahap ke-%d sudah dibuat", t[0].Tahap)
+	}
+	return nil
+}
+
+func (tr *TahapRepo) isGT100(projectID uint, input uint) error {
+	var percent uint
+	if err := tr.DB.Table("tahapans").Where("project_id = ?", projectID).Select("sum(cost_percent) as n").Scan(&percent).Error; err != nil {
+		fmt.Println("error [repo] isGT100(): ", err.Error())
+		return errors.New("error saat melakukan validasi jumlah persentase")
+	}
+	if percent+input > 100 {
+		sTtl := fmt.Sprintf("%d", percent+input)
+		return fmt.Errorf("total percentase tidak boleh lebih dari 0: %s persen", sTtl)
+	}
 	return nil
 }
 

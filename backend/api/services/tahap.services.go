@@ -29,6 +29,10 @@ func (ts *TahapService) Create(projectID uint, penelitiID uint, req dto.TahapCre
 		return errors.New("tidak dapat menambah data tahap pada proyek yang sudah diverifikasi")
 	}
 
+	if err := ts.Repo.HasTahap(projectID, uint(req.Tahap)); err != nil {
+		return err
+	}
+
 	mulai, err := time.Parse(time.RFC3339, req.Start)
 	if err != nil {
 		return err
@@ -91,6 +95,7 @@ func (ts *TahapService) Update(id uint, req dto.TahapCreate, projectID uint, pen
 
 	t := models.Tahapan{
 		ID:          id,
+		ProjectID:   projectID,
 		CostPercent: req.CostPercent,
 		Start:       mulai,
 		End:         selesai,

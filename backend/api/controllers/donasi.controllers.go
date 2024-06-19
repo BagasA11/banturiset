@@ -72,7 +72,7 @@ func (dc *Donasi) CreateDonasi(c *gin.Context) {
 
 	page, err := dc.Service.CreateInvoice(m, email.(string))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.JSON(http.StatusBadGateway, err.Error())
 		return
 	}
 
@@ -129,10 +129,56 @@ func (dc *Donasi) Notif(c *gin.Context) {
 		return
 	}
 
-	if err := dc.Service.Notifikasi(*req); err != nil {
+	if _, err := dc.Service.Notifikasi(*req); err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	c.JSON(http.StatusOK, "ok")
+}
+
+func (dc *Donasi) GetHistory(c *gin.Context) {
+	projectID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "parameter id invalid")
+		return
+	}
+
+	donasi, err := dc.Service.GetAllHistory(uint(projectID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"pesan": "gagal mendapatkan data histori donasi",
+			"error": err.Error(),
+		})
+	}
+	c.JSON(200, gin.H{
+		"data":   donasi,
+		"length": len(donasi),
+	})
+}
+
+func (dc *Donasi) Contributors(c *gin.Context) {
+	limit, err := strconv.Atoi(c.Query("limit"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "parameter limit invalid")
+		return
+	}
+
+	projectID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "id project invalid")
+		return
+	}
+	contribrutors, err := dc.Service.Contributors(uint(projectID), uint(limit))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+			"pesan": "gagal mengambil data contributor",
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"data":   contribrutors,
+		"length": len(contribrutors),
+	})
 }

@@ -1,16 +1,18 @@
 package services
 
 import (
-	"errors"
-	"slices"
-	"strings"
-
-	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
+	"slices"
+	"strings"
+
+	xendit "github.com/xendit/xendit-go/v5"
+	invoice "github.com/xendit/xendit-go/v5/invoice"
 
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
@@ -21,7 +23,13 @@ type DonasiService struct {
 	Repo *repository.DonasiRepo
 }
 
-const paymenturl = "https://api.xendit.co/v2/invoices"
+// type fee struct {
+// 	Typ   string  `json:"type"`
+// 	Value float32 `json:"value"`
+// }
+
+// const paymenturl = "https://api.xendit.co/v2/invoices"
+
 const getInvoiceUrl = "https://api.xendit.co/v2/invoices/"
 
 func NewDonasiService() *DonasiService {
@@ -63,78 +71,25 @@ func (ds *DonasiService) Create(donaturID uint, ProjectID uint, req dto.CreateDo
 	}
 
 	if IsOpenFund(ProjectID) != nil {
-		return nil, fmt.Errorf("waktu pendanaan proyek id %d sudah ditutup", ProjectID)
+		return nil, fmt.Errorf("waktu pendanaan proyek id %d sudah ditutup atau belum divalidasi oleh admin", ProjectID)
 	}
 
 	return ds.Repo.Create(d)
 }
 
-func (ds *DonasiService) CreateInvoice(tr *models.Donasi, email string) (*dto.InvoicePage, error) {
+func (ds *DonasiService) CreateInvoice(tr *models.Donasi, email string) (*invoice.Invoice, error) {
 
 	if tr == nil {
 		return nil, errors.New("tidak ada input yang dikenali")
 	}
-
-	// create body payload
-	fee := map[string]interface{}{
-		"type":  "ADMIN",
-		"value": tr.Fee,
-	}
-
-	data := map[string]interface{}{
-		"external_id": tr.ID,
-		"for-user-id": fmt.Sprintf("%d", tr.DonaturID),
-		"amount":      tr.Jml,
-		"currency":    "IDR",
-		"customer": map[string]interface{}{
-			"email": email,
-		},
-		"customer_notification_preference": map[string]interface{}{
-			"invoice_paid":    "email",
-			"invoice_created": "email",
-		},
-		"payment_methods": tr.Method,
-		"fees":            []interface{}{fee},
-	}
-
-	// encode payload to json
-	jsondata, err := json.Marshal(&data)
+	createInvoice := *invoice.NewCreateInvoiceRequest(tr.ID, float64(tr.Jml+tr.Fee))
+	xndClient := xendit.NewClient(os.Getenv("XENDIT_SKEY"))
+	resp, _, err := xndClient.InvoiceApi.CreateInvoice(context.Background()).CreateInvoiceRequest(createInvoice).Execute()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error when call invoiceapi.createinvoice %s", err.Error())
 	}
 
-	httpReq, err := http.NewRequest("POST", paymenturl, bytes.NewBuffer(jsondata))
-	if err != nil {
-		fmt.Println("Error:", err)
-		return nil, err
-	}
-
-	httpReq.Header.Set("Content-Type", "application/json")
-	key := os.Getenv("XENDIT_SKEY") + ":"
-	encodedString := base64.StdEncoding.EncodeToString([]byte(key))
-	httpReq.Header.Set("Authorization", encodedString)
-
-	client := &http.Client{}
-	resp, err := client.Do(httpReq)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return nil, err
-
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= 400 {
-		return nil, fmt.Errorf("response status = %d", resp.StatusCode)
-	}
-
-	var createTransactionResponse *dto.InvoicePage
-	decoder := json.NewDecoder(resp.Body)
-	if err := decoder.Decode(&createTransactionResponse); err != nil {
-		fmt.Println("Error:", err)
-		return nil, err
-	}
-
-	return createTransactionResponse, nil
+	return resp, nil
 }
 
 func (ds *DonasiService) GetTransaction(id string, donaturID uint) (interface{}, error) {
@@ -148,10 +103,10 @@ func (ds *DonasiService) GetTransaction(id string, donaturID uint) (interface{},
 	}
 
 	httpreq.Header.Set("for-user-id", fmt.Sprintf("%d", tr.DonaturID)) // ex:"1"
-	key := os.Getenv("XENDIT_SKEY") + ":"                              // ex: xxxxx:
-	fmt.Println("skey: ", key)
+	key := os.Getenv("XENDIT_SKEY") + ":"
+
 	encodedString := base64.StdEncoding.EncodeToString([]byte(key))
-	httpreq.Header.Set("Authorization", encodedString)
+	httpreq.Header.Set("Authorization", "Basic "+encodedString) // Basic yfhecmhgk98cmyfgsdtvwxe
 
 	client := &http.Client{}
 	resp, err := client.Do(httpreq)
@@ -173,19 +128,25 @@ func (ds *DonasiService) GetTransaction(id string, donaturID uint) (interface{},
 	return response, nil
 }
 
-func (ds *DonasiService) Notifikasi(req dto.NotifInvoice) error {
-	d, err := ds.Repo.FindID(req.ExternalID)
+func (ds *DonasiService) Notifikasi(req dto.NotifInvoice) (models.Donasi, error) {
+	// update status dan mengambil data transaksi dari database
+	d, err := ds.Repo.UpdateStatus(req.ExternalID, req.Status)
 	if err != nil {
-		return err
+		return d, err
 	}
 
-	if err := ds.Repo.UpdateStatus(req.ExternalID, req.Status); err != nil {
-		return err
-	}
-
+	// if status != paid => abort process
 	if strings.ToLower(req.Status) != "paid" {
-		return nil
+		return d, nil
 	}
 	bs := NewProjectService()
-	return bs.Repo.TambahSaldo(d.ProjectID, d.Jml)
+	return d, bs.Repo.TambahSaldo(d.ProjectID, d.Jml)
+}
+
+func (ds *DonasiService) GetAllHistory(projectID uint) ([]models.Donasi, error) {
+	return ds.Repo.GetHistory(projectID)
+}
+
+func (ds *DonasiService) Contributors(projectID uint, limit uint) ([]models.Donasi, error) {
+	return ds.Repo.Contributors(projectID, limit)
 }
