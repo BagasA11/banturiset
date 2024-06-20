@@ -37,6 +37,5 @@ type ReviewRegister struct {
 
 type Login struct {
 	Email    string `json:"email" binding:"required,min=8" `
-	Role     string `json:"role" binding:"required"`
 	Password string `json:"password" binding:"required,min=8"`
 }

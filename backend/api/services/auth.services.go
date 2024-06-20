@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"slices"
 	"strings"
 
 	"github.com/bagasa11/banturiset/api/dto"
@@ -24,46 +23,47 @@ func NewAuthService() *AuthService {
 
 func (as *AuthService) Login(req dto.Login) (string, error) {
 
-	var u models.User
-	var err error
 	var roleID uint
-
-	if req.Role == "" {
-		return "", errors.New("parameter kosong")
+	user, err := as.Repo.EmailLogin(req.Email)
+	if err != nil {
+		return "", err
 	}
-
-	if !slices.Contains([]string{"admin", "penyunting", "peneliti", "donatur", "penyumbang", "investor", "sponsor", "dermawan"}, strings.ToLower(req.Role)) {
-		return "", errors.New("role invalid, pilih role tersedia:{admin, penyunting, peneliti, donatur}")
+	if user == nil {
+		return "", errors.New("gagal mengambil data user")
 	}
-
-	// admin
-	if slices.Contains([]string{"admin", "penyunting"}, strings.ToLower(req.Role)) {
-		u, err = as.Repo.AdminLogin(req.Email)
-		roleID = u.Penyunting.ID
+	// compare input password and hash
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+		return "", nil
 	}
-	// penelit
-	if strings.ToLower(req.Role) == "peneliti" {
-		u, err = as.Repo.PenelitLogin(req.Email)
-		roleID = u.Peneliti.ID
-	}
-	// donatur
-	if slices.Contains([]string{"donatur", "investor", "dermawan", "sponsor"}, strings.ToLower(req.Role)) {
-		u, err = as.Repo.DonaturLogin(req.Email)
-		roleID = u.Donatur.ID
-	}
-
+	// select user detail by role
+	// if admin := user->admin{}
+	user, roleID, err = as.selectByRole(user.ID, user.Role)
 	if err != nil {
 		return "", err
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(req.Password)); err != nil {
-		return "", nil
+	if roleID == 0 {
+		return "", errors.New("terjadi kesalahan dalam fetch data user")
 	}
 
-	token, err := helpers.GenerateToken(u.ID, u.Email, u.Role, roleID)
+	token, err := helpers.GenerateToken(user.ID, user.Email, user.Role, roleID)
 	if err != nil {
 		return "", err
 	}
 	return token, nil
 
+}
+
+func (as *AuthService) selectByRole(userID uint, r string) (*models.User, uint, error) {
+
+	if strings.ToLower(r) == models.Admin {
+		return as.Repo.AdminProfile(userID)
+	}
+	if strings.ToLower(r) == models.Researcher {
+		return as.Repo.PenelitiProfile(userID)
+	}
+	if strings.ToLower(r) == models.Sponsor {
+		return as.Repo.DonaturProfile(userID)
+	}
+	return nil, 0, errors.New("role invalid")
 }

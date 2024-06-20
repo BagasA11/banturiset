@@ -12,3 +12,8 @@ const Selesai = 3
 const Validasi = 2
 const Diajuakan = 1
 const Ditolak = 0
+
+// users
+const Admin = "penyunting"
+const Researcher = "peneliti"
+const Sponsor = "donatur"

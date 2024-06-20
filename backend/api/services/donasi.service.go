@@ -128,19 +128,20 @@ func (ds *DonasiService) GetTransaction(id string, donaturID uint) (interface{},
 	return response, nil
 }
 
-func (ds *DonasiService) Notifikasi(req dto.NotifInvoice) (models.Donasi, error) {
-	// update status dan mengambil data transaksi dari database
-	d, err := ds.Repo.UpdateStatus(req.ExternalID, req.Status)
+func (ds *DonasiService) UpdateStatus(id string, sts string) error {
+	return ds.Repo.UpdateStatus(id, sts)
+}
+
+func (ds *DonasiService) ConfirmPayment(id string) (models.Donasi, error) {
+	ps := NewProjectService()
+	d, err := ds.ConfirmPayment(id)
 	if err != nil {
 		return d, err
 	}
-
-	// if status != paid => abort process
-	if strings.ToLower(req.Status) != "paid" {
-		return d, nil
+	if err = ps.Repo.TambahSaldo(d.ProjectID, d.Jml); err != nil {
+		return d, err
 	}
-	bs := NewProjectService()
-	return d, bs.Repo.TambahSaldo(d.ProjectID, d.Jml)
+	return d, nil
 }
 
 func (ds *DonasiService) GetAllHistory(projectID uint) ([]models.Donasi, error) {
@@ -149,4 +150,8 @@ func (ds *DonasiService) GetAllHistory(projectID uint) ([]models.Donasi, error) 
 
 func (ds *DonasiService) Contributors(projectID uint, limit uint) ([]models.Donasi, error) {
 	return ds.Repo.Contributors(projectID, limit)
+}
+
+func (ds *DonasiService) MyContribution(donaturID uint, limit uint) ([]models.Donasi, error) {
+	return ds.Repo.MyContribution(donaturID, limit)
 }

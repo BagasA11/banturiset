@@ -117,37 +117,46 @@ func (ur *UserRepo) DonaturLogin(email string) (models.User, error) {
 
 }
 
-func (ur *UserRepo) DonaturProfile(userID uint) (*models.User, error) {
+func (ur *UserRepo) DonaturProfile(userID uint) (*models.User, uint, error) {
 	u := models.User{}
 	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Donatur").First(&u).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("data user tidak ditemukan")
+			return nil, 0, errors.New("data user tidak ditemukan")
 		}
-		return nil, err
+		return nil, 0, err
 	}
-	return &u, nil
+	return &u, u.Donatur.ID, nil
 }
 
-func (ur *UserRepo) PenelitiProfile(userID uint) (*models.User, error) {
+func (ur *UserRepo) PenelitiProfile(userID uint) (*models.User, uint, error) {
 	u := models.User{}
 	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Peneliti").First(&u).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("data user tidak ditemukan")
+			return nil, 0, errors.New("data user tidak ditemukan")
 		}
-		return nil, err
+		return nil, 0, err
 	}
-	return &u, nil
+	return &u, u.Peneliti.ID, nil
 }
 
-func (ur *UserRepo) AdminProfile(userID uint) (*models.User, error) {
+func (ur *UserRepo) AdminProfile(userID uint) (*models.User, uint, error) {
 	u := models.User{}
 	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Penyunting").First(&u).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("data user tidak ditemukan")
+			return nil, 0, errors.New("data user tidak ditemukan")
 		}
-		return nil, err
+		return nil, 0, err
 	}
-	return &u, nil
+	return &u, u.Penyunting.ID, nil
+}
+
+func (ur *UserRepo) EmailLogin(email string) (*models.User, error) {
+	u := new(models.User)
+	if err := ur.DB.Where("email = ?", email).First(&u).Error; err != nil {
+		fmt.Println("error ur->emailLgin(): ", err.Error())
+		return nil, errors.New("login gagal")
+	}
+	return u, nil
 }
 
 func (pr *UserRepo) Update(user *models.User) error {

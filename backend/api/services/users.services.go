@@ -32,6 +32,10 @@ func (us *UserService) UserRegister(req dto.UserRegister) (uint, error) {
 		return 0, errors.New("admin tidak boleh melakukan registrasi")
 	}
 
+	if !slices.Contains([]string{models.Sponsor, models.Researcher}, strings.ToLower(req.Role)) {
+		return 0, fmt.Errorf("tipe user invalid: %v", []string{models.Sponsor, models.Researcher})
+	}
+
 	user := models.User{
 		FName:         req.FName,
 		Email:         req.Email,
@@ -119,30 +123,25 @@ func (us *UserService) CompletePayentInfo(id uint, req dto.PaymentInfos) error {
 	return us.User.Update(&u)
 }
 
-func (us *UserService) GetProfile(id uint, role string) (*models.User, error) {
-	u := new(models.User)
-	var err error
-
-	if slices.Contains([]string{"donatur", "investor", "dermawan", "sponsor"}, strings.ToLower(role)) {
-		u, err = us.User.DonaturProfile(id)
-	}
-	if strings.ToLower(role) == "peneliti" {
-		u, err = us.User.PenelitiProfile(id)
-	}
-	if slices.Contains([]string{"admin", "penyunting"}, strings.ToLower(role)) {
-		u, err = us.User.AdminProfile(id)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-	if u == nil {
-		return nil, errors.New("gagal mengambil data user")
-	}
-	return u, nil
+func (us *UserService) GetProfile(id uint, role string) (*models.User, uint, error) {
+	return us.selectByRole(id, role)
 }
 
 func GetPaymentInfo(userID uint) (models.PaymentInfo, error) {
 	us := NewUserService()
 	return us.User.GetPayment(userID)
+}
+
+func (us *UserService) selectByRole(userID uint, r string) (*models.User, uint, error) {
+
+	if strings.ToLower(r) == models.Admin {
+		return us.User.AdminProfile(userID)
+	}
+	if strings.ToLower(r) == models.Researcher {
+		return us.User.PenelitiProfile(userID)
+	}
+	if strings.ToLower(r) == models.Sponsor {
+		return us.User.DonaturProfile(userID)
+	}
+	return nil, 0, errors.New("role invalid")
 }
