@@ -68,9 +68,9 @@ func (pr *ProjectRepository) Diverifikasi(page uint) ([]models.Project, error) {
 	if page == 0 {
 		return ps, errors.New("page harus diatas 0")
 	}
-	var to = page * 10
+	var to = page * 20
 
-	if err := pr.DB.Where("id BETWEEN ? AND ?", to-9, to).Where("status >= ?", models.Verifikasi).Find(&ps).Error; err != nil {
+	if err := pr.DB.Where("id BETWEEN ? AND ?", to-19, to).Where("status >= ?", models.Verifikasi).Find(&ps).Error; err != nil {
 		fmt.Printf("\nerror project->diverifikasi(): %s", err.Error())
 		return ps, errors.New("gagal mendapatkan daftar proyek")
 	}
@@ -201,11 +201,13 @@ func (pr *ProjectRepository) TambahSaldo(id uint, saldo float32) error {
 	tx := pr.DB.Begin()
 	p := models.Project{}
 	if err := pr.DB.First(&p, id).Error; err != nil {
+		fmt.Println("pr->tambahSaldo() ", err.Error())
 		return err
 	}
 
 	p.CollectedFund += saldo
 	if err := tx.Save(&p).Error; err != nil {
+		fmt.Println("pr->tambahSaldo() ", err.Error())
 		tx.Rollback()
 		return err
 	}
@@ -218,8 +220,8 @@ func (pr *ProjectRepository) OpenDonate(page uint) ([]models.Project, error) {
 	if page == 0 {
 		return []models.Project{}, errors.New("page tidak boleh kosong")
 	}
-	pAkhir := uint(page * 10)
-	pAwal := uint(pAkhir - 9)
+	pAkhir := uint(page * 20)
+	pAwal := uint(pAkhir - 19)
 
 	err := pr.DB.
 		Where("status >= ? AND fraud = ? AND id BETWEEN ? AND ?", models.Verifikasi, !models.Fraud, pAwal, pAkhir).

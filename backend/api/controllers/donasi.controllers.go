@@ -3,14 +3,11 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/services"
-	"github.com/bagasa11/banturiset/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -109,9 +106,6 @@ func (dc *Donasi) GetInvoiceDetail(c *gin.Context) {
 
 func (dc *Donasi) Notif(c *gin.Context) {
 
-	webhook_id, _ := c.Get("webhook-id")
-	cache := config.GetCacheTTL()
-
 	req := new(dto.NotifInvoice)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		validationErrs, ok := err.(validator.ValidationErrors)
@@ -128,24 +122,11 @@ func (dc *Donasi) Notif(c *gin.Context) {
 		return
 	}
 
-	if c.GetHeader("x-callback-token") != os.Getenv("XENDIT_CALLBACK") {
-		c.JSON(http.StatusNotAcceptable, gin.H{
-			"message": "invalid callback token",
-		})
-		return
-	}
-
+	fmt.Printf("\nstatus [%s]\n", req.Status)
 	if strings.ToLower(req.Status) != "paid" {
 
 		if err := dc.Service.UpdateStatus(req.ExternalID, req.Status); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-
-		if err := cache.SetWithTTL(webhook_id.(string), webhook_id.(string), 45*time.Minute); err != nil {
-			c.JSON(500, gin.H{
 				"error": err.Error(),
 			})
 			return
@@ -158,13 +139,6 @@ func (dc *Donasi) Notif(c *gin.Context) {
 	_, err := dc.Service.ConfirmPayment(req.ExternalID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := cache.SetWithTTL(webhook_id.(string), webhook_id.(string), 45*time.Minute); err != nil {
-		c.JSON(500, gin.H{
-			"error": err.Error(),
-		})
 		return
 	}
 

@@ -14,5 +14,5 @@ func DonasiRoutes(r *gin.RouterGroup) {
 	r.GET("/project/:id/donasi/histori", middleware.JwtAuth(), dc.GetHistory)
 	r.GET("/project/:id/donasi/contributor", middleware.JwtAuth(), dc.Contributors)
 	r.GET("/donasi/mycontribution", middleware.JwtAuth(), middleware.DonaturOnly(), dc.Contributors)
-	r.POST("/donasi/notif", middleware.CheckRedundantRequest(), dc.Notif)
+	r.POST("/donasi/notif", middleware.VerifyWebhookToken(), middleware.CheckRedundantWebhook(), dc.Notif)
 }

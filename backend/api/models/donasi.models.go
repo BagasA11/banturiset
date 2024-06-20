@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -36,12 +35,12 @@ func (d *Donasi) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-func (d *Donasi) BeforeUpdate(tx *gorm.DB) error {
-	if strings.ToLower(d.Status) == "paid" {
-		return errors.New("tidak dapat mengubah data transaksi yang sudah berhasil dibayar")
-	}
-	return nil
-}
+// func (d *Donasi) BeforeUpdate(tx *gorm.DB) error {
+// 	if strings.ToLower(d.Status) == "paid" {
+// 		return errors.New("tidak dapat mengubah data transaksi yang sudah berhasil dibayar")
+// 	}
+// 	return nil
+// }
 
 func (d *Donasi) BeforeDelete(tx *gorm.DB) error {
 

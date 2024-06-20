@@ -119,7 +119,7 @@ func (ur *UserRepo) DonaturLogin(email string) (models.User, error) {
 
 func (ur *UserRepo) DonaturProfile(userID uint) (*models.User, uint, error) {
 	u := models.User{}
-	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Donatur").First(&u).Error; err != nil {
+	if err := ur.DB.Joins("Donatur").Where("is_verfied = ? AND is_block = ?", true, false).First(&u, userID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, 0, errors.New("data user tidak ditemukan")
 		}
@@ -130,7 +130,7 @@ func (ur *UserRepo) DonaturProfile(userID uint) (*models.User, uint, error) {
 
 func (ur *UserRepo) PenelitiProfile(userID uint) (*models.User, uint, error) {
 	u := models.User{}
-	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Peneliti").First(&u).Error; err != nil {
+	if err := ur.DB.Joins("Peneliti").Where("is_verfied = ? AND is_block = ?", true, false).First(&u, userID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, 0, errors.New("data user tidak ditemukan")
 		}
@@ -141,7 +141,7 @@ func (ur *UserRepo) PenelitiProfile(userID uint) (*models.User, uint, error) {
 
 func (ur *UserRepo) AdminProfile(userID uint) (*models.User, uint, error) {
 	u := models.User{}
-	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", userID, true, false).Joins("Penyunting").First(&u).Error; err != nil {
+	if err := ur.DB.Joins("Penyunting").Where("is_verfied = ? AND is_block = ?", true, false).First(&u, userID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, 0, errors.New("data user tidak ditemukan")
 		}

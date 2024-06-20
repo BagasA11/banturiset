@@ -37,7 +37,7 @@ func (dr *DonasiRepo) Create(d models.Donasi) (*models.Donasi, error) {
 
 func (dr *DonasiRepo) ConfirmPayment(id string) (models.Donasi, error) {
 	var d models.Donasi
-	if err := dr.DB.Where("id = ?", id).Preload("Project").First(&d).Error; err != nil {
+	if err := dr.DB.Preload("Project").Where("id = ?", id).First(&d).Error; err != nil {
 		fmt.Println("error dr->confirmPayment(): ", err.Error())
 		return d, errors.New("error when confirm payment status")
 	}

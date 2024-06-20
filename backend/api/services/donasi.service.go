@@ -134,7 +134,7 @@ func (ds *DonasiService) UpdateStatus(id string, sts string) error {
 
 func (ds *DonasiService) ConfirmPayment(id string) (models.Donasi, error) {
 	ps := NewProjectService()
-	d, err := ds.ConfirmPayment(id)
+	d, err := ds.Repo.ConfirmPayment(id)
 	if err != nil {
 		return d, err
 	}
