@@ -301,7 +301,7 @@ func (uc *UsersController) GetProfile(c *gin.Context) {
 		return
 	}
 
-	u, err := uc.Services.GetProfile(id.(uint), role.(string))
+	u, _, err := uc.Services.GetProfile(id.(uint), role.(string))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

@@ -17,7 +17,8 @@ func main() {
 	if err := config.InitDB(); err != nil {
 		panic(err)
 	}
-
+	// initialize ttl cache
+	config.InitCache()
 	r := gin.Default()
 	routes.RegisterRoutes(r)
 }
