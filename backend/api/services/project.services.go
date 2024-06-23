@@ -75,7 +75,7 @@ func (ps *ProjectService) Review(projectID uint) (models.Project, error) {
 	return ps.Repo.Review(projectID)
 }
 
-func (ps *ProjectService) Verifikasi(projectID uint) error {
+func (ps *ProjectService) Verifikasi(projectID uint) (models.Project, error) {
 	return ps.Repo.Verifikasi(projectID)
 }
 
@@ -132,8 +132,8 @@ func (ps *ProjectService) HasSubmit(page uint) ([]models.Project, error) {
 	if page == 0 {
 		return []models.Project{}, errors.New("page harus > 0")
 	}
-	end := page * 10
-	start := end - 9
+	end := page * 20
+	start := end - 19
 
 	return ps.Repo.HasSubmit(start, end)
 }
@@ -143,8 +143,8 @@ func (ps *ProjectService) OnGoing(page uint) ([]models.Project, error) {
 	if page == 0 {
 		return []models.Project{}, errors.New("page harus > 0")
 	}
-	end := page * 10
-	start := end - 9
+	end := page * 20
+	start := end - 19
 
 	return ps.Repo.OnGoing(start, end)
 }

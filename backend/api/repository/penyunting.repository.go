@@ -21,8 +21,9 @@ func NewPenyuntingRepo() *PenyuntingRepo {
 func (ur *PenyuntingRepo) NotVerified(page uint) ([]models.User, error) {
 	var users []models.User
 	var s = []string{"id", "f_name", "email", "role", "phone", "institute", "post_code"}
-	var to = page * 20
-	err := ur.DB.Where("is_verfied = ?", false).Where("id BETWEEN ? AND ?", to-19, to).Select(s).Find(&users).Error
+	var begin = page * 20
+	var last = begin - 19
+	err := ur.DB.Where("is_verfied = ?", false).Where("id BETWEEN ? AND ?", begin, last).Select(s).Find(&users).Error
 	return users, err
 }
 

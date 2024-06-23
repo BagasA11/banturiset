@@ -155,3 +155,7 @@ func (ds *DonasiService) Contributors(projectID uint, limit uint) ([]models.Dona
 func (ds *DonasiService) MyContribution(donaturID uint, limit uint) ([]models.Donasi, error) {
 	return ds.Repo.MyContribution(donaturID, limit)
 }
+
+func (ds *DonasiService) MyHistory(donaturID uint) ([]models.Donasi, error) {
+	return ds.Repo.MyHistory(donaturID)
+}

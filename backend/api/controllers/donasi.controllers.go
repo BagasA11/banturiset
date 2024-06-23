@@ -222,3 +222,22 @@ func (dc *Donasi) MyContribution(c *gin.Context) {
 	})
 
 }
+
+func (dc *Donasi) MyHistory(c *gin.Context) {
+	donaturID, _ := c.Get("role_id")
+	if donaturID == nil {
+		c.JSON(http.StatusBadRequest, "donatur ID tidak ditemukan")
+		return
+	}
+
+	d, err := dc.Service.MyHistory(donaturID.(uint))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"data": d,
+	})
+}

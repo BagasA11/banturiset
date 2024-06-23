@@ -128,17 +128,24 @@ func (pr *ProjectRepository) Detail(id uint) (models.Project, error) {
 	return p, nil
 }
 
-func (pr *ProjectRepository) Verifikasi(id uint) error {
+func (pr *ProjectRepository) Verifikasi(id uint) (models.Project, error) {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND fraud = ?", id, !models.Fraud).
-		Where("klirens_url IS NOT NULL AND proposal_url IS NOT NULL").
-		Update("status", models.Verifikasi).Error; err != nil {
-		tx.Rollback()
-		fmt.Println("\n error project->verifikasi(): ", err.Error())
-		return errors.New("gagal memverifikasi proyek")
+	var p models.Project
+
+	if err := pr.DB.Where("status = ? AND fraud = ?", models.Submit, !models.Fraud).Preload("Tahapan").Preload("BudgetDetails").
+		Joins("Peneliti").First(&p, id).Error; err != nil {
+		fmt.Println(err.Error())
+		return p, errors.New("gagal mendapatkan data proyek")
 	}
+	p.Status = models.Verifikasi
+	if err := tx.Save(&p).Error; err != nil {
+		tx.Rollback()
+		fmt.Println(err.Error())
+		return p, errors.New("gagal memverifikasi proyek")
+	}
+
 	tx.Commit()
-	return nil
+	return p, nil
 }
 
 func (pr *ProjectRepository) Update(p *models.Project) error {

@@ -67,21 +67,6 @@ func (tr *TahapRepo) Update(t models.Tahapan) error {
 	return nil
 }
 
-// ... ... ++
-// >= ... ++ ... atau ++ ... ... (gak boleh)
-// <= ... ... ++ (boleh)
-func (tr *TahapRepo) HasTahap(ProjectID uint, tahap uint) error {
-	t := []models.Tahapan{}
-	if err := tr.DB.Where("project_id = ? AND tahap >= ?", ProjectID, tahap).Find(&t).Error; err != nil {
-		fmt.Println("error tahap->isommited: ", err.Error())
-		return errors.New("someting error when checking tTahap")
-	}
-	if len(t) > 0 {
-		return fmt.Errorf("tahap ke-%d sudah dibuat", t[0].Tahap)
-	}
-	return nil
-}
-
 func (tr *TahapRepo) isGT100(projectID uint, input uint) error {
 	var percent uint
 	if err := tr.DB.Table("tahapans").Where("project_id = ?", projectID).Select("sum(cost_percent) as n").Scan(&percent).Error; err != nil {

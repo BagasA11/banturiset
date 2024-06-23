@@ -9,6 +9,9 @@ import (
 
 func UserRoutes(r *gin.RouterGroup) {
 	uc := controllers.NewUsersController()
+	r.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(200, "ping")
+	})
 	r.POST("/register", uc.UserRegistration)
 	r.PUT("/verifikasi/:id", middleware.JwtAuth(), middleware.AdminOnly(), uc.Verifikasi)
 	// create donatur data

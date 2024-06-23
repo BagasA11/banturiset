@@ -350,7 +350,7 @@ func (pc *ProjectControllers) Verfikasi(c *gin.Context) {
 		return
 	}
 
-	if pc.Service.Verifikasi(uint(projectID)) != nil {
+	if _, err := pc.Service.Verifikasi(uint(projectID)); err != nil {
 		c.JSON(http.StatusInternalServerError, "gagal memverifikasi proyek")
 		return
 	}
