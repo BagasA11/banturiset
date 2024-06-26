@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  # postgres:
+  #   image: postgres:latest
+  #   container_name: postgres_dockerizing
+  #   ports:
+  #     - 5432:5432
+  #   restart: always
+  #   environment:
+  #     POSTGRES_PASSWORD: postgres123
+  #   volumes:
+  #     - database_dockerizing:/var/lib/postgresql/data
+  #     - ./dbshell:/docker-entrypoint-initdb.d/
+  #   networks:
+  #     - fullstack
+
+  go_services:
+    container_name: go_services
+    build: ./backend
+    ports: 
+      - 8080:8080
+    restart: always
+    env_file: "/backend/.env.local"
+    volumes:
+      - api_volume:/usr/src/app/
+    networks:
+      - go_services
+
+    # environment:
+      # - MAIL_USERNAME=111202214715@mhs.dinus.ac.id
+      # - MAIL_PASS=ylve nrfl ksjh rnzh
+      # - SMTP=smtp.gmail.com
+      # - TLS=587
+      # - DB_USERNAME=bagas
+      # - DB_PASS=1234
+      # - DB_NAME=banturiset
+      # - DB_PORT=3306
+      # - LOC_PORT=8080
+      # - LOC_HOST=localhost
+      # - XENDIT_PUBKEY=xnd_public_development_lUdot5V8TCpsjpRgkZIFdRzEgORG87NVkoi2IIyby2RmpZdNt2Iedy8wUhOS1
+      # - XENDIT_SKEY=xnd_development_FHr50wMayGzh1Wv7adJcZu6H4enlNJPnpCmZvmdDhy7QQXUsSLHMiPt9zbt75Z
+      # - XENDIT_WEBHOOK=QXeRSbbno1rnvbSKizsoZS9ZlgevJjqTyQ1QggLEQxrvMB0j
+      # - JWT_KEY=ahfncwuhr73ywn83uybs73729dks
+
+    # depends_on:
+    #   - postgres
+    
+
+volumes:
+  api_volume:
+  # database_dockerizing:
+
+networks:
+  go_services:
+    driver: bridge

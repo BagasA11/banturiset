@@ -1,12 +1,17 @@
-FROM golang:1.22
+FROM golang:1.22.4
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
+# copy go package manager
+COPY go.mod ./
+COPY  go.sum ./
 
+RUN go mod download
+
+# copy all project files
 COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
 
-CMD ["app"]
+# run to compile go program
+RUN go build -v -o main .
+
+CMD [ "/app/main" ]

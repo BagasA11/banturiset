@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/bagasa11/banturiset/api/dto"
+	"github.com/bagasa11/banturiset/api/models"
 
 	"github.com/bagasa11/banturiset/api/services"
-
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
@@ -350,10 +351,14 @@ func (pc *ProjectControllers) Verfikasi(c *gin.Context) {
 		return
 	}
 
-	if _, err := pc.Service.Verifikasi(uint(projectID)); err != nil {
+	p, err := pc.Service.Verifikasi(uint(projectID))
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, "gagal memverifikasi proyek")
 		return
 	}
+
+	go pipeline(p)
+	time.Sleep(2 * time.Second)
 	c.JSON(http.StatusOK, "ok")
 }
 
@@ -482,4 +487,34 @@ func (pc *ProjectControllers) Revisi(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"data": projects,
 	})
+}
+
+func (pc *ProjectControllers) MyContributeProject(c *gin.Context) {
+	role_id, _ := c.Get("role_id")
+	if role_id.(uint) == 0 {
+		c.JSON(400, "role id invalid")
+		return
+	}
+
+	page, err := strconv.Atoi(c.Query("page"))
+	if err != nil {
+		c.JSON(400, "parameter page invalid")
+		return
+	}
+
+	ps, err := pc.Service.MyContributeProject(role_id.(uint), uint(page))
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"data":   ps,
+		"length": len(ps),
+	})
+}
+
+func pipeline(data models.Project) {
+	fmt.Printf("data: %v", data)
 }

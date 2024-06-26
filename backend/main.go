@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/bagasa11/banturiset/config"
 
 	"github.com/bagasa11/banturiset/routes"
@@ -13,7 +16,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	fmt.Println(os.Getenv("LOC_HOST"))
 	if err := config.InitDB(); err != nil {
 		panic(err)
 	}

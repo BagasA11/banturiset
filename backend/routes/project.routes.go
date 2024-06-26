@@ -30,8 +30,8 @@ func ProjectRoutes(r *gin.RouterGroup) {
 	r.GET("/project/diverifikasi", middleware.JwtAuth(), pc.Diverifikasi)
 	r.GET("/project/ongoing", middleware.JwtAuth(), pc.OnGoing)
 	r.GET("/project/:id/detail", middleware.JwtAuth(), pc.Detail)
-	// peneliti
 
-	// admin
+	// donatur
+	r.GET("/project/my_contrib", middleware.JwtAuth(), middleware.DonaturOnly(), pc.MyContributeProject)
 
 }

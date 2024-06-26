@@ -136,7 +136,7 @@ func (dc *Donasi) Notif(c *gin.Context) {
 		return
 	}
 
-	_, err := dc.Service.ConfirmPayment(req.ExternalID)
+	err := dc.Service.ConfirmPayment(req.ExternalID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -189,38 +189,6 @@ func (dc *Donasi) Contributors(c *gin.Context) {
 		"data":   contribrutors,
 		"length": len(contribrutors),
 	})
-}
-
-func (dc *Donasi) MyContribution(c *gin.Context) {
-	donaturID, _ := c.Get("role_id")
-	if donaturID.(uint) == 0 {
-		c.JSON(400, "header role_id diperlukan")
-		return
-	}
-	limit, err := strconv.Atoi(c.Query("limit"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-	if limit <= 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"pesan": "parameter limit harus > 0",
-		})
-		return
-	}
-	donasi, err := dc.Service.MyContribution(donaturID.(uint), uint(limit))
-	if err != nil {
-		c.JSON(500, gin.H{
-			"pesan": "gagal mengambil data",
-			"error": err.Error(),
-		})
-	}
-	c.JSON(200, gin.H{
-		"data": donasi,
-	})
-
 }
 
 func (dc *Donasi) MyHistory(c *gin.Context) {

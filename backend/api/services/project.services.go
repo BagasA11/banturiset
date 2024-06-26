@@ -152,3 +152,9 @@ func (ps *ProjectService) OnGoing(page uint) ([]models.Project, error) {
 func (ps *ProjectService) Revisi(penelitiID uint) ([]models.Project, error) {
 	return ps.Repo.Revisi(penelitiID)
 }
+
+func (ps *ProjectService) MyContributeProject(donaturID uint, page uint) ([]models.Project, error) {
+	end := page * 20
+	start := end - 19
+	return ps.Repo.MyContributeProject(donaturID, start, end)
+}

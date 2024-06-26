@@ -292,5 +292,15 @@ func (pr *ProjectRepository) Revisi(penelitiID uint) ([]models.Project, error) {
 	return p, nil
 }
 
+func (pr *ProjectRepository) MyContributeProject(donaturID uint, start uint, end uint) ([]models.Project, error) {
+	var p []models.Project
+
+	if err := pr.DB.Preload("Donasi", "id = ?", donaturID).Where("id BETWEEN ? AND ?", start, end).Find(&p).Error; err != nil {
+		fmt.Println("error[repo]: ", err.Error())
+		return p, err
+	}
+	return p, nil
+}
+
 func (pr *ProjectRepository) Abort(id uint)   {}
 func (pr *ProjectRepository) Selesai(id uint) {}

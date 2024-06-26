@@ -132,16 +132,18 @@ func (ds *DonasiService) UpdateStatus(id string, sts string) error {
 	return ds.Repo.UpdateStatus(id, sts)
 }
 
-func (ds *DonasiService) ConfirmPayment(id string) (models.Donasi, error) {
-	ps := NewProjectService()
+func (ds *DonasiService) ConfirmPayment(id string) error {
+
 	d, err := ds.Repo.ConfirmPayment(id)
 	if err != nil {
-		return d, err
+		return err
 	}
+
+	ps := NewProjectService()
 	if err = ps.Repo.TambahSaldo(d.ProjectID, d.Jml); err != nil {
-		return d, err
+		return err
 	}
-	return d, nil
+	return nil
 }
 
 func (ds *DonasiService) GetAllHistory(projectID uint) ([]models.Donasi, error) {
