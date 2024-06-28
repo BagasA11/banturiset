@@ -26,10 +26,10 @@ func ProjectRoutes(r *gin.RouterGroup) {
 	r.PUT("/project/:id/verifikasi", middleware.JwtAuth(), middleware.AdminOnly(), pc.Verfikasi)
 
 	// umum
-	r.GET("/project/opendonasi", middleware.JwtAuth(), pc.OpenDonate)
-	r.GET("/project/diverifikasi", middleware.JwtAuth(), pc.Diverifikasi)
-	r.GET("/project/ongoing", middleware.JwtAuth(), pc.OnGoing)
-	r.GET("/project/:id/detail", middleware.JwtAuth(), pc.Detail)
+	r.GET("/project/opendonasi", pc.OpenDonate)
+	r.GET("/project/diverifikasi", pc.Diverifikasi)
+	r.GET("/project/ongoing", pc.OnGoing)
+	r.GET("/project/:id/detail", pc.Detail)
 
 	// donatur
 	r.GET("/project/my_contrib", middleware.JwtAuth(), middleware.DonaturOnly(), pc.MyContributeProject)

@@ -359,7 +359,9 @@ func (pc *ProjectControllers) Verfikasi(c *gin.Context) {
 
 	go pipeline(p)
 	time.Sleep(2 * time.Second)
-	c.JSON(http.StatusOK, "ok")
+	c.JSON(http.StatusOK, gin.H{
+		"data": p,
+	})
 }
 
 func (pc *ProjectControllers) Diverifikasi(c *gin.Context) {
