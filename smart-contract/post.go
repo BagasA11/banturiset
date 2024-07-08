@@ -66,7 +66,7 @@ func main() {
     from := "Joko"
     to := "Budi"
     amount := big.NewInt(int64(999))
-    tx, err := instance.AddTransaction(auth, from, to,amount)
+    tx, err := instance.AddTransaction(auth, from, to, amount)
     if err != nil {
         log.Fatal(err)
     }
