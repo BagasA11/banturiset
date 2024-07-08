@@ -35,25 +35,27 @@ func (ur *UserRepo) Create(u models.User) (uint, error) {
 
 func (ur *UserRepo) IsDonatur(userID uint) error {
 	var u *models.User
-	err := ur.DB.Where("id = ?", userID).Preload("Donatur").Select("id", "role").Limit(1).Find(&u).Error
+	err := ur.DB.Where("id = ?", userID).Preload("Donatur").Limit(1).Find(&u).Error
 	if err != nil {
 		return err
 	}
-	if u != nil {
-		return fmt.Errorf("user dengan id %d sudah memiliki peran sebagai donatur", userID)
+	if u.Donatur.UserID == userID {
+		return fmt.Errorf("user id %d sudah terdaftar menjadi donatur", userID)
 	}
+
 	return nil
 }
 
 func (ur *UserRepo) IsPeneliti(userID uint) error {
 	var u *models.User
-	err := ur.DB.Where("id = ?", userID).Preload("Peneliti").Select("id", "role").Limit(1).Find(&u).Error
+	err := ur.DB.Where("id = ?", userID).Preload("Peneliti").Limit(1).Find(&u).Error
 	if err != nil {
 		return err
 	}
-	if u != nil {
-		return fmt.Errorf("user dengan id %d sudah memiliki peran sebagai peneliti", userID)
+	if u.Peneliti.UserID == userID {
+		return fmt.Errorf("user id %d sudah terdaftar menjadi peneliti", userID)
 	}
+
 	return nil
 }
 

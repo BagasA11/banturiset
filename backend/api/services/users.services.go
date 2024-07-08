@@ -76,6 +76,7 @@ func (us *UserService) CreatePeneliti(userID uint, req dto.PenelitiRegister) err
 		UserID: userID,
 	}
 	// redundant check
+	// memeriksa peneliti yang memiliki userID sama
 	rd, err := us.Peneliti.IsRedundant(p.UserID)
 	if err != nil {
 		return err
@@ -104,7 +105,10 @@ func (us *UserService) Verifikasi(userID uint) (string, error) {
 }
 
 func (us *UserService) NotVerified(page uint) ([]models.User, error) {
-	return us.Penyunting.NotVerified(page)
+	var last = page * 20
+	var begin = last - 19
+	fmt.Printf("%d - %d\n", begin, last)
+	return us.Penyunting.NotVerified(begin, last)
 }
 
 func (us *UserService) CompletePayentInfo(id uint, req dto.PaymentInfos) error {
