@@ -30,9 +30,9 @@ func (tr *TahapRepo) Create(t models.Tahapan) error {
 	if err := tr.isGT100(t.ProjectID, uint(t.CostPercent)); err != nil {
 		return err
 	}
-	if _, err := tr.GetDataByTahap(t.ProjectID, t.Tahap); err != nil {
-		return fmt.Errorf("data tahap %d redundan", t.Tahap)
-	}
+	// if _, err := tr.GetDataByTahap(t.ProjectID, t.Tahap); err != nil {
+	// 	return fmt.Errorf("data tahap %d redundan", t.Tahap)
+	// }
 
 	tx := tr.DB.Begin()
 	if err := tx.Create(&t).Error; err != nil {
@@ -107,14 +107,14 @@ func (tr *TahapRepo) Delete(id uint) error {
 	return nil
 }
 
-func (tr *TahapRepo) GetDataByTahap(projectID uint, tahap uint8) (models.Tahapan, error) {
+func (tr *TahapRepo) IsTahapRedundant(projectID uint, tahap uint8) error {
 	var t models.Tahapan
 	if err := tr.DB.Where("project_id = ? AND tahap = ?", projectID, tahap).First(&t).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return t, nil
+			return nil
 		}
 		fmt.Printf("getDatabyTahap(): %s/n", err.Error())
-		return t, errors.New("gagal mengambil data tahapan")
+		return errors.New("gagal mengambil data tahapan")
 	}
-	return t, errors.New("data redundan")
+	return errors.New("data redundan")
 }

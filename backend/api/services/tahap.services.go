@@ -110,7 +110,7 @@ func (ts *TahapService) Delete(id uint, projectID uint, penelitID uint) error {
 	return ts.Repo.Delete(id)
 }
 
-func GetDataByTahap(projectID uint, tahap uint8) (models.Tahapan, error) {
+func IsTahapRedundant(projectID uint, tahap uint8) error {
 	ts := NewTahapService()
-	return ts.Repo.GetDataByTahap(projectID, tahap)
+	return ts.Repo.IsTahapRedundant(projectID, tahap)
 }

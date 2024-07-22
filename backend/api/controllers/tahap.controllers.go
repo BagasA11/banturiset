@@ -56,6 +56,18 @@ func (tc *TahapControllers) Create(c *gin.Context) {
 		return
 	}
 
+	if err := services.IsTahapRedundant(uint(projectID), req.Tahap); err != nil {
+		if err.Error() == "data redundan" {
+			c.JSON(http.StatusUnprocessableEntity, fmt.Sprintf("data kolom tahap %d redundan", req.Tahap))
+			return
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+	}
+
 	if err := tc.Service.Create(uint(projectID), roleID.(uint), *req); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal menambahkan data tahapan penelitian",
