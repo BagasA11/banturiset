@@ -19,10 +19,7 @@ func NewPengajuanService() *PengajuanServices {
 }
 
 func (ps *PengajuanServices) Create(req dto.Pengajuan, penyuntingID uint) error {
-	t, err := time.Parse(time.RFC3339, req.ClosedAt)
-	if err != nil {
-		return err
-	}
+	t := time.Now().AddDate(0, int(req.Month), 0)
 
 	p := models.Pengajuan{
 		Title:        req.Title,

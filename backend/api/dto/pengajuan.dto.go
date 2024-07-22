@@ -6,5 +6,5 @@ type Pengajuan struct {
 	LinkWA      string  `json:"linkwa" binding:"required,max=120"`
 	LinkPanduan *string `json:"panduan" binding:"max=120"`
 	LinkIcon    string  `json:"icon" binding:"required,max=120"`
-	ClosedAt    string  `json:"closed_at" binding:"required"`
+	Month       uint8   `json:"month" binding:"required,min=1,max=12"`
 }

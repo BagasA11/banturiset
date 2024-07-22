@@ -29,6 +29,8 @@ type Project struct {
 	Pengajuan   Pengajuan `gorm:"foreignKey:PengajuanID"`
 	PenelitiID  uint      `gorm:"not null"`
 	Peneliti    Peneliti  `gorm:"foreignKey:PenelitiID"`
+	AdminID     *uint
+	Penyunting  Penyunting `gorm:"foreignKey:AdminID"`
 
 	Donasi        []Donasi
 	BudgetDetails []BudgetDetails

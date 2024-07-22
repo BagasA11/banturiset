@@ -1,7 +1,6 @@
 package models
 
 import (
-	"errors"
 	"time"
 
 	"gorm.io/gorm"
@@ -25,8 +24,8 @@ func (p *Pengajuan) BeforeCreate(tx *gorm.DB) error {
 	tx.Statement.SetColumn("CreatedAt", time.Now())
 	// if closed - created < 3 months
 
-	if time.Since(p.ClosedAt).Nanoseconds() < time.Hour.Nanoseconds()*24*30*3 {
-		return errors.New("tenggat waktu minimal 3 bulan")
-	}
+	// if time.Since(p.ClosedAt).Nanoseconds() < time.Hour.Nanoseconds()*24*30*3 {
+	// 	return errors.New("tenggat waktu minimal 3 bulan")
+	// }
 	return nil
 }

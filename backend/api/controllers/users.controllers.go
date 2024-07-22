@@ -313,3 +313,24 @@ func (uc *UsersController) GetProfile(c *gin.Context) {
 		"data": *u,
 	})
 }
+
+func (uc *UsersController) ReviewProfile(c *gin.Context) {
+	userID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"pesan": "gagal mendapatkan id user",
+			"error": err.Error(),
+		})
+		return
+	}
+	u, err := uc.Services.ReviewProfile(uint(userID))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(200, gin.H{
+		"data": u,
+	})
+}

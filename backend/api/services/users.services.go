@@ -149,3 +149,20 @@ func (us *UserService) selectByRole(userID uint, r string) (*models.User, uint, 
 	}
 	return nil, 0, errors.New("role invalid")
 }
+
+func (us *UserService) ReviewProfile(id uint) (models.User, error) {
+	u, err := us.User.ReviewProfile(id)
+	if err != nil {
+		return u, err
+	}
+	// d->uID = p->uID = pny->uID = 0
+	if u.Donatur.UserID == u.Peneliti.UserID && u.Peneliti.UserID == u.Penyunting.UserID && u.Penyunting.UserID == 0 {
+		return u, errors.New("data Detail User belum diinput")
+	}
+	return u, nil
+}
+
+// 1 0 0 -> 1
+// 0 1 0 -> 1
+
+// 0 0 0 -> 0

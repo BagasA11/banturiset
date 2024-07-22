@@ -58,6 +58,11 @@ func (pc *PengajuanControllers) Create(c *gin.Context) {
 		return
 	}
 
+	if req.Month < 3 {
+		c.JSON(http.StatusUnprocessableEntity, "durasi pengajuan minimum adalah 3 bulan")
+		return
+	}
+
 	if err := pc.Service.Create(*req, roleID.(uint)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal menambah data pengajuan",

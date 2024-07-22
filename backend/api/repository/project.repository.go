@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/bagasa11/banturiset/api/models"
@@ -90,7 +91,9 @@ func (pr *ProjectRepository) HasSubmit(start uint, end uint) ([]models.Project, 
 func (pr *ProjectRepository) ProjectPreview(id uint, penelitiID uint) (models.Project, error) {
 	var p models.Project
 	if err := pr.DB.Where("peneliti_id = ? AND status > ? AND status <= ? AND fraud = ?",
-		penelitiID, models.Abort, models.Draft, false).Preload("BudgetDetails").Preload("Tahapan").Find(&p, id).
+		penelitiID, models.Abort, models.Draft, false).Preload("BudgetDetails").Preload("Tahapan", func(db *gorm.DB) *gorm.DB {
+		return db.Order("tahapans.tahap DESC")
+	}).Find(&p, id).
 		Error; err != nil {
 
 		fmt.Println("error [repo] project->preview(): ", err.Error())
@@ -128,16 +131,28 @@ func (pr *ProjectRepository) Detail(id uint) (models.Project, error) {
 	return p, nil
 }
 
-func (pr *ProjectRepository) Verifikasi(id uint) (models.Project, error) {
+// tktlevel = tahap
+func (pr *ProjectRepository) Verifikasi(id uint, adminID uint) (models.Project, error) {
 	tx := pr.DB.Begin()
 	var p models.Project
 
-	if err := pr.DB.Where("status = ? AND fraud = ?", models.Submit, !models.Fraud).Preload("Tahapan").Preload("BudgetDetails").
-		Joins("Peneliti").First(&p, id).Error; err != nil {
+	// SELECT * FROM projects WHERE projects.id = $id AND projects.status = $submit AND fraud = false
+	// -> LEFT JOIN penyuntings ON projects.admin_id = penyuntings.id
+	// -> LEFT JOIN penelitis ON projects.peneliti_id = penelitis.id
+	// SELECT * FROM tahapans WHERE project_id = $id
+	// SELECT * FROM budgetdetails WHERE project_id = $id
+	if err := pr.DB.Where("status = ? AND fraud = ?", models.Submit, !models.Fraud).Preload("Tahapan").
+		Preload("BudgetDetails").
+		Joins("Penyunting").Joins("Peneliti").First(&p, id).Error; err != nil {
+
 		fmt.Println(err.Error())
 		return p, errors.New("gagal mendapatkan data proyek")
 	}
+
 	p.Status = models.Verifikasi
+	p.AdminID = &adminID
+
+	// UPDATE projects SET status = p->Status, admin_id p->AdminID WHERE id = $id
 	if err := tx.Save(&p).Error; err != nil {
 		tx.Rollback()
 		fmt.Println(err.Error())
@@ -302,5 +317,23 @@ func (pr *ProjectRepository) MyContributeProject(donaturID uint, start uint, end
 	return p, nil
 }
 
+/*
+	// func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) {
+		fundUntil < now(); penelitiID = PenelitiID; + tahap = Project->Tahapan->Tahap
+
+// }
+*/
+
+func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Project, error) {
+	var p models.Project
+	if err := pr.DB.Where("id = ? AND peneliti_id = ?", id, penelitiID).Preload("Tahapan", func(db *gorm.DB) *gorm.DB {
+		return db.Where("tahap = ?", tahap).Limit(1)
+	}).First(&p).Error; err != nil {
+		log.Fatal(err)
+		return p, errors.New("gagal mengambil data")
+	}
+
+	return p, nil
+}
 func (pr *ProjectRepository) Abort(id uint)   {}
 func (pr *ProjectRepository) Selesai(id uint) {}

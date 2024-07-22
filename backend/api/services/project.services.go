@@ -75,8 +75,8 @@ func (ps *ProjectService) Review(projectID uint) (models.Project, error) {
 	return ps.Repo.Review(projectID)
 }
 
-func (ps *ProjectService) Verifikasi(projectID uint) (models.Project, error) {
-	return ps.Repo.Verifikasi(projectID)
+func (ps *ProjectService) Verifikasi(projectID uint, adminID uint) (models.Project, error) {
+	return ps.Repo.Verifikasi(projectID, adminID)
 }
 
 func (ps *ProjectService) UploadProposal(id uint, penelitiID uint, proposalUrl string) error {
@@ -157,4 +157,9 @@ func (ps *ProjectService) MyContributeProject(donaturID uint, page uint) ([]mode
 	end := page * 20
 	start := end - 19
 	return ps.Repo.MyContributeProject(donaturID, start, end)
+}
+
+func MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Project, error) {
+	ps := NewProjectService()
+	return ps.Repo.MyProjectWasClosedDetail(id, penelitiID, tahap)
 }

@@ -17,7 +17,7 @@ func ProjectRoutes(r *gin.RouterGroup) {
 	r.PUT("/project/:id/edit", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.Update)
 	r.PUT("/project/:id/upload/proposal", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.UploadProposal)
 	r.PUT("/project/:id/upload/klirens", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.UploadKlirens)
-	r.PUT("/project/:id/submit", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.Submit)
+	r.PUT("/project/:id/submit", middleware.JwtAuth(), middleware.PenelitiOnly(), middleware.SubmitValidation(), pc.Submit)
 
 	// admin
 	r.GET("/project/hassubmit", middleware.JwtAuth(), middleware.AdminOnly(), pc.HasSubmit)

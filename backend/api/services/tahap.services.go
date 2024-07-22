@@ -109,3 +109,8 @@ func (ts *TahapService) Delete(id uint, projectID uint, penelitID uint) error {
 	}
 	return ts.Repo.Delete(id)
 }
+
+func GetDataByTahap(projectID uint, tahap uint8) (models.Tahapan, error) {
+	ts := NewTahapService()
+	return ts.Repo.GetDataByTahap(projectID, tahap)
+}

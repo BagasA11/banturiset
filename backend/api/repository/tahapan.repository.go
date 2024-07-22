@@ -30,6 +30,9 @@ func (tr *TahapRepo) Create(t models.Tahapan) error {
 	if err := tr.isGT100(t.ProjectID, uint(t.CostPercent)); err != nil {
 		return err
 	}
+	if _, err := tr.GetDataByTahap(t.ProjectID, t.Tahap); err != nil {
+		return fmt.Errorf("data tahap %d redundan", t.Tahap)
+	}
 
 	tx := tr.DB.Begin()
 	if err := tx.Create(&t).Error; err != nil {
@@ -67,17 +70,28 @@ func (tr *TahapRepo) Update(t models.Tahapan) error {
 	return nil
 }
 
+// type percent struct {
+// 	percent uint
+// }
+
 func (tr *TahapRepo) isGT100(projectID uint, input uint) error {
-	var percent uint
-	if err := tr.DB.Table("tahapans").Where("project_id = ?", projectID).Select("sum(cost_percent) as n").Scan(&percent).Error; err != nil {
-		fmt.Println("error [repo] isGT100(): ", err.Error())
-		return errors.New("error saat melakukan validasi jumlah persentase")
+	var p []int
+	if err := tr.DB.Model(&models.Tahapan{}).Where("project_id = ?", projectID).Pluck("cost_percent", &p).Error; err != nil {
+		fmt.Printf("isGT100(): %s\n", err.Error())
+		return err
 	}
-	if percent+input > 100 {
-		sTtl := fmt.Sprintf("%d", percent+input)
-		return fmt.Errorf("total percentase tidak boleh lebih dari 0: %s persen", sTtl)
+	if sum(p)+int(input) > 100 {
+		return errors.New("persentase tidak boleh melebihi 100%")
 	}
 	return nil
+}
+
+func sum(in []int) int {
+	var sum int = 0
+	for v, _ := range in {
+		sum += v
+	}
+	return sum
 }
 
 func (tr *TahapRepo) Delete(id uint) error {
@@ -91,4 +105,16 @@ func (tr *TahapRepo) Delete(id uint) error {
 	}
 	tx.Commit()
 	return nil
+}
+
+func (tr *TahapRepo) GetDataByTahap(projectID uint, tahap uint8) (models.Tahapan, error) {
+	var t models.Tahapan
+	if err := tr.DB.Where("project_id = ? AND tahap = ?", projectID, tahap).First(&t).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return t, nil
+		}
+		fmt.Printf("getDatabyTahap(): %s/n", err.Error())
+		return t, errors.New("gagal mengambil data tahapan")
+	}
+	return t, errors.New("data redundan")
 }

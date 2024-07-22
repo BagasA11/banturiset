@@ -351,7 +351,13 @@ func (pc *ProjectControllers) Verfikasi(c *gin.Context) {
 		return
 	}
 
-	p, err := pc.Service.Verifikasi(uint(projectID))
+	roleID, exist := c.Get("role_id")
+	if !exist {
+		c.JSON(http.StatusBadRequest, "id admin diperlukan")
+		return
+	}
+
+	p, err := pc.Service.Verifikasi(uint(projectID), roleID.(uint))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, "gagal memverifikasi proyek")
 		return

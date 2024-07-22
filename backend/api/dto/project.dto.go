@@ -62,3 +62,9 @@ type NotifInvoice struct {
 	Status     string  `json:"status"`
 	Amount     float32 `json:"amount"`
 }
+
+type ProgressReport struct {
+	Tahap   uint8  `json:"tahap" binding:"required,min=1"`
+	FileUrl string `json:"fileurl" binding:"required"`
+	Desc    string `json:"desc"`
+}

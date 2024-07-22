@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
@@ -66,6 +67,17 @@ func (ur *UserRepo) FindID(id uint) (models.User, error) {
 		return user, errors.New("data user tidak ditemukan")
 	}
 	return user, nil
+}
+
+func (ur *UserRepo) ReviewProfile(id uint) (models.User, error) {
+	var u models.User
+	if err := ur.DB.Where("id = ? AND is_verfied = ? AND is_block = ?", id, false, false).
+		Preload("Peneliti").Preload("Penyunting").Preload("Donatur").Find(&u).Limit(1).Error; err != nil {
+
+		log.Println(err.Error())
+		return u, errors.New("user tidak ditemukan")
+	}
+	return u, nil
 }
 
 func (ur *UserRepo) CheckID(id uint, role string) error {
