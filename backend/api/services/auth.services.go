@@ -55,7 +55,7 @@ func (as *AuthService) Login(req dto.Login) (string, error) {
 }
 
 func (as *AuthService) selectByRole(userID uint, r string) (*models.User, uint, error) {
-
+	// B4nturis3t_2024
 	if strings.ToLower(r) == models.Admin {
 		return as.Repo.AdminProfile(userID)
 	}
