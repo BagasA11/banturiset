@@ -7,10 +7,12 @@ services:
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: example
-      MARIADB_USERNAME: bagas
+      MARIADB_USERNAME: user1
       MARIADB_PASSWORD: 1234
     ports:
       - 3306:3306
+    networks:
+      - go_services
 
   go_services:
     container_name: go_services
@@ -35,5 +37,5 @@ services:
 networks:
   go_services:
     driver: bridge
-  db: 
-    driver: bridge
+  # db: 
+  #   driver: bridge

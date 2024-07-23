@@ -15,7 +15,7 @@ var DB *gorm.DB
 
 func getMysqlDsn() string {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		os.Getenv("ROOT"), os.Getenv("ROOTPASSWORD"), os.Getenv("DOCKER_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
+		os.Getenv("DB_UNAME"), os.Getenv("DB_UBUNTU_PASS"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
 	fmt.Println("dsn: ", dsn)
 	return dsn
 }
