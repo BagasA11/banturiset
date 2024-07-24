@@ -26,6 +26,10 @@ func NewUsersController() *UsersController {
 	}
 }
 
+func (uc *UsersController) Test(ctx *gin.Context) {
+	ctx.JSON(200, "hello world")
+}
+
 func (uc *UsersController) UserRegistration(c *gin.Context) {
 
 	req := new(dto.UserRegister)

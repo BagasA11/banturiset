@@ -26,11 +26,12 @@ func EnableCors() gin.HandlerFunc {
 
 func NewCors() gin.HandlerFunc {
 	return cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
-		AllowMethods:     []string{"PUT", "POST", "GET", "DELETE"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization"},
+		AllowOrigins:     []string{"http://localhost:5173", "https://banturiset.vercel.app"},
+		AllowFiles:       true,
+		AllowMethods:     []string{"PUT", "POST", "GET", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		MaxAge:           4 * time.Hour,
 	})
 }
