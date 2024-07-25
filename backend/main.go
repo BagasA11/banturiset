@@ -16,6 +16,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	fmt.Println(os.Getenv("LOC_HOST"))
 	if err := config.InitDB(); err != nil {
 		panic(err)
