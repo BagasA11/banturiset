@@ -29,8 +29,8 @@ func NewCors() gin.HandlerFunc {
 		AllowOrigins:     []string{"http://localhost:5173", "https://banturiset.vercel.app"},
 		AllowFiles:       true,
 		AllowMethods:     []string{"PUT", "POST", "GET", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type", "Content-Length", "Accept-Encoding", "Authorization"},
-		ExposeHeaders:    []string{"Content-Length"},
+		AllowHeaders:     []string{"Content-Type", "Content-Length", "Accept-Encoding", "Authorization", "id", "email", "role", "role_id"},
+		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers"},
 		AllowCredentials: true,
 		MaxAge:           4 * time.Hour,
 	})
