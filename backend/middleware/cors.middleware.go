@@ -36,3 +36,14 @@ func NewCors() gin.HandlerFunc {
 		MaxAge:           4 * time.Hour,
 	})
 }
+
+func DefaultConfigCors() gin.HandlerFunc {
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"POST", "GET", "PUT", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization", "Accept", "User-Agent", "Cache-Control", "Pragma"}
+	config.ExposeHeaders = []string{"Content-Length"}
+	config.AllowCredentials = true
+	config.MaxAge = 12 * time.Hour
+	return cors.New(config)
+}

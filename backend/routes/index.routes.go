@@ -13,7 +13,7 @@ func RegisterRoutes(r *gin.Engine) {
 	r.Use(gin.Recovery())
 
 	// cors
-	r.Use(middleware.NewCors())
+	r.Use(middleware.DefaultConfigCors())
 	UserRoutes(apiGroup)
 	AuthRoutes(apiGroup)
 	UploadRoutes(apiGroup)
