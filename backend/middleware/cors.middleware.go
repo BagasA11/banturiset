@@ -26,7 +26,7 @@ func EnableCors() gin.HandlerFunc {
 
 func NewCors() gin.HandlerFunc {
 	return cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
+		// AllowOrigins:     []string{"*"},
 		AllowAllOrigins:  true,
 		AllowFiles:       true,
 		AllowMethods:     []string{"PUT", "POST", "GET", "DELETE", "OPTIONS"},
