@@ -25,8 +25,9 @@ func RegisterRoutes(r *gin.Engine) {
 	// r.Use()
 	// r.Use()
 	// r.Use()
+
 	useMiddleware := []gin.HandlerFunc{cors.New(config), gin.Logger(), gin.Recovery()}
-	r.Use(useMiddleware...)
+	apiGroup.Use(useMiddleware...)
 	// apiGroup.Use(cors.New(config), gin.Logger(), gin.Recovery())
 
 	UserRoutes(apiGroup)
