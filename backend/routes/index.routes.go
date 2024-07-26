@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"net/http"
 	"os"
 	"time"
 
@@ -10,13 +11,16 @@ import (
 
 func RegisterRoutes(r *gin.Engine) {
 	apiGroup := r.Group("/api")
+
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowMethods = []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization", "Accept", "User-Agent", "Cache-Control", "Pragma"}
 	config.ExposeHeaders = []string{"Content-Length"}
 	config.AllowCredentials = true
-	config.MaxAge = 12 * time.Hour
+	config.AllowFiles = true
+	config.OptionsResponseStatusCode = http.StatusOK
+	config.MaxAge = 4 * time.Hour
 
 	// r.Use()
 	// r.Use()
