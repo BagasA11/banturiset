@@ -18,9 +18,12 @@ func RegisterRoutes(r *gin.Engine) {
 	config.AllowCredentials = true
 	config.MaxAge = 12 * time.Hour
 
-	r.Use(cors.New(config))
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	// r.Use()
+	// r.Use()
+	// r.Use()
+	useMiddleware := []gin.HandlerFunc{cors.New(config), gin.Logger(), gin.Recovery()}
+	apiGroup.Use(useMiddleware...)
+	// apiGroup.Use(cors.New(config), gin.Logger(), gin.Recovery())
 
 	UserRoutes(apiGroup)
 	AuthRoutes(apiGroup)
