@@ -15,7 +15,7 @@ func RegisterRoutes(r *gin.Engine) {
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowMethods = []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"}
-	// config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization", "Accept", "User-Agent", "Cache-Control", "Pragma"}
+	config.AllowHeaders = []string{"Origin", "Access-Control-Allow-Origin", "Content-Type", "Authorization", "Accept", "User-Agent", "Cache-Control", "Pragma"}
 	config.ExposeHeaders = []string{"Content-Length"}
 	config.AllowCredentials = true
 	config.AllowFiles = true
@@ -26,7 +26,7 @@ func RegisterRoutes(r *gin.Engine) {
 	// r.Use()
 	// r.Use()
 	useMiddleware := []gin.HandlerFunc{cors.New(config), gin.Logger(), gin.Recovery()}
-	apiGroup.Use(useMiddleware...)
+	r.Use(useMiddleware...)
 	// apiGroup.Use(cors.New(config), gin.Logger(), gin.Recovery())
 
 	UserRoutes(apiGroup)
