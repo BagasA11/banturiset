@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    Response: <span id="response"></span>
+    <h1 id="error"></h1>
+    <script>
+        document.getElementById("response").textContent = "Loading....";
+      const url = "http://103.63.25.209:8080/api/login";
+        fetch(url,{
+      method: "POST",
+      headers: {
+        // "Content-Type": "application/json",
+        // 'Accept': 'application/json',
+        
+        // "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        "email":"bagas123@gmail.com",
+        "password":"12345678"
+      })
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            document.getElementById("response").textContent = JSON.stringify(data);
+        })
+        .catch((err) => {
+          console.log(err);
+          document.getElementById("error").textContent = err;
+        });
+
+    </script>
+
+</body>
+
+</html>
