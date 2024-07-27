@@ -6,6 +6,7 @@ import (
 
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
+	tz "github.com/bagasa11/banturiset/timezone"
 	"gorm.io/gorm"
 )
 
@@ -31,12 +32,12 @@ func (pr *PengajuanRepository) Create(p models.Pengajuan) error {
 
 func (pr *PengajuanRepository) Open() ([]models.Pengajuan, error) {
 	var p []models.Pengajuan
-	err := pr.DB.Where("closed_at > ?", time.Now()).Select([]string{"id", "closed_at", "link_panduan", "desc", "title", "icon_url"}).Find(&p).Error
+	err := pr.DB.Where("closed_at > ?", tz.GetTime(time.Now())).Select([]string{"id", "closed_at", "link_panduan", "desc", "title", "icon_url"}).Find(&p).Error
 	return p, err
 }
 
 func (pr *PengajuanRepository) IsOpen(id uint) error {
-	if err := pr.DB.Where("closed_at >= ?", time.Now()).First(&models.Pengajuan{}, id).Error; err != nil {
+	if err := pr.DB.Where("closed_at >= ?", tz.GetTime(time.Now())).First(&models.Pengajuan{}, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return errors.New("skema penelitian sudah ditutup")
 		}

@@ -5,6 +5,7 @@ import (
 
 	"time"
 
+	tz "github.com/bagasa11/banturiset/timezone"
 	"gorm.io/gorm"
 )
 
@@ -51,7 +52,7 @@ func (p *Project) BeforeCreate(tx *gorm.DB) error {
 		return errors.New("level tkt minimum adalah 1")
 	}
 
-	tx.Statement.SetColumn("CreatedAt", time.Now())
+	tx.Statement.SetColumn("CreatedAt", tz.GetTime(time.Now()))
 	tx.Statement.SetColumn("Status", Draft)
 	tx.Statement.SetColumn("CollectedFund", float32(0))
 
@@ -59,7 +60,7 @@ func (p *Project) BeforeCreate(tx *gorm.DB) error {
 }
 
 func (p *Project) BeforeUpdate(tx *gorm.DB) error {
-	tx.Statement.SetColumn("UpdatedAt", time.Now())
+	tx.Statement.SetColumn("UpdatedAt", tz.GetTime(time.Now()))
 	return nil
 }
 

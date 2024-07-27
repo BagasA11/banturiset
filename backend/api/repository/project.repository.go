@@ -3,11 +3,11 @@ package repository
 import (
 	"errors"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/config"
+	tz "github.com/bagasa11/banturiset/timezone"
 	"gorm.io/gorm"
 )
 
@@ -71,7 +71,10 @@ func (pr *ProjectRepository) Diverifikasi(page uint) ([]models.Project, error) {
 	}
 	var to = page * 20
 
-	if err := pr.DB.Where("id BETWEEN ? AND ?", to-19, to).Where("status >= ?", models.Verifikasi).Find(&ps).Error; err != nil {
+	if err := pr.DB.Where("id BETWEEN ? AND ?", to-19, to).
+		Where("status >= ?", models.Verifikasi).
+		Find(&ps).Error; err != nil {
+
 		fmt.Printf("\nerror project->diverifikasi(): %s", err.Error())
 		return ps, errors.New("gagal mendapatkan daftar proyek")
 	}
@@ -124,8 +127,11 @@ func (pr *ProjectRepository) Detail(id uint) (models.Project, error) {
 	// []tahapan{}
 
 	var p models.Project
-	if err := pr.DB.Where("id = ? AND status >= ? AND fraud = ?", id, models.Verifikasi, false).Preload("BudgetDetails").
-		Preload("Tahapan").Preload("Pengajuan").First(&p).Error; err != nil {
+	if err := pr.DB.Where("id = ? AND status >= ? AND fraud = ?", id, models.Verifikasi, false).
+		Preload("BudgetDetails").
+		Preload("Tahapan").
+		Preload("Pengajuan").
+		First(&p).Error; err != nil {
 		return p, err
 	}
 	return p, nil
@@ -141,9 +147,13 @@ func (pr *ProjectRepository) Verifikasi(id uint, adminID uint) (models.Project, 
 	// -> LEFT JOIN penelitis ON projects.peneliti_id = penelitis.id
 	// SELECT * FROM tahapans WHERE project_id = $id
 	// SELECT * FROM budgetdetails WHERE project_id = $id
-	if err := pr.DB.Where("status = ? AND fraud = ?", models.Submit, !models.Fraud).Preload("Tahapan").
+	if err := pr.DB.Where("status = ? AND fraud = ?", models.Submit, !models.Fraud).
+		Preload("Tahapan").
 		Preload("BudgetDetails").
-		Joins("Penyunting").Joins("Peneliti").First(&p, id).Error; err != nil {
+		Joins("Penyunting").
+		Joins("Peneliti").
+		First(&p, id).
+		Error; err != nil {
 
 		fmt.Println(err.Error())
 		return p, errors.New("gagal mendapatkan data proyek")
@@ -165,7 +175,9 @@ func (pr *ProjectRepository) Verifikasi(id uint, adminID uint) (models.Project, 
 
 func (pr *ProjectRepository) Update(p *models.Project) error {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", p.ID, p.Peneliti.ID, models.Submit).Updates(&p).Error; err != nil {
+	if err := tx.Model(&models.Project{}).
+		Where("id = ? AND peneliti_id = ? AND status < ?", p.ID, p.Peneliti.ID, models.Submit).
+		Updates(&p).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -247,7 +259,7 @@ func (pr *ProjectRepository) OpenDonate(page uint) ([]models.Project, error) {
 
 	err := pr.DB.
 		Where("status >= ? AND fraud = ? AND id BETWEEN ? AND ?", models.Verifikasi, !models.Fraud, pAwal, pAkhir).
-		Where("fund_until >= ?", time.Now()).
+		Where("fund_until >= ?", tz.GetTime(time.Now())).
 		Find(&p).Error
 	if err != nil {
 		fmt.Println(err)
@@ -258,7 +270,8 @@ func (pr *ProjectRepository) OpenDonate(page uint) ([]models.Project, error) {
 func (pr *ProjectRepository) OnGoing(start uint, end uint) ([]models.Project, error) {
 	var p []models.Project
 	if err := pr.DB.
-		Where("id BETWEEN ? AND ? AND status >= ? AND fund_until < ?", start, end, models.Verifikasi, time.Now()).Find(&p).Error; err != nil {
+		Where("id BETWEEN ? AND ? AND status >= ? AND fund_until < ?", start, end, models.Verifikasi, tz.GetTime(time.Now())).
+		Find(&p).Error; err != nil {
 		fmt.Println("[repo] project->ongoing()", err.Error())
 		return p, errors.New("gagal mengambil data")
 	}
@@ -270,7 +283,7 @@ func (pr *ProjectRepository) IsOpentoFund(id uint) error {
 
 	// mencari proyek yang sudah diverifikasi
 	if err := pr.DB.
-		Where("status >= ?", models.Verifikasi).Where("fund_until >= ?", time.Now()).First(&models.Project{}, id).Error; err != nil {
+		Where("status >= ?", models.Verifikasi).Where("fund_until >= ?", tz.GetTime(time.Now())).First(&models.Project{}, id).Error; err != nil {
 		return errors.New("gagal mengecek timeline pendanaan proyek")
 	}
 
@@ -279,7 +292,13 @@ func (pr *ProjectRepository) IsOpentoFund(id uint) error {
 
 func (pr *ProjectRepository) IsEditable(id uint) error {
 
-	if err := pr.DB.Where("status < ? AND id = ?", models.Submit, id).First(&models.Project{}).Error; err != nil {
+	if err := pr.DB.Where("status < ? AND id = ?", models.Submit, id).
+		First(&models.Project{}).
+		Error; err != nil {
+
+		if err == gorm.ErrRecordNotFound {
+			return gorm.ErrRecordNotFound
+		}
 		return errors.New("proyek tidak bisa diubah")
 	}
 	return nil
@@ -326,10 +345,15 @@ func (pr *ProjectRepository) MyContributeProject(donaturID uint, start uint, end
 
 func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Project, error) {
 	var p models.Project
-	if err := pr.DB.Where("id = ? AND peneliti_id = ?", id, penelitiID).Preload("Tahapan", func(db *gorm.DB) *gorm.DB {
-		return db.Where("tahap = ?", tahap).Limit(1)
-	}).First(&p).Error; err != nil {
-		log.Fatal(err)
+	if err := pr.DB.
+		Where("id = ? AND peneliti_id = ?", id, penelitiID).
+		Preload("Tahapan",
+			func(db *gorm.DB) *gorm.DB {
+				return db.Where("tahap = ?", tahap).Limit(1)
+			}).
+		First(&p).Error; err != nil {
+
+		fmt.Printf("myprojectClosed(): %s", err.Error())
 		return p, errors.New("gagal mengambil data")
 	}
 

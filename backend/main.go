@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/bagasa11/banturiset/config"
+	"github.com/bagasa11/banturiset/timezone"
 
 	"github.com/bagasa11/banturiset/routes"
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,11 @@ import (
 func main() {
 	err := godotenv.Load(".env.local")
 	if err != nil {
+		panic(err)
+	}
+
+	// initialize timezone
+	if err := timezone.SetLocation(timezone.Timezone); err != nil {
 		panic(err)
 	}
 

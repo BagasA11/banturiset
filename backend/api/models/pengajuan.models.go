@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	tz "github.com/bagasa11/banturiset/timezone"
 	"gorm.io/gorm"
 )
 
@@ -21,7 +22,7 @@ type Pengajuan struct {
 }
 
 func (p *Pengajuan) BeforeCreate(tx *gorm.DB) error {
-	tx.Statement.SetColumn("CreatedAt", time.Now())
+	tx.Statement.SetColumn("CreatedAt", tz.GetTime(time.Now()))
 	// if closed - created < 3 months
 
 	// if time.Since(p.ClosedAt).Nanoseconds() < time.Hour.Nanoseconds()*24*30*3 {

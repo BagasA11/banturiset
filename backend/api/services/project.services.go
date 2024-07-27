@@ -8,6 +8,7 @@ import (
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/api/repository"
+	tz "github.com/bagasa11/banturiset/timezone"
 )
 
 type ProjectService struct {
@@ -21,10 +22,10 @@ func NewProjectService() *ProjectService {
 }
 
 func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) error {
+	now := tz.GetTime(time.Now())
+	deadline := now.AddDate(int(req.Year), int(now.Month()), now.Day()) // t->now + year + t->now->month + t->now->day
 
-	deadline := time.Now().AddDate(int(req.Year), int(time.Now().Month()), time.Now().Day()) // t->now + year + t->now->month + t->now->day
-
-	fundUntil := time.Now().Add(time.Until(deadline) / 3)
+	fundUntil := now.Add(time.Until(deadline) / 3)
 	fmt.Println("mont ", int(deadline.Month()/3))
 	p := models.Project{
 		Title:       req.Title,

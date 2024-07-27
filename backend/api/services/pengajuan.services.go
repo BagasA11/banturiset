@@ -6,6 +6,7 @@ import (
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/api/repository"
+	tz "github.com/bagasa11/banturiset/timezone"
 )
 
 type PengajuanServices struct {
@@ -19,7 +20,7 @@ func NewPengajuanService() *PengajuanServices {
 }
 
 func (ps *PengajuanServices) Create(req dto.Pengajuan, penyuntingID uint) error {
-	t := time.Now().AddDate(0, int(req.Month), 0)
+	t := tz.GetTime(time.Now()).AddDate(0, int(req.Month), 0)
 
 	p := models.Pengajuan{
 		Title:        req.Title,
