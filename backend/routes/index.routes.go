@@ -10,8 +10,6 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	apiGroup := r.Group("/api")
-
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 	config.AllowMethods = []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"}
@@ -25,9 +23,11 @@ func RegisterRoutes(r *gin.Engine) {
 	// r.Use()
 	// r.Use()
 	// r.Use()
-
 	useMiddleware := []gin.HandlerFunc{cors.New(config), gin.Logger(), gin.Recovery()}
-	apiGroup.Use(useMiddleware...)
+	r.Use(useMiddleware...)
+
+	apiGroup := r.Group("/api")
+	// apiGroup.Use(useMiddleware...)
 	// apiGroup.Use(cors.New(config), gin.Logger(), gin.Recovery())
 
 	UserRoutes(apiGroup)

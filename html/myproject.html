@@ -14,11 +14,11 @@
     <script>
         document.getElementById("response").textContent = "Loading....";
       const url = "http://103.63.25.209:8080/api/project/myproject?limit=1";
-	  const bearer = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYmFnYXMxMjNAZ21haWwuY29tIiwicm9sZSI6InBlbmVsaXRpIiwicm9sZV9pZCI6NiwiZXhwIjoxNzIyMDE4NTkzfQ.LZykPIIi2R7RDelDQQJBCjyZUwAlz8qNkSrX3Hukudk";
+	  const bearer = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYmFnYXMxMjNAZ21haWwuY29tIiwicm9sZSI6InBlbmVsaXRpIiwicm9sZV9pZCI6NiwiZXhwIjoxNzIyMTA2ODIzfQ.H4rxJ0KHwpn6sHj3EvImPPcNKahnHdlbdCI_iu4ktCY";
       fetch(url,{
       method: "GET",
       headers: {
-        // "Authorization": bearer,
+        "Authorization": bearer,
         // "Content-Type": "application/json",
         // "Access-Control-Allow-Origin": "*",
       },
