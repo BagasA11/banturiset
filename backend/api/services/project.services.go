@@ -164,3 +164,7 @@ func MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Pro
 	ps := NewProjectService()
 	return ps.Repo.MyProjectWasClosedDetail(id, penelitiID, tahap)
 }
+
+func (ps *ProjectService) MyProjectCost(projectID uint, penelitiID uint) (float32, error) {
+	return ps.Repo.MyProjectCost(projectID, penelitiID)
+}

@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"sync"
+
 	"time"
 
 	"github.com/bagasa11/banturiset/api/services"
+	tz "github.com/bagasa11/banturiset/timezone"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
@@ -15,73 +16,6 @@ import (
 type tahap struct {
 	Tahap uint8 `json:"tahap"`
 }
-
-type tahapInputValidate struct {
-	tahap     uint8
-	projectID uint
-}
-
-var inputChannel chan tahapInputValidate
-
-func sendToChan(c chan<- tahapInputValidate, input tahapInputValidate) {
-	c <- input
-}
-
-// func handleChan(ch <-chan tahapInputValidate, wg *sync.WaitGroup, result *tahapInputValidate) {
-// 	defer wg.Done()
-// 	for v := range ch {
-// 		result = &v
-// 		// result = &v
-
-// 	}
-// 	return
-// }
-
-// func DateAndStageValidate() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		projectID, err := strconv.Atoi(c.Param("id"))
-// 		if err != nil {
-// 			c.JSON(400, "url tidak valid")
-// 			c.Abort()
-// 			return
-// 		}
-// 		penelitiID, exist := c.Get("role_id")
-// 		if !exist {
-// 			c.JSON(400, "header id peneliti tidak ditemukan")
-// 			c.Abort()
-// 			return
-// 		}
-
-// 		if err := services.IsMyProject(uint(projectID), penelitiID.(uint)); err != nil {
-// 			c.JSON(http.StatusForbidden, "tidak boleh mengedit proyek milik user lain")
-// 			c.Abort()
-// 			return
-// 		}
-// 		// mendapatkan data tahapan berdasarkan tahap dan project id
-// 		tahapInput := new(tahap)
-// 		if err := c.ShouldBindJSON(&tahapInput); err != nil {
-// 			c.JSON(400, "gagal mengambil data input")
-// 			c.Abort()
-// 			return
-// 		}
-// 		dataTahap, err := services.GetDataByTahap(uint(projectID), tahapInput.Tahap)
-// 		if err != nil {
-// 			c.JSON(500, gin.H{
-// 				"error": err.Error(),
-// 			})
-// 			c.Abort()
-// 			return
-// 		}
-// 		// melakukan komparasi range data dengan now()
-// 		now := time.Now()
-// 		if !(now.After(dataTahap.Start) && now.Before(dataTahap.End)) {
-// 			c.JSON(http.StatusForbidden, "waktu pelaksanaan kegiatan belum dimulai")
-// 			c.Abort()
-// 			return
-// 		}
-// 		c.Next()
-// 	}
-// }
 
 func EnsureProjectWasClosed() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -149,7 +83,7 @@ func ValidateCreateReport() gin.HandlerFunc {
 			return
 		}
 
-		t := time.Now()
+		t := tz.GetTime(time.Now())
 		if project.FundUntil.After(t) {
 			c.JSON(http.StatusForbidden, "tidak dapat membuat laporan saat waktu pendanaan masih dibuka")
 			c.Abort()
@@ -161,9 +95,16 @@ func ValidateCreateReport() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		// mychan := make(chan tahap)
-		// mychan <- *tahapInput
-		sendToChan(inputChannel, tahapInputValidate{tahap: tahapInput.Tahap, projectID: uint(projectID)})
+
+		ps := services.NewProgressServices()
+		if err := ps.IsRedundant(project.ID, tahapInput.Tahap); err != nil {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{
+				"error": err.Error(),
+			})
+			c.Abort()
+			return
+		}
+
 		c.Next()
 	}
 }
@@ -216,42 +157,33 @@ func IsInState() gin.HandlerFunc {
 			return
 		}
 
-		sendToChan(inputChannel, tahapInputValidate{tahap: tahapInput.Tahap, projectID: uint(projectID)})
-		ctx.Next()
-	}
-}
-
-func EnsureProgressNotRedundant() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		var wg sync.WaitGroup
-		wg.Add(1)
-
-		data := new(tahapInputValidate)
-		i := 1
-		go func() {
-			defer wg.Done()
-			for v := range inputChannel {
-				fmt.Println(i + 1)
-				data = &v
-				if data == nil {
-					ctx.JSON(500, "terjadi kesalahan pada goroutine")
-					ctx.Abort()
-					return
-				}
-				i += 1
-				break
-			}
-
-		}()
-		wg.Wait()
-
 		ps := services.NewProgressServices()
-		if err := ps.IsRedundant(data.projectID, data.tahap); err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
+		if err := ps.IsRedundant(project.ID, tahapInput.Tahap); err != nil {
+			ctx.JSON(http.StatusUnprocessableEntity, gin.H{
 				"error": err.Error(),
 			})
+			ctx.Abort()
 			return
 		}
+
 		ctx.Next()
 	}
 }
+
+// func EnsureProgressNotRedundant() gin.HandlerFunc {
+// 	return func(ctx *gin.Context) {
+// 		var wg sync.WaitGroup
+// 		wg.Add(1)
+
+// 		data := new(tahapInputValidate)
+
+// 		ps := services.NewProgressServices()
+// 		if err := ps.IsRedundant(data.projectID, data.tahap); err != nil {
+// 			ctx.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
+// 				"error": err.Error(),
+// 			})
+// 			return
+// 		}
+// 		ctx.Next()
+// 	}
+// }

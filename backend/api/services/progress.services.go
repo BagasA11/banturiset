@@ -26,6 +26,7 @@ func (ps *ProgressServices) CreateReport(projectID uint, input dto.ProgressRepor
 	return ps.Repo.CreateReport(p)
 }
 
+// Service untuk memeriksa redundansi laporan
 func (ps *ProgressServices) IsRedundant(projectID uint, tahap uint8) error {
 
 	return ps.Repo.IsRedundant(projectID, tahap)

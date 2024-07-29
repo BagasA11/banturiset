@@ -12,11 +12,13 @@
     <h1 id="error"></h1>
     <script>
         document.getElementById("response").textContent = "Loading....";
+      // const url = "http://103.63.25.209:8080/api/project/opendonasi?page=1";
       const url = "http://103.63.25.209:8080/api/project/opendonasi?page=1";
+      // const url = "http://103.63.25.209:8080/api/project/opendonasi";
       fetch(url,{
       method: "GET",
       headers: {
-        // "Content-Type": "application/json",
+        "Accept": "application/json"
         // "Access-Control-Allow-Origin": "*",
       },
     })

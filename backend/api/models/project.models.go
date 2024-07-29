@@ -25,6 +25,7 @@ type Project struct {
 	PesanRevisi   *string
 	Fraud         bool    `gorm:"not null; default:false"`
 	CollectedFund float32 `gorm:"not null"`
+	ValidatedAt   *time.Time
 
 	PengajuanID uint      `gorm:"not null"`
 	Pengajuan   Pengajuan `gorm:"foreignKey:PengajuanID"`

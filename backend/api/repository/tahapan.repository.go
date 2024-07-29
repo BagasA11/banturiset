@@ -76,7 +76,9 @@ func (tr *TahapRepo) Update(t models.Tahapan) error {
 
 func (tr *TahapRepo) isGT100(projectID uint, input uint) error {
 	var p []int
-	if err := tr.DB.Model(&models.Tahapan{}).Where("project_id = ?", projectID).Pluck("cost_percent", &p).Error; err != nil {
+	if err := tr.DB.
+		Model(&models.Tahapan{}).Where("project_id = ?", projectID).
+		Pluck("cost_percent", &p).Error; err != nil {
 		fmt.Printf("isGT100(): %s\n", err.Error())
 		return err
 	}

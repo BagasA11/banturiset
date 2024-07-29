@@ -31,14 +31,17 @@ func (rp *ReportProgressRepo) CreateReport(p models.Progress) error {
 	return nil
 }
 
+// memeriksa redundansi pada Tahap laporan
+// Jika Tahap ditemukan, atau error saat mengambil data maka akan me return error
+// jika Record Not Found, maka akan me-return nil
 func (rp *ReportProgressRepo) IsRedundant(projectID uint, tahap uint8) error {
-	var p []models.Progress
-	if err := rp.DB.Where("project_id = ? AND tahap = ?", projectID, tahap).Find(&p).Error; err != nil {
-		fmt.Printf("error progress->isRedundant(): %s", err.Error())
+	var p models.Progress
+	if err := rp.DB.Where("project_id = ? AND tahap = ?", projectID, tahap).First(&p).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil
+		}
 		return errors.New("gagal mengambil data")
 	}
-	if len(p) == 0 {
-		return nil
-	}
-	return fmt.Errorf("tahap ke-%d sudah didefinisikan", p[0].Tahap)
+
+	return fmt.Errorf("tahap ke-%d sudah didefinisikan", p.Tahap)
 }

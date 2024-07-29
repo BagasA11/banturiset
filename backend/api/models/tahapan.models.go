@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	tz "github.com/bagasa11/banturiset/timezone"
 	"gorm.io/gorm"
 )
 
@@ -23,7 +24,7 @@ func (t *Tahapan) BeforeCreate(tx *gorm.DB) error {
 	if t.CostPercent > 100 {
 		return errors.New("persentase harus < 100")
 	}
-	if !t.End.After(time.Now()) {
+	if !t.End.After(tz.GetTime(time.Now())) {
 		return fmt.Errorf("deadline tahapan: %v tidak boleh dibelakang masa kini %v", t.End, time.Now())
 	}
 

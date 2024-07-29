@@ -1,0 +1,1387 @@
+{
+	"info": {
+		"_postman_id": "d70aa95a-8ed2-444d-b2d2-67b56f1d76b4",
+		"name": "Bantu Riset [Production]",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" width=\"2162\" height=\"1530\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34412920"
+	},
+	"item": [
+		{
+			"name": "Project",
+			"item": [
+				{
+					"name": "Budget Details",
+					"item": [
+						{
+							"name": "Create Budget",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODUxNzcxN30.0ZKZysS-ivTJB_cR-rZZxx0lmAr2rg3v_7SLPIEY7Vs"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"desc\":\"Membeli Radar Cuaca: Radar cuaca akan digunakan untuk mengambil data cuaca\",\r\n    \"cost\":1000000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/project/6/budget/create"
+							},
+							"response": []
+						}
+					],
+					"description": "Budget details adalah bagian dari detil proyek yang memerinci belanja kebutuhan dari anggaran dana yang digunakan"
+				},
+				{
+					"name": "Tahapan",
+					"item": [
+						{
+							"name": "Buat tahapan",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODc5NjgzNn0.2W2Hbxb6Wz3Lp6eEK1BGTKldqn_M3sJ48Z_KEZENBUg"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"percent\":10,\r\n    \"tahap\":3,\r\n    \"awal\":\"2024-06-19T12:38:48.123Z\",\r\n    \"akhir\":\"2024-07-21T12:38:48.123Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/project/12/tahap/create"
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Tahap",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODc5NjgzNn0.2W2Hbxb6Wz3Lp6eEK1BGTKldqn_M3sJ48Z_KEZENBUg"
+									}
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"percent\":40,\r\n    \"tahap\":2,\r\n    \"awal\":\"2024-06-19T12:38:48.123Z\",\r\n    \"akhir\":\"2024-07-21T12:38:48.123Z\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/project/12/tahap/update/4"
+							},
+							"response": []
+						}
+					],
+					"description": "Tahapan memerinci dan menjelaskan ulang tahap apa saya yang dilakukan akan dilakukan dalam kegiatan penelitian"
+				},
+				{
+					"name": "Donasi",
+					"item": [
+						{
+							"name": "Create Donasi",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiYWdhc21pcGEzQGdtYWlsLmNvbSIsInJvbGUiOiJkb25hdHVyIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4ODIyMDEyfQ.IJXLoR8IDkNxHvmKT-lIDt1wTjQ6ClG8uNWE6DubUQk"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"jml\":25000,\r\n    \"method\":\"ovo\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/project/12/donasi/create"
+							},
+							"response": []
+						},
+						{
+							"name": "Melihat Invoice",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiYWdhc21pcGEzQGdtYWlsLmNvbSIsInJvbGUiOiJkb25hdHVyIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4NjQ2MDE2fQ.wtF_Xeq-zGYj4gsOl-FVoWlAPLxqUmqqxOkDWmHkK4Q"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": "localhost:8080/api/donasi/invoice-28fc8ge"
+							},
+							"response": []
+						},
+						{
+							"name": "Histori Transaksi",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": "localhost:8080/api/donasi/history"
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 23 Jun 2024 14:19:39 GMT"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"CreatedAt\": \"2024-06-20T20:44:47.416+07:00\",\n            \"UpdatedAt\": \"2024-06-20T21:00:50.021+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-7ea7g2f\",\n            \"Status\": \"PAID\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-20T20:57:50.692+07:00\",\n            \"UpdatedAt\": \"2024-06-20T20:58:13.407+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-199a828\",\n            \"Status\": \"PAID\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-20T20:56:05.045+07:00\",\n            \"UpdatedAt\": \"2024-06-20T20:56:05.044+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-3447f3f\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-20T20:50:48.645+07:00\",\n            \"UpdatedAt\": \"2024-06-20T20:50:48.644+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-28873cd\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-20T20:38:31.548+07:00\",\n            \"UpdatedAt\": \"2024-06-20T20:38:31.547+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-9b5ffa3\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-20T20:24:46.81+07:00\",\n            \"UpdatedAt\": \"2024-06-20T20:24:46.809+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-81d12c1\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-20T20:19:55.924+07:00\",\n            \"UpdatedAt\": \"2024-06-20T20:19:55.924+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-726b324\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-19T22:38:10.684+07:00\",\n            \"UpdatedAt\": \"2024-06-19T22:38:10.684+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-da48223\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-19T22:14:54.947+07:00\",\n            \"UpdatedAt\": \"2024-06-19T22:14:54.946+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-9defde5\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-19T22:12:01.063+07:00\",\n            \"UpdatedAt\": \"2024-06-19T22:12:01.062+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-fb6bha2\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-19T22:07:17.288+07:00\",\n            \"UpdatedAt\": \"2024-06-19T22:07:17.288+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-5hf7g57\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-19T22:07:10.008+07:00\",\n            \"UpdatedAt\": \"2024-06-19T22:07:10.007+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-99d723a\",\n            \"Status\": \"PENDING\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n                \"UpdatedAt\": \"2024-06-20T21:00:50.024+07:00\",\n                \"DeletedAt\": null,\n                \"ID\": 12,\n                \"Title\": \"Testing Timestamp\",\n                \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n                \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n                \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n                \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n                \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n                \"Milestone\": 4,\n                \"TktLevel\": 9,\n                \"Cost\": 13000000,\n                \"Status\": 2,\n                \"PesanRevisi\": \"data budget detail dirincikan lagi\",\n                \"Fraud\": false,\n                \"CollectedFund\": 50000,\n                \"PengajuanID\": 2,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 5,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Kontributor",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "localhost:8080/api/project/12/donasi/contributor?limit=10",
+											"host": [
+												"localhost"
+											],
+											"port": "8080",
+											"path": [
+												"api",
+												"project",
+												"12",
+												"donasi",
+												"contributor"
+											],
+											"query": [
+												{
+													"key": "limit",
+													"value": "10"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "Date",
+											"value": "Sun, 23 Jun 2024 14:56:33 GMT"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"CreatedAt\": \"2024-06-20T20:57:50.692+07:00\",\n            \"UpdatedAt\": \"2024-06-20T20:58:13.407+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-199a828\",\n            \"Status\": \"PAID\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                \"DeletedAt\": null,\n                \"ID\": 0,\n                \"Title\": \"\",\n                \"Desc\": \"\",\n                \"ProposalUrl\": null,\n                \"KlirensUrl\": null,\n                \"FundUntil\": \"0001-01-01T00:00:00Z\",\n                \"DeadLine\": \"0001-01-01T00:00:00Z\",\n                \"Milestone\": 0,\n                \"TktLevel\": 0,\n                \"Cost\": 0,\n                \"Status\": 0,\n                \"PesanRevisi\": null,\n                \"Fraud\": false,\n                \"CollectedFund\": 0,\n                \"PengajuanID\": 0,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 0,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        },\n        {\n            \"CreatedAt\": \"2024-06-20T20:44:47.416+07:00\",\n            \"UpdatedAt\": \"2024-06-20T21:00:50.021+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": \"invoice-7ea7g2f\",\n            \"Status\": \"PAID\",\n            \"Jml\": 25000,\n            \"Fee\": 834.75006,\n            \"Method\": \"OVO\",\n            \"ProjectID\": 12,\n            \"Project\": {\n                \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                \"DeletedAt\": null,\n                \"ID\": 0,\n                \"Title\": \"\",\n                \"Desc\": \"\",\n                \"ProposalUrl\": null,\n                \"KlirensUrl\": null,\n                \"FundUntil\": \"0001-01-01T00:00:00Z\",\n                \"DeadLine\": \"0001-01-01T00:00:00Z\",\n                \"Milestone\": 0,\n                \"TktLevel\": 0,\n                \"Cost\": 0,\n                \"Status\": 0,\n                \"PesanRevisi\": null,\n                \"Fraud\": false,\n                \"CollectedFund\": 0,\n                \"PengajuanID\": 0,\n                \"Pengajuan\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"LinkWa\": \"\",\n                    \"LinkPanduan\": null,\n                    \"IconUrl\": \"\",\n                    \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                    \"PenyuntingID\": 0,\n                    \"Penyunting\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Pengajuan\": null\n                    },\n                    \"Project\": null\n                },\n                \"PenelitiID\": 0,\n                \"Peneliti\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Project\": null,\n                    \"Payout\": null\n                },\n                \"Donasi\": null,\n                \"BudgetDetails\": null,\n                \"Tahapan\": null,\n                \"Payout\": null,\n                \"Progress\": null\n            },\n            \"DonaturID\": 1,\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        }\n    ],\n    \"length\": 2\n}"
+								}
+							]
+						}
+					],
+					"description": "Folder donasi berisi tentang request donasi"
+				},
+				{
+					"name": "myproject",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODUxNzcxN30.0ZKZysS-ivTJB_cR-rZZxx0lmAr2rg3v_7SLPIEY7Vs"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/project/myproject?limit=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"project",
+								"myproject"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "myproject",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{public_ip}}:8080/api/project/myproject?limit=2",
+									"host": [
+										"{{public_ip}}"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"project",
+										"myproject"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 08 Jul 2024 04:23:31 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "886"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"CreatedAt\": \"2024-07-08T04:22:48.523Z\",\n            \"UpdatedAt\": \"2024-07-08T04:22:48.523Z\",\n            \"DeletedAt\": null,\n            \"ID\": 13,\n            \"Title\": \"Test Test 123\",\n            \"Desc\": \"Test Lorem Ipsum Dolor Sit amet\",\n            \"ProposalUrl\": null,\n            \"KlirensUrl\": null,\n            \"FundUntil\": \"2025-05-21T20:22:48.521Z\",\n            \"DeadLine\": \"2027-02-16T04:22:48.521Z\",\n            \"Milestone\": 3,\n            \"TktLevel\": 9,\n            \"Cost\": 13000000,\n            \"Status\": -2,\n            \"PesanRevisi\": null,\n            \"Fraud\": false,\n            \"CollectedFund\": 0,\n            \"PengajuanID\": 2,\n            \"Pengajuan\": {\n                \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                \"DeletedAt\": null,\n                \"ID\": 0,\n                \"Title\": \"\",\n                \"Desc\": \"\",\n                \"LinkWa\": \"\",\n                \"LinkPanduan\": null,\n                \"IconUrl\": \"\",\n                \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                \"PenyuntingID\": 0,\n                \"Penyunting\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Pengajuan\": null\n                },\n                \"Project\": null\n            },\n            \"PenelitiID\": 6,\n            \"Peneliti\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Project\": null,\n                \"Payout\": null\n            },\n            \"Donasi\": null,\n            \"BudgetDetails\": null,\n            \"Tahapan\": null,\n            \"Payout\": null,\n            \"Progress\": null\n        }\n    ],\n    \"len\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "revisi",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODUxNzcxN30.0ZKZysS-ivTJB_cR-rZZxx0lmAr2rg3v_7SLPIEY7Vs"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/project/myproject?limit=2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"project",
+								"myproject"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "myproject",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/project/myproject?limit=2",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"project",
+										"myproject"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Tolak",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4ODAyNDI2fQ.03e7f0qZWZ2AAM1-8j5WFeSGgHUWZrnvC2skcQAWhuc"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"revisi\":\"bagian budget detail di detailkan lagi, itemnya ditambah dan jangan cuman 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/project/12/reject"
+					},
+					"response": []
+				},
+				{
+					"name": "Membuat project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxNzg2MTUzM30.nQywXkn447bje4pQb0nJnpe4piRNEWfAEPPHwMEJs5A"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Membuat Model Prediksi Cuaca dengan Algoritma Naive Bayes\",\r\n    \"desc\":\"Cuaca merupakan aspek penting dalam berbagai kehidupan manusia. Maka memprediksi cuaca dengan akurat sangat penting. Untuk itu perlu adanya model yang dapat memprediksi cuaca dengan akurat\",\r\n    \"deadline\":\"2025-06-29T03:15:59T\",\r\n    \"milestone\":4,\r\n    \"tkt\":9,\r\n    \"cost\":13000000.005,\r\n    \"pengajuan_id\":2\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/project/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Proposal",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODUxNzcxN30.0ZKZysS-ivTJB_cR-rZZxx0lmAr2rg3v_7SLPIEY7Vs"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"url\":\"./file/proposal/d2h34be.pdf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/project/6/upload/proposal"
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4NTE5OTM4fQ.Cf0erGUYgZMfTZDzcB5CHjpWNgTDY6qnSvhyLjL1wZY"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"url\":\"./file/proposal/d2h34be.pdf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/project/6/submit"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Klirens",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODUxNzcxN30.0ZKZysS-ivTJB_cR-rZZxx0lmAr2rg3v_7SLPIEY7Vs"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"url\":\"./file/proposal/d2h34be.pdf\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/project/6/upload/proposal"
+					},
+					"response": []
+				},
+				{
+					"name": "Detail Proyek",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODY0NDc5NX0.N-yNhTlQgyAyXFPHhnxikJDAk7Wc2w24_-I11d_j1hc"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/project/6/review"
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "localhost:8080/api/project/6/review"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 17 Jun 2024 13:20:59 GMT"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"CreatedAt\": \"2024-06-16T11:04:34.75+07:00\",\n        \"UpdatedAt\": \"2024-06-17T20:20:23.136+07:00\",\n        \"DeletedAt\": null,\n        \"ID\": 6,\n        \"Title\": \"Weather Forecasting dengan svm\",\n        \"Desc\": \"Cuaca merupakan aspek penting dalam berbagai kehidupan manusia. Maka memprediksi cuaca dengan akurat sangat penting. Untuk itu perlu adanya model yang dapat memprediksi cuaca dengan akurat\",\n        \"ProposalUrl\": \"./file/klirens/84gfh62.pdf\",\n        \"KlirensUrl\": \"./file/klirens/84gfh62.pdf\",\n        \"FundUntil\": \"2024-06-16T11:04:34.745+07:00\",\n        \"DeadLine\": \"2027-01-01T11:04:34.745+07:00\",\n        \"Milestone\": 4,\n        \"TktLevel\": 9,\n        \"Cost\": 13000000,\n        \"Status\": 0,\n        \"PesanRevisi\": null,\n        \"Fraud\": false,\n        \"CollectedFund\": 0,\n        \"PengajuanID\": 2,\n        \"Pengajuan\": {\n            \"CreatedAt\": \"2024-06-06T19:26:47.601+07:00\",\n            \"UpdatedAt\": \"2024-06-06T19:26:47.602+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": 2,\n            \"Title\": \"Teknologi Komputer d\",\n            \"Desc\": \"skema penelitian ini bertujuan untuk meneliti teknoloi Komputer dan AI\",\n            \"LinkWa\": \"web.whatsapp.com\",\n            \"LinkPanduan\": \"\",\n            \"IconUrl\": \"https://developers.xendit.co/api-reference/images/logo.png\",\n            \"ClosedAt\": \"2024-07-09T19:41:53+07:00\",\n            \"PenyuntingID\": 1,\n            \"Penyunting\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Pengajuan\": null\n            },\n            \"Project\": null\n        },\n        \"PenelitiID\": 5,\n        \"Peneliti\": {\n            \"ID\": 0,\n            \"NIP\": \"\",\n            \"UserID\": 0,\n            \"Project\": null\n        },\n        \"Donasi\": null,\n        \"BudgetDetails\": [\n            {\n                \"ID\": 1,\n                \"Deskripsi\": \"Membeli Radar Cuaca: Radar cuaca akan digunakan untuk mengambil data cuaca\",\n                \"Cost\": 1000000,\n                \"ProjectID\": 6,\n                \"Project\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"ProposalUrl\": null,\n                    \"KlirensUrl\": null,\n                    \"FundUntil\": \"0001-01-01T00:00:00Z\",\n                    \"DeadLine\": \"0001-01-01T00:00:00Z\",\n                    \"Milestone\": 0,\n                    \"TktLevel\": 0,\n                    \"Cost\": 0,\n                    \"Status\": 0,\n                    \"PesanRevisi\": null,\n                    \"Fraud\": false,\n                    \"CollectedFund\": 0,\n                    \"PengajuanID\": 0,\n                    \"Pengajuan\": {\n                        \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"DeletedAt\": null,\n                        \"ID\": 0,\n                        \"Title\": \"\",\n                        \"Desc\": \"\",\n                        \"LinkWa\": \"\",\n                        \"LinkPanduan\": null,\n                        \"IconUrl\": \"\",\n                        \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                        \"PenyuntingID\": 0,\n                        \"Penyunting\": {\n                            \"ID\": 0,\n                            \"NIP\": \"\",\n                            \"UserID\": 0,\n                            \"Pengajuan\": null\n                        },\n                        \"Project\": null\n                    },\n                    \"PenelitiID\": 0,\n                    \"Peneliti\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Project\": null\n                    },\n                    \"Donasi\": null,\n                    \"BudgetDetails\": null,\n                    \"Tahapan\": null,\n                    \"Progress\": null\n                }\n            },\n            {\n                \"ID\": 2,\n                \"Deskripsi\": \"Biaya Observasi Lapangan\",\n                \"Cost\": 500000,\n                \"ProjectID\": 6,\n                \"Project\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"ProposalUrl\": null,\n                    \"KlirensUrl\": null,\n                    \"FundUntil\": \"0001-01-01T00:00:00Z\",\n                    \"DeadLine\": \"0001-01-01T00:00:00Z\",\n                    \"Milestone\": 0,\n                    \"TktLevel\": 0,\n                    \"Cost\": 0,\n                    \"Status\": 0,\n                    \"PesanRevisi\": null,\n                    \"Fraud\": false,\n                    \"CollectedFund\": 0,\n                    \"PengajuanID\": 0,\n                    \"Pengajuan\": {\n                        \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"DeletedAt\": null,\n                        \"ID\": 0,\n                        \"Title\": \"\",\n                        \"Desc\": \"\",\n                        \"LinkWa\": \"\",\n                        \"LinkPanduan\": null,\n                        \"IconUrl\": \"\",\n                        \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                        \"PenyuntingID\": 0,\n                        \"Penyunting\": {\n                            \"ID\": 0,\n                            \"NIP\": \"\",\n                            \"UserID\": 0,\n                            \"Pengajuan\": null\n                        },\n                        \"Project\": null\n                    },\n                    \"PenelitiID\": 0,\n                    \"Peneliti\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Project\": null\n                    },\n                    \"Donasi\": null,\n                    \"BudgetDetails\": null,\n                    \"Tahapan\": null,\n                    \"Progress\": null\n                }\n            }\n        ],\n        \"Tahapan\": [\n            {\n                \"ID\": 1,\n                \"CostPercent\": 30,\n                \"Tahap\": 1,\n                \"Start\": \"2024-06-16T19:38:48.123+07:00\",\n                \"End\": \"2024-07-16T19:38:48.123+07:00\",\n                \"ProjectID\": 6,\n                \"Project\": {\n                    \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                    \"DeletedAt\": null,\n                    \"ID\": 0,\n                    \"Title\": \"\",\n                    \"Desc\": \"\",\n                    \"ProposalUrl\": null,\n                    \"KlirensUrl\": null,\n                    \"FundUntil\": \"0001-01-01T00:00:00Z\",\n                    \"DeadLine\": \"0001-01-01T00:00:00Z\",\n                    \"Milestone\": 0,\n                    \"TktLevel\": 0,\n                    \"Cost\": 0,\n                    \"Status\": 0,\n                    \"PesanRevisi\": null,\n                    \"Fraud\": false,\n                    \"CollectedFund\": 0,\n                    \"PengajuanID\": 0,\n                    \"Pengajuan\": {\n                        \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                        \"DeletedAt\": null,\n                        \"ID\": 0,\n                        \"Title\": \"\",\n                        \"Desc\": \"\",\n                        \"LinkWa\": \"\",\n                        \"LinkPanduan\": null,\n                        \"IconUrl\": \"\",\n                        \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                        \"PenyuntingID\": 0,\n                        \"Penyunting\": {\n                            \"ID\": 0,\n                            \"NIP\": \"\",\n                            \"UserID\": 0,\n                            \"Pengajuan\": null\n                        },\n                        \"Project\": null\n                    },\n                    \"PenelitiID\": 0,\n                    \"Peneliti\": {\n                        \"ID\": 0,\n                        \"NIP\": \"\",\n                        \"UserID\": 0,\n                        \"Project\": null\n                    },\n                    \"Donasi\": null,\n                    \"BudgetDetails\": null,\n                    \"Tahapan\": null,\n                    \"Progress\": null\n                }\n            }\n        ],\n        \"Progress\": null\n    },\n    \"pesan\": \"sukses\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Preview",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODU0NDU4M30.7lYlnuFfq87BY0WOi2N4H3Sver3LpfZyiAwlXdW1xDU"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/project/6/preview"
+					},
+					"response": []
+				},
+				{
+					"name": "verifikasi",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE3ODM0ODYyfQ.Mj6ROpWpv6-LWsDeWwzFArLsET0B7B9kFUPCZHK_Odg"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"url": "{{public_ip}}:8080/api/project/13/verifikasi"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODc5NjgzNn0.2W2Hbxb6Wz3Lp6eEK1BGTKldqn_M3sJ48Z_KEZENBUg"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"Membuat sigma Face\",\r\n    \"desc\":\"Lorem Ipsum Dolor sit Amet\",\r\n    \"milestone\":2,,\r\n    \"tkt\":8,\r\n    \"cost\":2000000.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/project/12/edit"
+					},
+					"response": []
+				},
+				{
+					"name": "Open Donasi",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiYWdhc21pcGEzQGdtYWlsLmNvbSIsInJvbGUiOiJkb25hdHVyIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE4NjQ2MDE2fQ.wtF_Xeq-zGYj4gsOl-FVoWlAPLxqUmqqxOkDWmHkK4Q"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/project/opendonasi"
+					},
+					"response": []
+				},
+				{
+					"name": "Submitted Project",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/api/project/hassubmit?page=2",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"project",
+										"hassubmit"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 19 Jun 2024 09:13:12 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "974"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"CreatedAt\": \"2024-06-19T06:06:14.294+07:00\",\n            \"UpdatedAt\": \"2024-06-19T16:08:43.555+07:00\",\n            \"DeletedAt\": null,\n            \"ID\": 12,\n            \"Title\": \"Testing Timestamp\",\n            \"Desc\": \"mengukur akurasi perhitungan waktu pada field fund_until\",\n            \"ProposalUrl\": \"./file/klirens/38gbf29.pdf\",\n            \"KlirensUrl\": \"./file/klirens/hf4fc75.pdf\",\n            \"FundUntil\": \"2025-08-25T14:06:14.292+07:00\",\n            \"DeadLine\": \"2028-01-07T06:06:14.291+07:00\",\n            \"Milestone\": 4,\n            \"TktLevel\": 9,\n            \"Cost\": 13000000,\n            \"Status\": 0,\n            \"PesanRevisi\": null,\n            \"Fraud\": false,\n            \"CollectedFund\": 0,\n            \"PengajuanID\": 2,\n            \"Pengajuan\": {\n                \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                \"DeletedAt\": null,\n                \"ID\": 0,\n                \"Title\": \"\",\n                \"Desc\": \"\",\n                \"LinkWa\": \"\",\n                \"LinkPanduan\": null,\n                \"IconUrl\": \"\",\n                \"ClosedAt\": \"0001-01-01T00:00:00Z\",\n                \"PenyuntingID\": 0,\n                \"Penyunting\": {\n                    \"ID\": 0,\n                    \"NIP\": \"\",\n                    \"UserID\": 0,\n                    \"Pengajuan\": null\n                },\n                \"Project\": null\n            },\n            \"PenelitiID\": 5,\n            \"Peneliti\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Project\": null,\n                \"Payout\": null\n            },\n            \"Donasi\": null,\n            \"BudgetDetails\": null,\n            \"Tahapan\": null,\n            \"Payout\": null,\n            \"Progress\": null\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Proyek Ditolak penyunting",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODc2NDg1Mn0.JHnxJvFkZu2r8zwd9LH9iztC6vX8gGK8GHxsHDdG0_w"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "localhost:8080/api/project/revisi"
+					},
+					"response": []
+				},
+				{
+					"name": "Detail Project terverifikasi",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"description": "Kumpulan request terkait membuat project"
+		},
+		{
+			"name": "User dan Auth",
+			"item": [
+				{
+					"name": "Need Verify",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/user/verify?page=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"verify"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": [
+						{
+							"name": "Need Verify",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{public_ip}}:8080/api/user/verify?page=1",
+									"host": [
+										"{{public_ip}}"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"user",
+										"verify"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 08 Jul 2024 04:16:20 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "426"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"ID\": 11,\n            \"FName\": \"Bagas Sebastian\",\n            \"Email\": \"bagas123@gmail.com\",\n            \"Password\": \"\",\n            \"Phone\": \"+6281212345678\",\n            \"Role\": \"peneliti\",\n            \"Institute\": \"Udinus\",\n            \"InstituteAddr\": \"\",\n            \"PostCode\": \"13450\",\n            \"Bank\": null,\n            \"NoRek\": null,\n            \"ProfileUrl\": null,\n            \"IsVerfied\": false,\n            \"IsBlock\": false,\n            \"Peneliti\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Project\": null,\n                \"Payout\": null\n            },\n            \"Penyunting\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Pengajuan\": null\n            },\n            \"Donatur\": {\n                \"ID\": 0,\n                \"UserID\": 0\n            }\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Registrasi",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"fname\": \"Bagas RS\",\n    \"email\":\"bagas321@gmail.com\",\n    \"role\":\"peneliti\",\n    \"phone\":\"+6282112897283\",\n    \"password\":\"12345678\",\n    \"institute\":\"Udinus\",\n    \"institute_address\":\"jl. Imam Bonjol\",\n    \"post\":\"13-34x0_$\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/register",
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Donatur",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"role\":\"donatur\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/user/donatur/create/1",
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "verifikasi user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwiZXhwIjoxNzE3NDgyMzY3fQ.1rpFLQsSPlaTcT4PzreXalUV47Cm_XTEXsCjaEM8SGs"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/verifikasi/5",
+						"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Penelit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"nip\":\"345738297\",\n    \"role\":\"peneliti\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "103.63.25.209:8080/api/peneliti/create/11",
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"bagasmipa3@gmail.com\",\r\n    \"password\":\"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "localhost:8080/api/login"
+					},
+					"response": [
+						{
+							"name": "Admin",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"admin01@gmail.com\",\r\n    \"role\":\"penyunting\",\r\n    \"password\":\"12345678\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "localhost:8080/api/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Jun 2024 06:21:02 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "230"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"pesan\": \"login sukses\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE3ODM0ODYyfQ.Mj6ROpWpv6-LWsDeWwzFArLsET0B7B9kFUPCZHK_Odg\"\n}"
+						},
+						{
+							"name": "Donatur",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"bagasmipa3@gmail.com\",\r\n    \"password\":\"12345678\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "103.63.25.209:8080/api/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 08 Jul 2024 03:00:37 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "230"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"pesan\": \"login sukses\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiYWdhc21pcGEzQGdtYWlsLmNvbSIsInJvbGUiOiJkb25hdHVyIiwicm9sZV9pZCI6MSwiZXhwIjoxNzIwNDIyMDM3fQ.H1AeaETwYdM2nqKubLVODUX1nE2PtpicqAmjBkiJj-8\"\n}"
+						},
+						{
+							"name": "Peneliti",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"spamtest123@gmail.co\",\r\n    \"password\":\"12345678\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "103.63.25.209:8080/api/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 08 Jul 2024 03:02:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "231"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"pesan\": \"login sukses\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcyMDQyMjE1NX0.BEbHHhx_1PblT-NyT5XBauWQ_MVHpLR2IONP25-PB8A\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldToken\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/refresh"
+					},
+					"response": []
+				},
+				{
+					"name": "Melengkapi Informasi pembayaran",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwiZXhwIjoxNzE3NDgyMzY3fQ.1rpFLQsSPlaTcT4PzreXalUV47Cm_XTEXsCjaEM8SGs"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"bank\":\"BSI\",\n    \"no_rek\":\"7257491159\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/user/complete-payment",
+						"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcyMjE3NTI5NX0.WE5EcFtmlnxKObn04umA7c8TSLDmrjS5CPXH0v7_UYM"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{public_ip}}:8080/api/user/profile"
+					},
+					"response": []
+				}
+			],
+			"description": "Folder ini berisi endpoint untuk memanajemen data user dan autorisasi"
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "upload",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODUxODg3M30.hzfP5etOsWGLuxtsQGlwZgjbWH4Q5lVGp95Moq9vOZA"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/Asus/Downloads/surat pernyataan.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/file/upload?folder=klirens",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"file",
+								"upload"
+							],
+							"query": [
+								{
+									"key": "folder",
+									"value": "klirens"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "upload",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/Asus/Downloads/Bantu Riset (1).pdf"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:8080/api/upload?folder=proposal",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"upload"
+									],
+									"query": [
+										{
+											"key": "folder",
+											"value": "proposal"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Jun 2024 13:30:26 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "66"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"pesan\": \"upload file sukses\",\n    \"url\": \"./file/proposal/d2h34be.pdf\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Unduh file",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxODU0NDU4M30.7lYlnuFfq87BY0WOi2N4H3Sver3LpfZyiAwlXdW1xDU"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/file/download?fileurl=./file/klirens/84gfh62.pdf",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"file",
+								"download"
+							],
+							"query": [
+								{
+									"key": "fileurl",
+									"value": "./file/klirens/84gfh62.pdf"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Folder file manajemen bertugas untuk mengatur upload dan download file\n\nTips:\n\n1. Upload file: upload file ke enpoint `/api/file/upload` untuk mendapatkan direktori file. Kemudian simpan direktori untuk melakukan request sebagai url file\n    \n2. Download file: masukkan direktori file ke dalam query parameter `?fileurl=`"
+		},
+		{
+			"name": "create pengajuan",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJhZG1pbjAxQGdtYWlsLmNvbSIsInJvbGUiOiJwZW55dW50aW5nIiwicm9sZV9pZCI6MSwiZXhwIjoxNzE3NjgzOTcwfQ.UWP781o_Hx-0v58Et0UQJ9mpuFQSmr64s_w2jCs0wKY"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\":\"Teknologi Komputer dan AI\",\r\n    \"desc\":\"skema penelitian ini bertujuan untuk meneliti teknoloi Komputer dan AI\",\r\n    \"linkwa\":\"web.whatsapp.com\",\r\n    \"panduan\":\"\",\r\n    \"icon\":\"https://developers.xendit.co/api-reference/images/logo.png\",\r\n    \"closed_at\":\"1999-01-01T10:00:10+02:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/pengajuan/create"
+			},
+			"response": []
+		},
+		{
+			"name": "pengajuan dibuka",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiZW1haWwiOiJzcGFtdGVzdDEyM0BnbWFpbC5jbyIsInJvbGUiOiJwZW5lbGl0aSIsInJvbGVfaWQiOjUsImV4cCI6MTcxNzY4NDMzMX0.uou82rXd-Y_7cT2JQaOZt0-JYEh5CE7WY9HvGwdtKs"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/pengajuan/open"
+			},
+			"response": [
+				{
+					"name": "pengajuan dibuka",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/pengajuan/open"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 08 Jun 2024 06:21:26 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "455"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n            \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n            \"DeletedAt\": null,\n            \"ID\": 2,\n            \"Title\": \"Teknologi Komputer d\",\n            \"Desc\": \"skema penelitian ini bertujuan untuk meneliti teknoloi Komputer dan AI\",\n            \"LinkWa\": \"\",\n            \"LinkPanduan\": \"\",\n            \"IconUrl\": \"https://developers.xendit.co/api-reference/images/logo.png\",\n            \"ClosedAt\": \"2024-07-09T19:41:53+07:00\",\n            \"PenyuntingID\": 0,\n            \"Penyunting\": {\n                \"ID\": 0,\n                \"NIP\": \"\",\n                \"UserID\": 0,\n                \"Pengajuan\": null\n            },\n            \"Project\": null\n        }\n    ],\n    \"len\": 1\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}

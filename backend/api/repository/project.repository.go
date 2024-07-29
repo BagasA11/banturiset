@@ -33,14 +33,11 @@ func (pr *ProjectRepository) Create(p models.Project) error {
 	if err := tx.Create(&p).Error; err != nil {
 		tx.Rollback()
 		fmt.Printf("error project->Create(): %v", err)
+		if err == gorm.ErrDuplicatedKey {
+			return gorm.ErrDuplicatedKey
+		}
 		return errors.New("gagal membuat data project")
 	}
-
-	// if p.Pengajuan.ClosedAt.Nanosecond() < p.CreatedAt.Nanosecond() {
-	// 	tx.Rollback()
-	// 	return errors.New("waktu pengajuan sudah ditutup")
-	// }
-
 	tx.Commit()
 	return nil
 }
@@ -93,10 +90,15 @@ func (pr *ProjectRepository) HasSubmit(start uint, end uint) ([]models.Project, 
 
 func (pr *ProjectRepository) ProjectPreview(id uint, penelitiID uint) (models.Project, error) {
 	var p models.Project
-	if err := pr.DB.Where("peneliti_id = ? AND status > ? AND status <= ? AND fraud = ?",
-		penelitiID, models.Abort, models.Draft, false).Preload("BudgetDetails").Preload("Tahapan", func(db *gorm.DB) *gorm.DB {
-		return db.Order("tahapans.tahap DESC")
-	}).Find(&p, id).
+	if err := pr.DB.
+		Where("peneliti_id = ? AND status > ? AND status <= ? AND fraud = ?",
+			penelitiID, models.Abort, models.Draft, false).
+		Preload("BudgetDetails").
+		Preload("Tahapan", func(db *gorm.DB) *gorm.DB {
+			return db.Order("tahapans.tahap DESC")
+		}).
+		Limit(1).
+		Find(&p, id).
 		Error; err != nil {
 
 		fmt.Println("error [repo] project->preview(): ", err.Error())
@@ -158,10 +160,10 @@ func (pr *ProjectRepository) Verifikasi(id uint, adminID uint) (models.Project, 
 		fmt.Println(err.Error())
 		return p, errors.New("gagal mendapatkan data proyek")
 	}
-
+	now := tz.GetTime(time.Now())
 	p.Status = models.Verifikasi
 	p.AdminID = &adminID
-
+	p.ValidatedAt = &now
 	// UPDATE projects SET status = p->Status, admin_id p->AdminID WHERE id = $id
 	if err := tx.Save(&p).Error; err != nil {
 		tx.Rollback()
@@ -359,5 +361,17 @@ func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint, 
 
 	return p, nil
 }
-func (pr *ProjectRepository) Abort(id uint)   {}
-func (pr *ProjectRepository) Selesai(id uint) {}
+
+func (pr *ProjectRepository) MyProjectCost(projectID uint, penelitiID uint) (float32, error) {
+	var cost float32
+	if err := pr.DB.Where("id = ? AND peneliti_id = ?", projectID, penelitiID).Pluck("cost", &cost).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return float32(0), gorm.ErrRecordNotFound
+		}
+		return float32(0), errors.New("gagal mengambil data biaya project")
+	}
+	return cost, nil
+}
+
+// func (pr *ProjectRepository) Abort(id uint)   {}
+// func (pr *ProjectRepository) Selesai(id uint) {}

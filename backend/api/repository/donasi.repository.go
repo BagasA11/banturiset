@@ -38,7 +38,11 @@ func (dr *DonasiRepo) Create(d models.Donasi) (*models.Donasi, error) {
 func (dr *DonasiRepo) ConfirmPayment(id string) (models.Donasi, error) {
 	var d models.Donasi
 	if err := dr.DB.Preload("Project").Where("id = ?", id).First(&d).Error; err != nil {
+
 		fmt.Println("error dr->confirmPayment(): ", err.Error())
+		if err == gorm.ErrRecordNotFound {
+			return d, gorm.ErrRecordNotFound
+		}
 		return d, errors.New("error when confirm payment status")
 	}
 	d.Status = "PAID"
@@ -82,14 +86,21 @@ func (dr *DonasiRepo) GetHistory(projectID uint) ([]models.Donasi, error) {
 func (dr *DonasiRepo) Contributors(projectID uint, limit uint) ([]models.Donasi, error) {
 	var d []models.Donasi
 	// select * from donasis WHERE status = 'PAID' AND project_id = $projectID order by
-	err := dr.DB.Where("status = ? AND project_id = ?", "PAID", projectID).Limit(int(limit)).Order("jml desc").Find(&d).Error
+	err := dr.DB.
+		Where("status = ? AND project_id = ?", "PAID", projectID).
+		Limit(int(limit)).Order("jml desc").
+		Find(&d).Error
 	return d, err
 }
 
 func (dr *DonasiRepo) MyContribution(donaturID uint, limit uint) ([]models.Donasi, error) {
 	var d []models.Donasi
-	if err := dr.DB.Where("status = ? AND donatur_id = ?", "PAID", donaturID).Preload("Project").Limit(int(limit)).
+	if err := dr.DB.
+		Where("status = ? AND donatur_id = ?", "PAID", donaturID).
+		Preload("Project").
+		Limit(int(limit)).
 		Find(&d).Error; err != nil {
+
 		fmt.Println("error dr->myContribution(): ", err.Error())
 		return d, errors.New("gagal mengambil data")
 	}

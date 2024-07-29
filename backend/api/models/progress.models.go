@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	tz "github.com/bagasa11/banturiset/timezone"
 	"gorm.io/gorm"
 )
 
@@ -24,7 +25,7 @@ type Progress struct {
 
 func (p *Progress) BeforeCreate(tx *gorm.DB) error {
 	tx.Statement.SetColumn("Validasi", Diajuakan)
-	tx.Statement.SetColumn("CreatedAt", time.Now())
+	tx.Statement.SetColumn("CreatedAt", tz.GetTime(time.Now()))
 	return nil
 }
 

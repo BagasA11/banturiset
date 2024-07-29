@@ -39,8 +39,8 @@ func SubmitValidation() gin.HandlerFunc {
 			return
 		}
 
-		if project.ProposalUrl == nil || project.KlirensUrl == nil {
-			c.JSON(http.StatusUnprocessableEntity, "proposal dan surat klirens penelitian tidak boleh kosong")
+		if project.ProposalUrl == nil {
+			c.JSON(http.StatusUnprocessableEntity, "proposal penelitian tidak boleh kosong")
 			c.Abort()
 			return
 		}
@@ -59,6 +59,16 @@ func SubmitValidation() gin.HandlerFunc {
 
 		if len(project.BudgetDetails) <= 0 {
 			c.JSON(http.StatusUnprocessableEntity, "detail anggaran belanja tidak boleh kosong")
+			c.Abort()
+			return
+		}
+
+		var sumValue float32
+		for i := 0; i < len(project.BudgetDetails); i++ {
+			sumValue += project.BudgetDetails[i].Cost
+		}
+		if sumValue > project.Cost {
+			c.JSON(http.StatusUnprocessableEntity, "Jumlah detil biaya tidak boleh melebihi biaya proyek")
 			c.Abort()
 			return
 		}
