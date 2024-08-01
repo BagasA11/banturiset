@@ -109,12 +109,12 @@ func (pc *ProgressControllers) CreateClean(c *gin.Context) {
 	}
 
 	t := tz.GetTime(time.Now())
-	// validation test passed
-	// if project.FundUntil.After(t) {
-	// 	c.JSON(http.StatusForbidden, "tidak dapat membuat laporan saat waktu pendanaan masih dibuka")
-	// 	c.Abort()
-	// 	return
-	// }
+
+	if project.FundUntil.After(t) {
+		c.JSON(http.StatusForbidden, "tidak dapat membuat laporan saat waktu pendanaan masih dibuka")
+		c.Abort()
+		return
+	}
 
 	if !(project.Tahapan[0].Start.Before(t) && project.Tahapan[0].End.After(t)) {
 		c.JSON(http.StatusForbidden, "waktu pelaksanaan kegiatan belum dimulai")
