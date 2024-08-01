@@ -2,8 +2,10 @@ package routes
 
 import (
 	"net/http"
-	"os"
 	"time"
+
+	"github.com/gin-gonic/autotls"
+	"golang.org/x/crypto/acme/autocert"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -39,5 +41,13 @@ func RegisterRoutes(r *gin.Engine) {
 	BudgetRoutes(apiGroup)
 	DonasiRoutes(apiGroup)
 	ProgressRoutes(apiGroup)
-	r.Run(":" + os.Getenv("LOC_PORT"))
+	// r.Run(":" + os.Getenv("LOC_PORT"))
+
+	m := autocert.Manager{
+		Prompt:     autocert.AcceptTOS,
+		HostPolicy: autocert.HostWhitelist("bagasa11.my.id"),
+		Cache:      autocert.DirCache("/var/www/.cache"),
+	}
+
+	autotls.RunWithManager(r, &m)
 }

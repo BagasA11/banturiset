@@ -5,10 +5,10 @@ import (
 	"os"
 
 	"github.com/bagasa11/banturiset/config"
+	"github.com/bagasa11/banturiset/routes"
 	"github.com/bagasa11/banturiset/timezone"
 	val "github.com/bagasa11/banturiset/validators"
 
-	"github.com/bagasa11/banturiset/routes"
 	"github.com/gin-gonic/gin"
 	bind "github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
