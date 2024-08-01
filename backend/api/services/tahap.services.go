@@ -2,11 +2,14 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/api/repository"
+	tz "github.com/bagasa11/banturiset/timezone"
+	"gorm.io/gorm"
 )
 
 type TahapService struct {
@@ -29,12 +32,23 @@ func (ts *TahapService) Create(projectID uint, penelitiID uint, req dto.TahapCre
 		return errors.New("tidak dapat menambah data tahap pada proyek yang sudah diverifikasi")
 	}
 
-	mulai, err := time.Parse(time.RFC3339, req.Start)
+	if err := ts.Repo.IsTahapRedundant(projectID, req.Tahap); err != nil {
+		return errors.New("tahap tidak boleh redundan")
+	}
+
+	if err := ts.Repo.HasNotAncestor(projectID, req.Tahap); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return fmt.Errorf("tidak dapat menambahkan tahap karena melewati tahap sebelumnya. Tambahkan data tahap %d", req.Tahap-1)
+		}
+		return errors.New("gagal memvalidasi tahap")
+	}
+
+	mulai, err := time.Parse(tz.TFormat, req.Start)
 	if err != nil {
 		return err
 	}
 
-	selesai, err := time.Parse(time.RFC3339, req.End)
+	selesai, err := time.Parse(tz.TFormat, req.End)
 	if err != nil {
 		return err
 	}
@@ -69,13 +83,13 @@ func (ts *TahapService) List(projectID uint, limit uint) ([]models.Tahapan, erro
 	return t, nil
 }
 
-func (ts *TahapService) Update(id uint, req dto.TahapCreate, projectID uint, penelitiID uint) error {
-	mulai, err := time.Parse(time.RFC3339, req.Start)
+func (ts *TahapService) Update(id uint, req dto.TahapUpdate, projectID uint, penelitiID uint) error {
+	mulai, err := time.Parse(tz.TFormat, req.Start)
 	if err != nil {
 		return err
 	}
 
-	selesai, err := time.Parse(time.RFC3339, req.End)
+	selesai, err := time.Parse(tz.TFormat, req.End)
 	if err != nil {
 		return err
 	}
@@ -91,7 +105,6 @@ func (ts *TahapService) Update(id uint, req dto.TahapCreate, projectID uint, pen
 
 	t := models.Tahapan{
 		ID:          id,
-		ProjectID:   projectID,
 		CostPercent: req.CostPercent,
 		Start:       mulai,
 		End:         selesai,
@@ -107,10 +120,24 @@ func (ts *TahapService) Delete(id uint, projectID uint, penelitID uint) error {
 	if err := IsEditable(projectID); err != nil {
 		return err
 	}
+	tahap, err := ts.Repo.GetTahap(id, projectID)
+	if err != nil {
+		return err
+	}
+
+	if err := ts.Repo.HasSuccessor(projectID, tahap); err != nil {
+		return err
+	}
+
 	return ts.Repo.Delete(id)
 }
 
 func IsTahapRedundant(projectID uint, tahap uint8) error {
 	ts := NewTahapService()
 	return ts.Repo.IsTahapRedundant(projectID, tahap)
+}
+
+func GetTahapList(projectID uint) ([]uint8, error) {
+	ts := NewTahapService()
+	return ts.Repo.GetTahapList(projectID)
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/api/repository"
 	tz "github.com/bagasa11/banturiset/timezone"
+	"gorm.io/gorm"
 )
 
 type ProjectService struct {
@@ -39,8 +40,13 @@ func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) error {
 		PenelitiID:  penelitiID,
 	}
 
-	skema := NewPengajuanService()
-	if err := skema.IsOpen(req.PengajuanID); err != nil {
+	pengajuanService := NewPengajuanService()
+	err := pengajuanService.IsOpen(p.PengajuanID)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return gorm.ErrRecordNotFound
+		}
 		return err
 	}
 
@@ -121,7 +127,15 @@ func (ps *ProjectService) SubmitToReviewed(ProjectID uint, penelitiID uint) erro
 
 func IsEditable(id uint) error {
 	ps := NewProjectService()
-	return ps.Repo.IsEditable(id)
+
+	err := ps.Repo.IsEditable(id)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return errors.New("tidak dapat mengedit project yang sudah disubmit")
+		}
+		return err
+	}
+	return nil
 }
 
 func IsOpenFund(id uint) error {
@@ -167,4 +181,8 @@ func MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Pro
 
 func (ps *ProjectService) MyProjectCost(projectID uint, penelitiID uint) (float32, error) {
 	return ps.Repo.MyProjectCost(projectID, penelitiID)
+}
+
+func (ps *ProjectService) Delete(id uint, penelitiID uint) error {
+	return ps.Repo.Delete(id, penelitiID)
 }

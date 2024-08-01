@@ -74,6 +74,18 @@ func (tr *TahapRepo) Update(t models.Tahapan) error {
 // 	percent uint
 // }
 
+func (tr *TahapRepo) GetTahap(id uint, project_id uint) (uint8, error) {
+	var tahap []uint8
+	if err := tr.DB.Model(&models.Tahapan{}).Where("id = ? AND project_id = ?", id, project_id).Limit(1).Pluck("tahap", &tahap).Error; err != nil {
+		return 0, err
+	}
+	if len(tahap) == 0 {
+		return 0, errors.New("gagal mengambil data tahapan atau data tidak ada")
+	}
+	fmt.Println("tahap->pluck():\t", tahap[0])
+	return tahap[0], nil
+}
+
 func (tr *TahapRepo) isGT100(projectID uint, input uint) error {
 	var p []int
 	if err := tr.DB.
@@ -90,7 +102,7 @@ func (tr *TahapRepo) isGT100(projectID uint, input uint) error {
 
 func sum(in []int) int {
 	var sum int = 0
-	for v, _ := range in {
+	for _, v := range in {
 		sum += v
 	}
 	return sum
@@ -119,4 +131,41 @@ func (tr *TahapRepo) IsTahapRedundant(projectID uint, tahap uint8) error {
 		return errors.New("gagal mengambil data tahapan")
 	}
 	return errors.New("data redundan")
+}
+
+// suatu tahap tidak boleh dibuat atau dihapus ketika mememiliki suksesor. ex: membuat tahap ke-1 ketika ada tahap ke-2
+func (tr *TahapRepo) HasSuccessor(projectID uint, tahap uint8) error {
+	t := new(models.Tahapan)
+	err := tr.DB.Where("project_id = ? AND tahap = ?", projectID, tahap+1).First(&t).Error
+	fmt.Println(t.ID, "\t", t.Tahap)
+	if err == gorm.ErrRecordNotFound {
+		return nil
+	}
+	if t != nil {
+		return errors.New("tahap tidak boleh memiliki suksesor")
+	}
+	return errors.New("gagal memvalidasi tahap suksesor")
+}
+
+// tahapan harus memiliki pendahulu
+//
+// ex: sebelum menambahkan data tahapan ke-2, maka harus ada tahapan ke-1
+func (tr *TahapRepo) HasNotAncestor(projectID uint, tahap uint8) error {
+
+	if tahap == 1 {
+		return nil
+	}
+	err := tr.DB.Where("project_id = ? AND tahap = ?", projectID, tahap-1).First(&models.Tahapan{}).Error
+	if err == gorm.ErrRecordNotFound {
+		return gorm.ErrRecordNotFound
+	}
+	return err
+}
+
+func (tr *TahapRepo) GetTahapList(projectID uint) ([]uint8, error) {
+	var tahap []uint8
+	if err := tr.DB.Model(&models.Tahapan{}).Where("project_id = ?", projectID).Pluck("tahap", &tahap).Error; err != nil {
+		return []uint8{}, err
+	}
+	return tahap, nil
 }

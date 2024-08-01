@@ -97,9 +97,12 @@ func (pr *ProjectRepository) ProjectPreview(id uint, penelitiID uint) (models.Pr
 		Preload("Tahapan", func(db *gorm.DB) *gorm.DB {
 			return db.Order("tahapans.tahap DESC")
 		}).
-		Limit(1).
-		Find(&p, id).
+		First(&p, id).
 		Error; err != nil {
+
+		if err == gorm.ErrRecordNotFound {
+			return models.Project{}, gorm.ErrRecordNotFound
+		}
 
 		fmt.Println("error [repo] project->preview(): ", err.Error())
 		return models.Project{}, errors.New("gagal mendapatkan detail project atau project ini telah diverifikasi")
@@ -301,7 +304,7 @@ func (pr *ProjectRepository) IsEditable(id uint) error {
 		if err == gorm.ErrRecordNotFound {
 			return gorm.ErrRecordNotFound
 		}
-		return errors.New("proyek tidak bisa diubah")
+		return errors.New("gagal memvalidasi status project")
 	}
 	return nil
 }
@@ -347,13 +350,17 @@ func (pr *ProjectRepository) MyContributeProject(donaturID uint, start uint, end
 
 func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Project, error) {
 	var p models.Project
-	if err := pr.DB.
+	err := pr.DB.
 		Where("id = ? AND peneliti_id = ?", id, penelitiID).
 		Preload("Tahapan",
 			func(db *gorm.DB) *gorm.DB {
 				return db.Where("tahap = ?", tahap).Limit(1)
-			}).
-		First(&p).Error; err != nil {
+			}).First(&p).Error
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return p, gorm.ErrRecordNotFound
+		}
 
 		fmt.Printf("myprojectClosed(): %s", err.Error())
 		return p, errors.New("gagal mengambil data")
@@ -371,6 +378,16 @@ func (pr *ProjectRepository) MyProjectCost(projectID uint, penelitiID uint) (flo
 		return float32(0), errors.New("gagal mengambil data biaya project")
 	}
 	return cost, nil
+}
+
+func (pr *ProjectRepository) Delete(projectID uint, penelitiID uint) error {
+	tx := pr.DB.Begin()
+	if err := tx.Where("peneliti_id = ? AND status < ?", penelitiID, models.Submit).Delete(&models.Project{}, projectID).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
 }
 
 // func (pr *ProjectRepository) Abort(id uint)   {}

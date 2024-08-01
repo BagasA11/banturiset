@@ -49,6 +49,7 @@ func (tc *TahapControllers) Create(c *gin.Context) {
 		}
 		var errorMessage string
 		for _, e := range validationErrs {
+
 			errorMessage = fmt.Sprintf("error in field %s condition: %s", e.Field(), e.ActualTag())
 			break
 		}
@@ -137,7 +138,7 @@ func (tc *TahapControllers) Update(c *gin.Context) {
 		return
 	}
 
-	req := new(dto.TahapCreate)
+	req := new(dto.TahapUpdate)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		validationErrs, ok := err.(validator.ValidationErrors)
 		if !ok {

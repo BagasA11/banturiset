@@ -64,7 +64,3 @@ func (p *Project) BeforeUpdate(tx *gorm.DB) error {
 	tx.Statement.SetColumn("UpdatedAt", tz.GetTime(time.Now()))
 	return nil
 }
-
-func (p *Project) BeforeDelete(tx *gorm.DB) error {
-	return errors.New("tidak boleh menghapus data proyek")
-}

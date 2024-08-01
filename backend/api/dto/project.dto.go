@@ -41,8 +41,14 @@ type Klirens struct {
 type TahapCreate struct {
 	CostPercent uint8  `json:"percent" binding:"required"`
 	Tahap       uint8  `json:"tahap" binding:"required"`
-	Start       string `json:"awal" binding:"required"`
-	End         string `json:"akhir" binding:"required"`
+	Start       string `json:"awal" binding:"required,start" time_format:"2006-Jan-02"`
+	End         string `json:"akhir" binding:"required" time_format:"2006-Jan-02"`
+}
+
+type TahapUpdate struct {
+	CostPercent uint8  `json:"percent" binding:"required"`
+	Start       string `json:"awal" binding:"required,start" time_format:"2006-Jan-02"`
+	End         string `json:"akhir" binding:"required" time_format:"2006-Jan-02"`
 }
 
 type CreateDonasi struct {

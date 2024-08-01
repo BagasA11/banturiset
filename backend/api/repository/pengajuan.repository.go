@@ -39,7 +39,7 @@ func (pr *PengajuanRepository) Open() ([]models.Pengajuan, error) {
 func (pr *PengajuanRepository) IsOpen(id uint) error {
 	if err := pr.DB.Where("closed_at >= ?", tz.GetTime(time.Now())).First(&models.Pengajuan{}, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return errors.New("skema penelitian sudah ditutup")
+			return gorm.ErrRecordNotFound
 		}
 		return err
 	}

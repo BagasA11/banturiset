@@ -8,6 +8,7 @@ import (
 
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
+	"gorm.io/gorm"
 
 	"github.com/bagasa11/banturiset/api/services"
 	"github.com/gin-gonic/gin"
@@ -29,7 +30,7 @@ func (pc *ProjectControllers) Create(c *gin.Context) {
 
 	role_id, exist := c.Get("role_id")
 	if !exist {
-		c.JSON(http.StatusBadRequest, "detail user tidak ditemukan")
+		c.JSON(http.StatusBadRequest, "id peneliti tidak ditemukan")
 		return
 	}
 
@@ -37,6 +38,7 @@ func (pc *ProjectControllers) Create(c *gin.Context) {
 	if err := c.ShouldBindJSON(&req); err != nil {
 		validationErrs, ok := err.(validator.ValidationErrors)
 		if !ok {
+			fmt.Println("\n", err.Error())
 			c.JSON(http.StatusBadRequest, "Invalid request")
 			return
 		}
@@ -50,12 +52,20 @@ func (pc *ProjectControllers) Create(c *gin.Context) {
 	}
 
 	if err := pc.Service.Create(*req, role_id.(uint)); err != nil {
+
+		// if pengajuan not found
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusUnprocessableEntity, "skema penelitian sudah ditutup")
+			return
+		}
+
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal membuat project",
 			"error": err.Error(),
 		})
 		return
 	}
+
 	c.JSON(http.StatusOK, "sukses")
 }
 
@@ -222,6 +232,12 @@ func (pc *ProjectControllers) Preview(c *gin.Context) {
 	}
 
 	project, err := pc.Service.Preview(uint(projectID), role_id.(uint))
+
+	if err == gorm.ErrRecordNotFound {
+		c.JSON(http.StatusNotFound, "data tidak ditemukan")
+		return
+	}
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -521,6 +537,28 @@ func (pc *ProjectControllers) MyContributeProject(c *gin.Context) {
 		"data":   ps,
 		"length": len(ps),
 	})
+}
+
+func (pc *ProjectControllers) Delete(c *gin.Context) {
+	// get project id
+	pID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, "gagal mendapatkan id project")
+		return
+	}
+	// get peneliti id
+	roleID, exist := c.Get("role_id")
+	if !exist {
+		c.JSON(http.StatusBadRequest, "id peneliti tidak ditemukan")
+		return
+	}
+	if err := pc.Service.Delete(uint(pID), roleID.(uint)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.AbortWithStatus(200)
 }
 
 func pipeline(data models.Project) {
