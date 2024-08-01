@@ -4,11 +4,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/autotls"
-	"golang.org/x/crypto/acme/autocert"
+	"log"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 func RegisterRoutes(r *gin.Engine) {
@@ -49,5 +50,5 @@ func RegisterRoutes(r *gin.Engine) {
 		Cache:      autocert.DirCache("/var/www/.cache"),
 	}
 
-	autotls.RunWithManager(r, &m)
+	log.Fatal(autotls.RunWithManager(r, &m))
 }
