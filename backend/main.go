@@ -37,6 +37,8 @@ func main() {
 
 	// initialize ttl cache
 	config.InitCache()
+	gin.SetMode(gin.ReleaseMode)
+
 	r := gin.Default()
 	routes.RegisterRoutes(r)
 }
