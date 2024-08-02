@@ -2,14 +2,13 @@ package routes
 
 import (
 	"net/http"
+	"os"
 	"time"
 
-	"log"
-
 	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/autotls"
+	// "github.com/gin-gonic/autotls"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/acme/autocert"
+	// "golang.org/x/crypto/acme/autocert"
 )
 
 func RegisterRoutes(r *gin.Engine) {
@@ -23,16 +22,10 @@ func RegisterRoutes(r *gin.Engine) {
 	config.OptionsResponseStatusCode = http.StatusOK
 	config.MaxAge = 4 * time.Hour
 
-	// r.Use()
-	// r.Use()
-	// r.Use()
 	useMiddleware := []gin.HandlerFunc{cors.New(config), gin.Logger(), gin.Recovery()}
 	r.Use(useMiddleware...)
 
 	apiGroup := r.Group("/api")
-	// apiGroup.Use(useMiddleware...)
-	// apiGroup.Use(cors.New(config), gin.Logger(), gin.Recovery())
-
 	UserRoutes(apiGroup)
 	AuthRoutes(apiGroup)
 	UploadRoutes(apiGroup)
@@ -42,13 +35,6 @@ func RegisterRoutes(r *gin.Engine) {
 	BudgetRoutes(apiGroup)
 	DonasiRoutes(apiGroup)
 	ProgressRoutes(apiGroup)
-	// r.Run(":" + os.Getenv("LOC_PORT"))
+	r.Run(":" + os.Getenv("LOC_PORT"))
 
-	m := autocert.Manager{
-		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("bagasa11.my.id"),
-		Cache:      autocert.DirCache("/var/www/.cache"),
-	}
-
-	log.Fatal(autotls.RunWithManager(r, &m))
 }
