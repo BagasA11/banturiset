@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/bagasa11/banturiset/config"
 	"github.com/bagasa11/banturiset/routes"
 	"github.com/bagasa11/banturiset/timezone"
@@ -16,7 +13,8 @@ import (
 )
 
 func main() {
-	err := godotenv.Load(".env.local")
+	home := "/home/banturiset/backend/"
+	err := godotenv.Load(home + ".env.local")
 	if err != nil {
 		panic(err)
 	}
@@ -26,7 +24,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(os.Getenv("LOC_HOST"))
+	// fmt.Println(os.Getenv("LOC_HOST"))
 	if err := config.InitDB(); err != nil {
 		panic(err)
 	}
