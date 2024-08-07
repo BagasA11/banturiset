@@ -39,6 +39,6 @@ func (ps *PengajuanServices) Open() ([]models.Pengajuan, error) {
 	return ps.Repo.Open()
 }
 
-func (ps *PengajuanServices) IsOpen(id uint) error {
+func (ps *PengajuanServices) IsOpen(id uint) (string, error) {
 	return ps.Repo.IsOpen(id)
 }

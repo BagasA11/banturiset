@@ -22,7 +22,7 @@ func NewProjectService() *ProjectService {
 	}
 }
 
-func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) error {
+func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) (string, error) {
 	now := tz.GetTime(time.Now())
 	deadline := now.AddDate(int(req.Year), int(now.Month()), now.Day()) // t->now + year + t->now->month + t->now->day
 
@@ -41,16 +41,16 @@ func (ps *ProjectService) Create(req dto.CreateProject, penelitiID uint) error {
 	}
 
 	pengajuanService := NewPengajuanService()
-	err := pengajuanService.IsOpen(p.PengajuanID)
+	link, err := pengajuanService.IsOpen(p.PengajuanID)
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return gorm.ErrRecordNotFound
+			return "", gorm.ErrRecordNotFound
 		}
-		return err
+		return "", err
 	}
 
-	return ps.Repo.Create(p)
+	return link, ps.Repo.Create(p)
 }
 
 func IsMyProject(id uint, penelitiID uint) error {

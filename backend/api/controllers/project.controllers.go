@@ -51,11 +51,20 @@ func (pc *ProjectControllers) Create(c *gin.Context) {
 		return
 	}
 
-	if err := pc.Service.Create(*req, role_id.(uint)); err != nil {
+	link, err := pc.Service.Create(*req, role_id.(uint))
+	if err != nil {
 
 		// if pengajuan not found
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusUnprocessableEntity, "skema penelitian sudah ditutup")
+			return
+		}
+
+		// if there is duplicated rows, like title, and others
+		if err == gorm.ErrDuplicatedKey {
+			c.JSON(http.StatusUnprocessableEntity, gin.H{
+				"error": gorm.ErrDuplicatedKey,
+			})
 			return
 		}
 
@@ -66,7 +75,10 @@ func (pc *ProjectControllers) Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, "sukses")
+	c.JSON(http.StatusOK, gin.H{
+		"link":  link,
+		"pesan": "membuat project sukses. Silahkan bergabung ke grup yang telah disediakan",
+	})
 }
 
 func (pc *ProjectControllers) OpenDonate(c *gin.Context) {

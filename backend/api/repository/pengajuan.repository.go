@@ -36,14 +36,18 @@ func (pr *PengajuanRepository) Open() ([]models.Pengajuan, error) {
 	return p, err
 }
 
-func (pr *PengajuanRepository) IsOpen(id uint) error {
-	if err := pr.DB.Where("closed_at >= ?", tz.GetTime(time.Now())).First(&models.Pengajuan{}, id).Error; err != nil {
+func (pr *PengajuanRepository) IsOpen(id uint) (string, error) {
+	var p models.Pengajuan
+	if err := pr.DB.Where("closed_at >= ?", tz.GetTime(time.Now())).
+		Select("link_wa").
+		First(&p, id).Error; err != nil {
+
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return gorm.ErrRecordNotFound
+			return "", gorm.ErrRecordNotFound
 		}
-		return err
+		return "", err
 	}
-	return nil
+	return p.LinkWa, nil
 }
 
 func (pr *PengajuanRepository) FindID(id uint) (models.Pengajuan, error) {
