@@ -36,7 +36,32 @@ func (us *UserService) UserRegister(req dto.UserRegister) (uint, error) {
 		return 0, fmt.Errorf("tipe user invalid: %v", []string{models.Sponsor, models.Researcher})
 	}
 
-	user := models.User{
+	user := autoValidateUser(req, req.Role)
+
+	return us.User.Create(user)
+}
+
+// @param dto.UserRegister
+// @param string
+// if role is donatur, then user verified property is true. So User can be login immadiately after register proccess
+// @return models.User
+func autoValidateUser(req dto.UserRegister, role string) models.User {
+
+	if strings.ToLower(role) == models.Sponsor {
+		return models.User{
+			FName:         req.FName,
+			Email:         req.Email,
+			Password:      req.Password,
+			Phone:         req.Phone,
+			Role:          req.Role,
+			Institute:     req.Institute,
+			InstituteAddr: req.InstAddr,
+			PostCode:      req.PostCode,
+			IsVerfied:     true,
+		}
+	}
+
+	return models.User{
 		FName:         req.FName,
 		Email:         req.Email,
 		Password:      req.Password,
@@ -45,9 +70,8 @@ func (us *UserService) UserRegister(req dto.UserRegister) (uint, error) {
 		Institute:     req.Institute,
 		InstituteAddr: req.InstAddr,
 		PostCode:      req.PostCode,
+		IsVerfied:     false,
 	}
-
-	return us.User.Create(user)
 }
 
 func (us *UserService) CreateDonatur(userID uint) error {
