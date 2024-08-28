@@ -5,44 +5,9 @@ import (
 
 	"strconv"
 
-	_ "github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/services"
 	"github.com/gin-gonic/gin"
 )
-
-// type PengajuanID struct {
-// 	ID uint `json:"pengajuan_id" binding:"required"`
-// }
-
-// func SkemaValidation() gin.HandlerFunc {
-// 	return func(ctx *gin.Context) {
-// 		pengajuan_id := new(dto.CreateProject)
-// 		if err := ctx.ShouldBindJSON(&pengajuan_id); err != nil {
-// 			ctx.JSON(http.StatusBadRequest, gin.H{
-// 				"error": err.Error(),
-// 			})
-// 			ctx.Abort()
-// 			return
-// 		}
-
-// 		ps := services.NewPengajuanService()
-// 		err := ps.IsOpen(pengajuan_id.PengajuanID)
-// 		if err == gorm.ErrRecordNotFound {
-// 			ctx.JSON(http.StatusUnprocessableEntity, fmt.Sprintf("skema penelitian %d sudah ditutup", pengajuan_id.PengajuanID))
-// 			ctx.Abort()
-// 			return
-// 		}
-// 		if err != nil {
-// 			ctx.JSON(http.StatusInternalServerError, gin.H{
-// 				"error": err.Error(),
-// 			})
-// 			ctx.Abort()
-// 			return
-// 		}
-
-// 		ctx.Next()
-// 	}
-// }
 
 func SubmitValidation() gin.HandlerFunc {
 	return func(c *gin.Context) {

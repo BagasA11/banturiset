@@ -64,7 +64,7 @@ func (dr *DonasiRepo) UpdateStatus(id string, status string) error {
 
 func (dr *DonasiRepo) FindByUserID(trID string, donaturID uint) (models.Donasi, error) {
 	var d models.Donasi
-	err := dr.DB.Where("id = ? AND donatur_id = ?", trID, donaturID).First(&d).Error
+	err := dr.DB.Where("id = ? AND user_id = ?", trID, donaturID).First(&d).Error
 	return d, err
 }
 
@@ -96,7 +96,7 @@ func (dr *DonasiRepo) Contributors(projectID uint, limit uint) ([]models.Donasi,
 func (dr *DonasiRepo) MyContribution(donaturID uint, limit uint) ([]models.Donasi, error) {
 	var d []models.Donasi
 	if err := dr.DB.
-		Where("status = ? AND donatur_id = ?", "PAID", donaturID).
+		Where("status = ? AND user_id = ?", "PAID", donaturID).
 		Preload("Project").
 		Limit(int(limit)).
 		Find(&d).Error; err != nil {

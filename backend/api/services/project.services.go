@@ -8,6 +8,7 @@ import (
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/api/repository"
+	e "github.com/bagasa11/banturiset/errorf"
 	tz "github.com/bagasa11/banturiset/timezone"
 	"gorm.io/gorm"
 )
@@ -174,9 +175,27 @@ func (ps *ProjectService) MyContributeProject(donaturID uint, page uint) ([]mode
 	return ps.Repo.MyContributeProject(donaturID, start, end)
 }
 
-func MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Project, error) {
+func ClosedProjectChecker(id uint, penelitID uint, tahap uint8) error {
 	ps := NewProjectService()
-	return ps.Repo.MyProjectWasClosedDetail(id, penelitiID, tahap)
+	p, err := ps.Repo.MyProjectWasClosedDetail(id, penelitID, tahap)
+	if err != nil {
+		return err
+	}
+	// tahapan length check
+	if len(p.Tahapan) <= 0 {
+		return e.ErrNilTahap
+	}
+
+	// time validation
+	t := tz.GetTime(time.Now())
+	if p.FundUntil.After(t) {
+		return e.ErrDonationStillOpen
+	}
+	if !(p.Tahapan[0].Start.Before(t) && p.Tahapan[0].End.After(t)) {
+		return e.ErrHaveNotStartEvent
+	}
+
+	return nil
 }
 
 func (ps *ProjectService) MyProjectCost(projectID uint, penelitiID uint) (float32, error) {

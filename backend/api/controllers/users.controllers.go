@@ -82,61 +82,45 @@ func (uc *UsersController) UserRegistration(c *gin.Context) {
 		})
 		return
 	}
+
+	// if role == donatur: then create donatur .... else: skip step
+	if err := uc.autoFillDonatur(userID, req.Role); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"pesan": "gagal insert data ke tabel donatur",
+			"error": err.Error(),
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"user_id": userID,
 		"pesan":   "simpan user_id untuk proses registrasi lebih lanjut. Masukkan user_id ke dalam parameter url",
 	})
 }
 
-func (uc *UsersController) DonaturCreate(c *gin.Context) {
-	// example.com/api/user/create/1?role=
+/*
+@param uint, string
 
-	userID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"pesan": "tidak dapat mengonversi id user menjadi integer",
-			"error": err.Error(),
-		})
-		return
+@return error
+
+autoFillDonatur method built to leverage auto validate process for donatur or users.
+if @param: role string == donatur, then insert userID to table
+else: return proccess with nil value
+*/
+func (uc *UsersController) autoFillDonatur(userID uint, role string) error {
+	// if role != donatur... then skip proccess
+	if strings.ToLower(role) != "donatur" {
+		return nil
 	}
-
-	req := new(dto.DonaturRegister)
-	if err := c.ShouldBindJSON(&req); err != nil {
-		validationErrs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			c.JSON(http.StatusBadRequest, "Invalid request")
-			return
-		}
-		var errorMessage string
-		for _, e := range validationErrs {
-			errorMessage = fmt.Sprintf("error in field %s condition: %s", e.Field(), e.ActualTag())
-			break
-		}
-		c.JSON(http.StatusBadRequest, errorMessage)
-		return
+	// validating userID
+	if err := uc.Services.CheckID(userID, strings.ToLower(role)); err != nil {
+		return err
 	}
-
-	if strings.ToLower(req.Role) != "donatur" {
-		c.JSON(http.StatusUnprocessableEntity, "diharapkan untuk menjadi donatur")
-		return
-	}
-
-	if err := uc.Services.CheckID(uint(userID), req.Role); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"pesan": "user id tidak ditemukan atau peran tidak valid",
-			"error": err.Error(),
-		})
-		return
-	}
-
+	// insert userID to Donatur table and throw error
 	if err := uc.Services.CreateDonatur(uint(userID)); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"pesan": "tidak dapat menambahkan data donatur",
-			"error": err.Error(),
-		})
-		return
+		return err
 	}
-	c.JSON(http.StatusOK, "registrasi sukses. Mohon tunggu verifikasi akun dari admin")
+	return nil
 }
 
 func (uc *UsersController) PenelitiCreate(c *gin.Context) {

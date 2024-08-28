@@ -15,7 +15,7 @@ func UserRoutes(r *gin.RouterGroup) {
 	r.POST("/register", uc.UserRegistration)
 	r.PUT("/verifikasi/:id", middleware.JwtAuth(), middleware.AdminOnly(), uc.Verifikasi)
 	// create donatur data
-	r.POST("/user/donatur/create/:id", uc.DonaturCreate)
+	// r.POST("/user/donatur/create/:id", uc.DonaturCreate)
 	r.POST("/user/peneliti/create/:id", uc.PenelitiCreate)
 
 	r.GET("/user/verify", middleware.JwtAuth(), middleware.AdminOnly(), uc.NeedVerify)

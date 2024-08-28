@@ -9,7 +9,7 @@ import (
 func ProgressRoutes(r *gin.RouterGroup) {
 	pc := controllers.NewProgressControllers()
 
-	r.POST("/project/:id/laporan-raw/create", middleware.JwtAuth(), middleware.PenelitiOnly(), middleware.IsInState(), pc.Create)
+	// r.POST("/project/:id/laporan-raw/create", middleware.JwtAuth(), middleware.PenelitiOnly(), middleware.IsInState(), pc.Create)
 	r.POST("/project/:id/laporan-clean/create", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.CreateClean)
 
 }

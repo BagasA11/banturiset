@@ -19,8 +19,8 @@ type Donasi struct {
 
 	ProjectID uint
 	Project   Project
-	DonaturID uint
-	Donatur   Donatur
+	UserID    uint
+	User      User
 }
 
 func (d *Donasi) BeforeCreate(tx *gorm.DB) error {

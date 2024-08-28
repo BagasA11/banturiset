@@ -25,8 +25,8 @@ func NewDonasi() *Donasi {
 
 func (dc *Donasi) CreateDonasi(c *gin.Context) {
 
-	roleID, _ := c.Get("role_id")
-	if roleID.(uint) == 0 {
+	userID, _ := c.Get("id")
+	if userID.(uint) == 0 {
 		c.JSON(http.StatusBadRequest, "id donatur diperlukan")
 		return
 	}
@@ -61,7 +61,7 @@ func (dc *Donasi) CreateDonasi(c *gin.Context) {
 		return
 	}
 
-	m, err := dc.Service.Create(roleID.(uint), uint(projectID), *req)
+	m, err := dc.Service.Create(userID.(uint), uint(projectID), *req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
@@ -82,7 +82,7 @@ func (dc *Donasi) CreateDonasi(c *gin.Context) {
 
 func (dc *Donasi) GetInvoiceDetail(c *gin.Context) {
 
-	roleID, _ := c.Get("role_id")
+	roleID, _ := c.Get("id")
 	if roleID.(uint) == 0 {
 		c.JSON(http.StatusBadRequest, "id donatur diperlukan")
 		return
@@ -122,7 +122,6 @@ func (dc *Donasi) Notif(c *gin.Context) {
 		return
 	}
 
-	fmt.Printf("\nstatus [%s]\n", req.Status)
 	if strings.ToLower(req.Status) != "paid" {
 
 		if err := dc.Service.UpdateStatus(req.ExternalID, req.Status); err != nil {

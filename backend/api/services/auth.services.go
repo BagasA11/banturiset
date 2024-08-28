@@ -54,6 +54,14 @@ func (as *AuthService) Login(req dto.Login) (string, error) {
 
 }
 
+/*
+@param uint, string
+
+@return models.User{}, uint, error
+
+selectByRole() function will filter and get detail user data if mathces with given userID and role
+if data not found or an error occur while query data, then exception will be throwed
+*/
 func (as *AuthService) selectByRole(userID uint, r string) (*models.User, uint, error) {
 	// B4nturis3t_2024
 	if strings.ToLower(r) == models.Admin {

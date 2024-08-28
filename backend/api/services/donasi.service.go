@@ -38,7 +38,7 @@ func NewDonasiService() *DonasiService {
 	}
 }
 
-func (ds *DonasiService) Create(donaturID uint, ProjectID uint, req dto.CreateDonasi) (*models.Donasi, error) {
+func (ds *DonasiService) Create(userID uint, ProjectID uint, req dto.CreateDonasi) (*models.Donasi, error) {
 	if !slices.Contains([]string{"ovo", "bca", "bsi", "mandiri", "bri", "bni", "bjb", "shopeepay"}, strings.ToLower(req.Method)) {
 		return nil, fmt.Errorf("metode pembayaran %s tidak didukung", req.Method)
 	}
@@ -63,7 +63,7 @@ func (ds *DonasiService) Create(donaturID uint, ProjectID uint, req dto.CreateDo
 	}
 
 	d := models.Donasi{
-		DonaturID: donaturID,
+		UserID:    userID,
 		ProjectID: ProjectID,
 		Method:    strings.ToUpper(req.Method),
 		Jml:       req.Jml,
@@ -92,8 +92,8 @@ func (ds *DonasiService) CreateInvoice(tr *models.Donasi, email string) (*invoic
 	return resp, nil
 }
 
-func (ds *DonasiService) GetTransaction(id string, donaturID uint) (interface{}, error) {
-	tr, err := ds.Repo.FindByUserID(id, donaturID)
+func (ds *DonasiService) GetTransaction(id string, userID uint) (interface{}, error) {
+	tr, err := ds.Repo.FindByUserID(id, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (ds *DonasiService) GetTransaction(id string, donaturID uint) (interface{},
 		return nil, err
 	}
 
-	httpreq.Header.Set("for-user-id", fmt.Sprintf("%d", tr.DonaturID)) // ex:"1"
+	httpreq.Header.Set("for-user-id", fmt.Sprintf("%d", tr.UserID)) // ex:"1"
 	key := os.Getenv("XENDIT_SKEY") + ":"
 
 	encodedString := base64.StdEncoding.EncodeToString([]byte(key))
