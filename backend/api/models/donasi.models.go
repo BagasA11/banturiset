@@ -43,6 +43,5 @@ func (d *Donasi) BeforeUpdate(tx *gorm.DB) error {
 }
 
 func (d *Donasi) BeforeDelete(tx *gorm.DB) error {
-
 	return errors.New("tidak boleh menghapus transaksi")
 }
