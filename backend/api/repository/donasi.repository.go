@@ -109,7 +109,7 @@ func (dr *DonasiRepo) MyContribution(donaturID uint, limit uint) ([]models.Donas
 
 func (dr *DonasiRepo) MyHistory(donaturID uint) ([]models.Donasi, error) {
 	var d []models.Donasi
-	if err := dr.DB.Order("updated_at DESC").Where("donatur_id = ?", donaturID).Preload("Project").
+	if err := dr.DB.Order("updated_at DESC").Where("user_id = ?", donaturID).Preload("Project").
 		Find(&d).Error; err != nil {
 		fmt.Println("error dr->myContribution(): ", err.Error())
 		return d, errors.New("gagal mengambil data")

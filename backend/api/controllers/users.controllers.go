@@ -84,10 +84,18 @@ func (uc *UsersController) UserRegistration(c *gin.Context) {
 	}
 
 	// if role == donatur: then create donatur .... else: skip step
-	if err := uc.autoFillDonatur(userID, req.Role); err != nil {
+	status, err := uc.autoFillDonatur(userID, req.Role)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"pesan": "gagal insert data ke tabel donatur",
 			"error": err.Error(),
+			"pesan": "gagal insert data ke tabel donatur",
+		})
+		return
+	}
+	// status = 200 indicates that create donatur proccess succesful
+	if status == 200 {
+		c.JSON(http.StatusOK, gin.H{
+			"pesan": "silahkan melakukan login",
 		})
 		return
 	}
@@ -107,20 +115,17 @@ autoFillDonatur method built to leverage auto validate process for donatur or us
 if @param: role string == donatur, then insert userID to table
 else: return proccess with nil value
 */
-func (uc *UsersController) autoFillDonatur(userID uint, role string) error {
+func (uc *UsersController) autoFillDonatur(userID uint, role string) (status int, e error) {
 	// if role != donatur... then skip proccess
 	if strings.ToLower(role) != "donatur" {
-		return nil
+		return http.StatusNoContent, nil
 	}
-	// validating userID
-	if err := uc.Services.CheckID(userID, strings.ToLower(role)); err != nil {
-		return err
-	}
+
 	// insert userID to Donatur table and throw error
 	if err := uc.Services.CreateDonatur(uint(userID)); err != nil {
-		return err
+		return http.StatusUnprocessableEntity, err
 	}
-	return nil
+	return 200, nil
 }
 
 func (uc *UsersController) PenelitiCreate(c *gin.Context) {

@@ -331,22 +331,15 @@ func (pr *ProjectRepository) Revisi(penelitiID uint) ([]models.Project, error) {
 	return p, nil
 }
 
-func (pr *ProjectRepository) MyContributeProject(donaturID uint, start uint, end uint) ([]models.Project, error) {
+func (pr *ProjectRepository) MyContributeProject(userID uint, start uint, end uint) ([]models.Project, error) {
 	var p []models.Project
 
-	if err := pr.DB.Preload("Donasi", "id = ?", donaturID).Where("id BETWEEN ? AND ?", start, end).Find(&p).Error; err != nil {
+	if err := pr.DB.Preload("Donasi", "user_id = ?", userID).Where("id BETWEEN ? AND ?", start, end).Find(&p).Error; err != nil {
 		fmt.Println("error[repo]: ", err.Error())
 		return p, err
 	}
 	return p, nil
 }
-
-/*
-	// func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) {
-		fundUntil < now(); penelitiID = PenelitiID; + tahap = Project->Tahapan->Tahap
-
-// }
-*/
 
 func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Project, error) {
 	var p models.Project

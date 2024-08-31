@@ -13,7 +13,6 @@ import (
 func CheckRedundantWebhook() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		t := time.Now()
 		webhook_id := c.GetHeader("webhook-id")
 		fmt.Println(webhook_id)
 		if webhook_id == "" {
@@ -24,19 +23,12 @@ func CheckRedundantWebhook() gin.HandlerFunc {
 
 		// memeriksa apakah ada data dengan cache key yang sama
 		// jika tidak ditemukan, maka akan melakukan setup data
-		// namun jika ditemukan, akan memeriksa expired time dari cache
-		// jika expired akan dihapus
+		// namun jika ditemukan, maka akan skip
+
 		cache := config.GetCacheTTL()
-		_, chDura, err := cache.GetWithTTL(webhook_id)
+		_, err := cache.Get(webhook_id)
 
 		if err == nil {
-			// if expired then: remove item
-
-			if time.Since(t) > chDura {
-				err = cache.Remove(webhook_id)
-				fmt.Println("remove cache item with key: ", webhook_id)
-				fmt.Println("error when remove cache: ", err.Error())
-			}
 			c.AbortWithStatus(200)
 			return
 		}

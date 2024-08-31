@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+
 	// home := "/home/banturiset/backend/"
 	err := godotenv.Load(".env.local")
 	if err != nil {

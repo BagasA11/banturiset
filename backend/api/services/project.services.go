@@ -169,10 +169,10 @@ func (ps *ProjectService) Revisi(penelitiID uint) ([]models.Project, error) {
 	return ps.Repo.Revisi(penelitiID)
 }
 
-func (ps *ProjectService) MyContributeProject(donaturID uint, page uint) ([]models.Project, error) {
+func (ps *ProjectService) MyContributeProject(userID uint, page uint) ([]models.Project, error) {
 	end := page * 20
 	start := end - 19
-	return ps.Repo.MyContributeProject(donaturID, start, end)
+	return ps.Repo.MyContributeProject(userID, start, end)
 }
 
 func ClosedProjectChecker(id uint, penelitID uint, tahap uint8) error {

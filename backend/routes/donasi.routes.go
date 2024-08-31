@@ -9,6 +9,7 @@ import (
 func DonasiRoutes(r *gin.RouterGroup) {
 	dc := controllers.NewDonasi()
 
+	// donatur
 	r.POST("/project/:id/donasi/create", middleware.JwtAuth(), middleware.DonaturOnly(), dc.CreateDonasi)
 	r.GET("/donasi/:id", middleware.JwtAuth(), middleware.DonaturOnly(), dc.GetInvoiceDetail)
 	r.GET("/donasi/history", middleware.JwtAuth(), middleware.DonaturOnly(), dc.MyHistory)

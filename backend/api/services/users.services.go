@@ -9,6 +9,7 @@ import (
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
 	"github.com/bagasa11/banturiset/api/repository"
+	ef "github.com/bagasa11/banturiset/errorf"
 )
 
 type UserService struct {
@@ -119,7 +120,7 @@ func (us *UserService) CreatePeneliti(userID uint, req dto.PenelitiRegister) err
 func (us *UserService) CheckID(id uint, role string) error {
 	r := strings.ToLower(role)
 	if !slices.Contains([]string{"donatur", "peneliti", "researcher", "saintist"}, strings.ToLower(r)) {
-		return errors.New("role ditolak")
+		return ef.ErrInvalidRole
 	}
 	return us.User.CheckID(id, r)
 }

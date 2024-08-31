@@ -525,9 +525,10 @@ func (pc *ProjectControllers) Revisi(c *gin.Context) {
 	})
 }
 
+// this method is a controller returning json data of user contributed projects
 func (pc *ProjectControllers) MyContributeProject(c *gin.Context) {
-	role_id, _ := c.Get("role_id")
-	if role_id.(uint) == 0 {
+	userID, _ := c.Get("id")
+	if userID.(uint) == 0 {
 		c.JSON(400, "role id invalid")
 		return
 	}
@@ -538,7 +539,7 @@ func (pc *ProjectControllers) MyContributeProject(c *gin.Context) {
 		return
 	}
 
-	ps, err := pc.Service.MyContributeProject(role_id.(uint), uint(page))
+	ps, err := pc.Service.MyContributeProject(userID.(uint), uint(page))
 	if err != nil {
 		c.JSON(500, gin.H{
 			"error": err.Error(),

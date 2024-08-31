@@ -11,4 +11,5 @@ var (
 	ErrRedundantTahap    = e.New("data tahap redundant")
 	ErrRedundantData     = e.New("data redundant")
 	ErrNilTahap          = e.New("data tahapan tidak ditemukan")
+	ErrInvalidRole       = e.New("role ditolak")
 )
