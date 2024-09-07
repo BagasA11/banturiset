@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type tahap struct {
-	Tahap uint8 `json:"tahap"`
-}
+// type tahap struct {
+// 	Tahap uint8 `json:"tahap"`
+// }
 
 func EnsureProjectWasClosed() gin.HandlerFunc {
 	return func(c *gin.Context) {
