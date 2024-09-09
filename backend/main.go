@@ -14,8 +14,9 @@ import (
 
 func main() {
 
-	home := "/home/banturiset/backend/"
-	err := godotenv.Load(home + ".env.local")
+	// home := "/home/banturiset/backend/"
+	// err := godotenv.Load(home + ".env.local")
+	err := godotenv.Load(".env.local")
 	if err != nil {
 		panic(err)
 	}
@@ -36,7 +37,7 @@ func main() {
 
 	// initialize ttl cache
 	config.InitCache()
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
 	routes.RegisterRoutes(r)

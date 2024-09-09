@@ -21,14 +21,22 @@ func getMysqlDsn() string {
 	return dsn
 }
 
-// func get_postgresDsn() string {
-// 	return fmt.Sprintf("host=localhost user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=%s",
-// 		os.Getenv("POSTGRES_USERNAME"), os.Getenv("POSTGRES_PASS"),
-// 		os.Getenv("POSTGRES_DBName"), os.Getenv("POSTGRES_PORT"), os.Getenv("POSTGRES_TIMEZONE"))
-// }
+func mysqlLocalDsn() string {
+	// user: user1; pass:1234; host:localhost; port: 3306; db:banturiset
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		os.Getenv("ROOT"), os.Getenv("ROOTPASSWORD"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"), os.Getenv("DB_NAME"))
+	// fmt.Println("dsn: ", dsn)
+	return dsn
+}
+
+func get_postgresDsn() string {
+	return fmt.Sprintf("host=localhost user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=%s",
+		os.Getenv("POSTGRES_USERNAME"), os.Getenv("POSTGRES_PASS"),
+		os.Getenv("POSTGRES_DBName"), os.Getenv("POSTGRES_PORT"), os.Getenv("POSTGRES_TIMEZONE"))
+}
 
 func InitDB() error {
-	dsn := getMysqlDsn()
+	dsn := mysqlLocalDsn()
 
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{PrepareStmt: true})

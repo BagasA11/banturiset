@@ -6,9 +6,8 @@ import (
 	"time"
 
 	"github.com/gin-contrib/cors"
-	// "github.com/gin-gonic/autotls"
+
 	"github.com/gin-gonic/gin"
-	// "golang.org/x/crypto/acme/autocert"
 )
 
 func RegisterRoutes(r *gin.Engine) {
