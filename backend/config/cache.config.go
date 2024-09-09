@@ -16,7 +16,7 @@ var cache *ttlcache.Cache
 
 func InitCache() {
 	cache = ttlcache.NewCache()
-	fmt.Println("cache object: ", cache)
+	// fmt.Println("cache object: ", cache)
 	cache.SetExpirationCallback(func(key string, value interface{}) {
 		// if key expired, then cache will be removed
 		defer recover()
