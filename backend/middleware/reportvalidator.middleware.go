@@ -12,6 +12,7 @@ type tahap struct {
 	Tahap uint8 `json:"tahap"`
 }
 
+// Ensure Project Was Closed
 func EnsureProjectWasClosed() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		projectID, err := strconv.Atoi(c.Param("id"))
