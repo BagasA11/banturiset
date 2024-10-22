@@ -3,27 +3,25 @@ version: '3.7'
 services:
   db:
     container_name: db
-    image: mariadb:10.4
+    image: mariadb:10.11
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: example
-      MARIADB_USERNAME: user1
+      MARIADB_USERNAME: banturiset
       MARIADB_PASSWORD: 1234
     ports:
       - 3306:3306
-    networks:
-      - go_services
+   
 
-  go_services:
-    container_name: go_services
+  app:
+    container_name: app
     build: ./backend
     ports: 
       - 8080:8080
     restart: always
     env_file: "/backend/.env.local"
     # volumes:
-    networks:
-      - go_services
+   
     depends_on:
       - db
         
@@ -32,10 +30,5 @@ services:
 
 # volumes:
 #   mysql_data:
-  # go_services:
+  # banturiset:
 
-networks:
-  go_services:
-    driver: bridge
-  # db: 
-  #   driver: bridge
