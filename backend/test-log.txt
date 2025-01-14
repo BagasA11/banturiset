@@ -1,0 +1,14 @@
+date: 10 Nov 2024
+1. opendonasi = bermasalah
+expected: return not found|error invalid url|data[]
+result: wait too long
+source: middeware/retelimiter.middleware.go
+status: fixed
+2. Fitur Review
+expected: return data|not found
+result: unsupported relation schema
+source: api/repository/project.repository.go 
+3. Verifikasi project
+expected: status ok
+result: invalid sql syntax
+source: api/repository/project.repository.go  

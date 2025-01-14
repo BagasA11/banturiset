@@ -1,0 +1,4 @@
+id,f_name,email,password,role,post_code,profile_url,is_verfied,is_block
+1,peneliti_ke_1,peneliti1@gmail.com,$2a$10$Hphgo/BvmFJrZqryUeGUru/eQOS.6pQAVlL..xhzOfuawB0ywLb/G,peneliti,55173,,TRUE,FALSE
+2,dontur_2,user006@gmail.com,$2a$10$AVBJgR/3CjlhUEIGNnbIH.HRNZ5b7xlS5SHTZokbD05deJN2RQUZa,donatur,40303,,TRUE,FALSE
+3,admin_1,admin01@gmail.com,$2a$10$GUZL3r7ieb/ZVVulznYZnemG12zKI9QVLT7m3j2Nk5zZXQi2OhaHu,penyunting,87373,,TRUE,FALSE
