@@ -83,12 +83,21 @@ func (ps *ProjectService) Review(projectID uint) (models.Project, error) {
 	return ps.Repo.Review(projectID)
 }
 
-func (ps *ProjectService) Verifikasi(projectID uint, adminID uint) (models.Project, error) {
-	return ps.Repo.Verifikasi(projectID, adminID)
+func (ps *ProjectService) Verifikasi(projectID uint, adminID uint) error {
+	p := models.Project{
+		ID:      projectID,
+		Status:  models.Verifikasi,
+		AdminID: &adminID,
+	}
+	return ps.Repo.Verifikasi(&p)
 }
 
 func (ps *ProjectService) UploadProposal(id uint, penelitiID uint, proposalUrl string) error {
 	return ps.Repo.UploadProposal(id, penelitiID, proposalUrl)
+}
+
+func (ps *ProjectService) UploadImage(id uint, penelitiID uint, imageUrl string) error {
+	return ps.Repo.UploadImage(id, penelitiID, imageUrl)
 }
 
 func (ps *ProjectService) UploadKlirens(id uint, penelitiID uint, klirens_url string) error {
@@ -175,24 +184,17 @@ func (ps *ProjectService) MyContributeProject(userID uint, page uint) ([]models.
 	return ps.Repo.MyContributeProject(userID, start, end)
 }
 
-func ClosedProjectChecker(id uint, penelitID uint, tahap uint8) error {
+func ClosedProjectChecker(id uint, penelitID uint) error {
 	ps := NewProjectService()
-	p, err := ps.Repo.MyProjectWasClosedDetail(id, penelitID, tahap)
+	p, err := ps.Repo.MyProjectWasClosedDetail(id, penelitID)
 	if err != nil {
 		return err
-	}
-	// tahapan length check
-	if len(p.Tahapan) <= 0 {
-		return e.ErrNilTahap
 	}
 
 	// time validation
 	t := tz.GetTime(time.Now())
 	if p.FundUntil.After(t) {
 		return e.ErrDonationStillOpen
-	}
-	if !(p.Tahapan[0].Start.Before(t) && p.Tahapan[0].End.After(t)) {
-		return e.ErrHaveNotStartEvent
 	}
 
 	return nil

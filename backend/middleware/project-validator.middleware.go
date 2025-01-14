@@ -15,7 +15,7 @@ func SubmitValidation() gin.HandlerFunc {
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
-				"pesan": "format url invalid",
+				"pesan": "id project tidak ditemukan",
 			})
 			c.Abort()
 			return
@@ -41,18 +41,6 @@ func SubmitValidation() gin.HandlerFunc {
 
 		if project.ProposalUrl == nil {
 			c.JSON(http.StatusUnprocessableEntity, "proposal penelitian tidak boleh kosong")
-			c.Abort()
-			return
-		}
-
-		if len(project.Tahapan) <= 0 {
-			c.JSON(http.StatusUnprocessableEntity, "detail tahap pelaksanaan project tidak boleh kosong")
-			c.Abort()
-			return
-		}
-
-		if uint8(project.Milestone) != project.Tahapan[0].Tahap {
-			c.JSON(http.StatusUnprocessableEntity, "tahap pelaksanaan project dan jumlah milestone project tidak sama")
 			c.Abort()
 			return
 		}

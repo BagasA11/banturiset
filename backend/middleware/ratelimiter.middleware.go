@@ -30,6 +30,7 @@ func PerClientRateLimiter() gin.HandlerFunc {
 				delete(clients, ip)
 			}
 		}
+		mu.Unlock()
 	}()
 
 	return func(ctx *gin.Context) {
@@ -40,12 +41,15 @@ func PerClientRateLimiter() gin.HandlerFunc {
 		}
 		mu.Lock()
 		if _, found := clients[ip]; !found {
-			clients[ip] = &client{limiter: rate.NewLimiter(2, 4)}
+			clients[ip] = &client{limiter: rate.NewLimiter(5, 40)}
 		}
 		clients[ip].lastseen = tz.GetTime(time.Now())
 		if !clients[ip].limiter.Allow() {
 			mu.Unlock()
-			ctx.JSON(http.StatusTooManyRequests, "api reached capacity")
+			ctx.JSON(http.StatusTooManyRequests, gin.H{
+				"message": "api reached capacity",
+				"ip":      clients[ip],
+			})
 			ctx.Abort()
 			return
 		}
@@ -57,7 +61,7 @@ func PerClientRateLimiter() gin.HandlerFunc {
 
 func SimpleLimiter() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		limiter := rate.NewLimiter(2, 4)
+		limiter := rate.NewLimiter(10, 14)
 		if !limiter.Allow() {
 			ctx.JSON(http.StatusTooManyRequests, "api limit is reached")
 			ctx.Abort()

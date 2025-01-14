@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/bagasa11/banturiset/api/dto"
 	"github.com/bagasa11/banturiset/api/models"
@@ -50,7 +49,14 @@ func (pc *ProjectControllers) Create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, errorMessage)
 		return
 	}
+	if req.Year > 3 {
+		c.JSON(http.StatusUnprocessableEntity, gin.H{
+			"pesan": "waktu penelitian tidak boleh melebihi 3 tahun",
+		})
+		return
+	}
 
+	// mencari link grup wa
 	link, err := pc.Service.Create(*req, role_id.(uint))
 	if err != nil {
 
@@ -182,6 +188,50 @@ func (pc *ProjectControllers) UploadProposal(c *gin.Context) {
 	c.JSON(http.StatusOK, "ok")
 }
 
+func (pc *ProjectControllers) UploadImage(c *gin.Context) {
+
+	role_id, exist := c.Get("role_id")
+	if !exist {
+		c.JSON(http.StatusBadRequest, "detail user tidak ditemukan")
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"pesan": "project tidak ditemukan atau format id salah",
+			"error": err.Error(),
+		})
+		return
+	}
+
+	req := new(dto.ImageUrl)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		validationErrs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			c.JSON(http.StatusBadRequest, "Invalid request")
+			return
+		}
+		var errorMessage string
+		for _, e := range validationErrs {
+			errorMessage = fmt.Sprintf("error in field %s condition: %s", e.Field(), e.ActualTag())
+			break
+		}
+		c.JSON(http.StatusBadRequest, errorMessage)
+		return
+	}
+
+	if err := pc.Service.UploadImage(uint(id), role_id.(uint), req.Url); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "gagal mengunggah gambar",
+			"error":  err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, "ok")
+}
+
 func (pc *ProjectControllers) UploadKlirens(c *gin.Context) {
 
 	role_id, exist := c.Get("role_id")
@@ -266,7 +316,7 @@ func (pc *ProjectControllers) Reject(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
-			"pesan": "project tidak ditemukan atau format id salah",
+			"pesan": "id project tidak ditemukan atau format id salah",
 			"error": err.Error(),
 		})
 		return
@@ -314,7 +364,6 @@ func (pc *ProjectControllers) Submit(c *gin.Context) {
 	if err := pc.Service.SubmitToReviewed(uint(projectID), role_id.(uint)); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal mensubmit proyek",
-			"error": err.Error(),
 		})
 		return
 	}
@@ -385,17 +434,12 @@ func (pc *ProjectControllers) Verfikasi(c *gin.Context) {
 		return
 	}
 
-	p, err := pc.Service.Verifikasi(uint(projectID), roleID.(uint))
+	err = pc.Service.Verifikasi(uint(projectID), roleID.(uint))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, "gagal memverifikasi proyek")
 		return
 	}
 
-	go pipeline(p)
-	time.Sleep(2 * time.Second)
-	c.JSON(http.StatusOK, gin.H{
-		"data": p,
-	})
 }
 
 func (pc *ProjectControllers) Diverifikasi(c *gin.Context) {

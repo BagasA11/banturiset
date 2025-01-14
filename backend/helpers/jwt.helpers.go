@@ -85,6 +85,11 @@ func GenerateToken(userID uint, email string, role string, roleID uint) (string,
 
 func ValidateToken(inputToken string) (*config.JwtClaims, error) {
 	token, err := jwt.ParseWithClaims(inputToken, &config.JwtClaims{}, func(t *jwt.Token) (interface{}, error) {
+		// forcing token to use defined algorithm
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", t.Header["alg"])
+		}
+
 		return []byte(config.JWT_KEY), nil
 	})
 	if err != nil {

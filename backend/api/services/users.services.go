@@ -50,28 +50,26 @@ func autoValidateUser(req dto.UserRegister, role string) models.User {
 
 	if strings.ToLower(role) == models.Sponsor {
 		return models.User{
-			FName:         req.FName,
-			Email:         req.Email,
-			Password:      req.Password,
-			Phone:         req.Phone,
-			Role:          req.Role,
-			Institute:     req.Institute,
-			InstituteAddr: req.InstAddr,
-			PostCode:      req.PostCode,
-			IsVerfied:     true,
+			FName:    req.FName,
+			Email:    req.Email,
+			Password: req.Password,
+
+			Role: req.Role,
+
+			PostCode:  req.PostCode,
+			IsVerfied: true,
 		}
 	}
 
 	return models.User{
-		FName:         req.FName,
-		Email:         req.Email,
-		Password:      req.Password,
-		Phone:         req.Phone,
-		Role:          req.Role,
-		Institute:     req.Institute,
-		InstituteAddr: req.InstAddr,
-		PostCode:      req.PostCode,
-		IsVerfied:     false,
+		FName:    req.FName,
+		Email:    req.Email,
+		Password: req.Password,
+
+		Role: req.Role,
+
+		PostCode:  req.PostCode,
+		IsVerfied: false,
 	}
 }
 
@@ -97,8 +95,10 @@ func (us *UserService) CreateDonatur(userID uint) error {
 
 func (us *UserService) CreatePeneliti(userID uint, req dto.PenelitiRegister) error {
 	p := models.Peneliti{
-		NIP:    req.NIP,
-		UserID: userID,
+		NIP:       req.NIP,
+		UserID:    userID,
+		Institute: req.Institute,
+		Address:   req.Address,
 	}
 	// redundant check
 	// memeriksa peneliti yang memiliki userID sama
@@ -136,29 +136,8 @@ func (us *UserService) NotVerified(page uint) ([]models.User, error) {
 	return us.Penyunting.NotVerified(begin, last)
 }
 
-func (us *UserService) CompletePayentInfo(id uint, req dto.PaymentInfos) error {
-
-	if !slices.Contains([]string{"bca", "bsi", "mandiri", "bri", "bni", "bjb"}, strings.ToLower(req.Bank)) {
-		return fmt.Errorf("hanya menerima provider bank %v",
-			fmt.Sprintf("hanya menerima provider bank %v", []string{"bca", "bsi", "mandiri", "bri", "bni", "bjb"}))
-	}
-	bank := strings.ToUpper(req.Bank)
-	u := models.User{
-		ID:    id,
-		Bank:  &bank,
-		NoRek: &req.NoRek,
-	}
-
-	return us.User.Update(&u)
-}
-
 func (us *UserService) GetProfile(id uint, role string) (*models.User, uint, error) {
 	return us.selectByRole(id, role)
-}
-
-func GetPaymentInfo(userID uint) (models.PaymentInfo, error) {
-	us := NewUserService()
-	return us.User.GetPayment(userID)
 }
 
 func (us *UserService) selectByRole(userID uint, r string) (*models.User, uint, error) {

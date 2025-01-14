@@ -17,9 +17,9 @@ func getMysqlDsn() string {
 	// user: user1; pass:1234; host:localhost; port: 3306; db:banturiset
 	// user:pass@tcp(host:port)DB
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		os.Getenv("COMPOSE_DB_UNAME"),
-		os.Getenv("COMPOSE_DB_PASS"),
-		os.Getenv("COMPOSE_DB_HOST"),
+		os.Getenv("DOCKER_MYSQL_USER"),
+		os.Getenv("DOCKER_MYSQL_ROOT_PASSWORD"),
+		os.Getenv("DOCKER_HOST"),
 		os.Getenv("COMPOSE_DB_PORT"),
 		os.Getenv("COMPOSE_DB_NAME"))
 	// fmt.Println("dsn: ", dsn)
@@ -52,7 +52,7 @@ func InitDB() error {
 
 	err = DB.AutoMigrate(&models.User{}, &models.Donatur{}, &models.Peneliti{},
 		&models.Penyunting{}, &models.Pengajuan{}, &models.Project{}, &models.BudgetDetails{},
-		&models.Tahapan{}, &models.Progress{}, &models.Donasi{}, &models.TokenList{}, &models.Payout{})
+		&models.Report{}, &models.Donasi{}, &models.Payout{})
 
 	// err = DB.AutoMigrate(&models.User{}, &models.Donatur{}, &models.Peneliti{},
 	// 	&models.Penyunting{}, &models.Pengajuan{}, &models.Project{}, &models.BudgetDetails{},

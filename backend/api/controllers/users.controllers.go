@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/bagasa11/banturiset/api/dto"
+	reg "github.com/bagasa11/banturiset/helpers"
 
 	"github.com/bagasa11/banturiset/api/services"
 	"github.com/bagasa11/banturiset/helpers"
@@ -51,11 +52,6 @@ func (uc *UsersController) UserRegistration(c *gin.Context) {
 
 	if !helpers.ValidatePattern("email", req.Email) {
 		c.JSON(http.StatusUnprocessableEntity, "format email ditolak")
-		return
-	}
-
-	if !helpers.ValidatePattern("phone", req.Phone) {
-		c.JSON(http.StatusUnprocessableEntity, "format handphone ditolak")
 		return
 	}
 
@@ -161,6 +157,11 @@ func (uc *UsersController) PenelitiCreate(c *gin.Context) {
 		return
 	}
 
+	if !reg.ValidatePattern("phone", req.Phone) {
+		c.JSON(http.StatusUnprocessableEntity, "format hp invalid, gunakan format +62 atau 0xxx")
+		return
+	}
+
 	if err := uc.Services.CheckID(uint(userID), req.Role); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"pesan": "user id tidak ditemukan",
@@ -236,50 +237,6 @@ func (uc *UsersController) Verifikasi(c *gin.Context) {
 
 	c.JSON(http.StatusOK, "verifikasi sukses")
 
-}
-
-func (uc *UsersController) CompletePayment(c *gin.Context) {
-	id, exist := c.Get("id")
-	if !exist {
-		c.JSON(http.StatusInternalServerError, "header user id tidak ditemukan")
-		return
-	}
-
-	req := new(dto.PaymentInfos)
-	if err := c.ShouldBindJSON(&req); err != nil {
-		validationErrs, ok := err.(validator.ValidationErrors)
-		if !ok {
-			c.JSON(http.StatusBadRequest, "Invalid request")
-			return
-		}
-		var errorMessage string
-		for _, e := range validationErrs {
-			errorMessage = fmt.Sprintf("error in field %s condition: %s", e.Field(), e.ActualTag())
-			break
-		}
-		c.JSON(http.StatusBadRequest, errorMessage)
-		return
-	}
-
-	if !helpers.ValidateRekening(req.NoRek) {
-		c.JSON(http.StatusUnprocessableEntity, "format nomor rekening invalid")
-		return
-	}
-
-	if !slices.Contains([]string{"bca", "bsi", "mandiri", "bri", "bni", "bjb"}, strings.ToLower(req.Bank)) {
-		c.JSON(http.StatusUnprocessableEntity,
-			fmt.Sprintf("hanya menerima provider bank %v", []string{"bca", "bsi", "mandiri", "bri", "bni", "bjb"}))
-		return
-	}
-
-	if err := uc.Services.CompletePayentInfo(id.(uint), *req); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"pesan": "gagal mengupdate info pembayaran",
-			"error": err.Error(),
-		})
-		return
-	}
-	c.JSON(http.StatusOK, "ok")
 }
 
 func (uc *UsersController) GetProfile(c *gin.Context) {

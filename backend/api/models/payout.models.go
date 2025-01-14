@@ -1,9 +1,12 @@
 package models
 
+import "gorm.io/gorm"
+
 type Payout struct {
+	gorm.Model
 	ID         string `gorm:"primaryKey"`
-	Tahap      uint8  `gorm:"not null"`
 	ProjectID  uint
 	PenelitiID uint
-	Status     string `gorm:"not null"`
+	Message    string
+	Status     bool `gorm:"not null; default:false"`
 }

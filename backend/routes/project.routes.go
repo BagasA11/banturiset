@@ -17,6 +17,7 @@ func ProjectRoutes(r *gin.RouterGroup) {
 	r.PUT("/project/:id/edit", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.Update)
 	r.PUT("/project/:id/upload/proposal", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.UploadProposal)
 	r.PUT("/project/:id/upload/klirens", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.UploadKlirens)
+	r.PUT("/project/:id/upload/image", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.UploadImage)
 	r.PUT("/project/:id/submit", middleware.JwtAuth(), middleware.PenelitiOnly(), middleware.SubmitValidation(), pc.Submit)
 
 	r.DELETE("/project/:id/delete", middleware.JwtAuth(), middleware.PenelitiOnly(), pc.Delete)
@@ -28,8 +29,8 @@ func ProjectRoutes(r *gin.RouterGroup) {
 	r.PUT("/project/:id/verifikasi", middleware.JwtAuth(), middleware.AdminOnly(), pc.Verfikasi)
 
 	// umum
-	// r.GET("/project/opendonasi", middleware.SimpleLimiter(), pc.OpenDonate)
-	r.GET("/project/opendonasi", middleware.PerClientRateLimiter(), pc.OpenDonate)
+	r.GET("/project/opendonasi", pc.OpenDonate)
+	// r.GET("/project/opendonasi", middleware.PerClientRateLimiter(), pc.OpenDonate)
 	// r.GET("/project/opendonasi", pc.OpenDonate)
 	r.GET("/project/diverifikasi", pc.Diverifikasi)
 	r.GET("/project/ongoing", pc.OnGoing)

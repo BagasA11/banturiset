@@ -22,6 +22,5 @@ func UserRoutes(r *gin.RouterGroup) {
 	r.GET("/user/review/:id", middleware.JwtAuth(), middleware.AdminOnly(), uc.ReviewProfile)
 	r.GET("/user/profile", middleware.JwtAuth(), uc.GetProfile)
 
-	r.PUT("/user/complete-payment", middleware.JwtAuth(), uc.CompletePayment)
 	// r.POST("/mail", uc.SendMail)
 }

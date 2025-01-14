@@ -38,12 +38,16 @@ type Klirens struct {
 	Url string `json:"url" binding:"required"`
 }
 
-type TahapCreate struct {
-	CostPercent uint8  `json:"percent" binding:"required"`
-	Tahap       uint8  `json:"tahap" binding:"required"`
-	Start       string `json:"awal" binding:"required,start" time_format:"2006-Jan-02"`
-	End         string `json:"akhir" binding:"required" time_format:"2006-Jan-02"`
+type ImageUrl struct {
+	Url string `json:"url" binding:"required"`
 }
+
+// type TahapCreate struct {
+// 	CostPercent uint8  `json:"percent" binding:"required"`
+// 	Tahap       uint8  `json:"tahap" binding:"required"`
+// 	Start       string `json:"awal" binding:"required,start" time_format:"2006-Jan-02"`
+// 	End         string `json:"akhir" binding:"required" time_format:"2006-Jan-02"`
+// }
 
 type TahapUpdate struct {
 	CostPercent uint8  `json:"percent" binding:"required"`
@@ -70,7 +74,6 @@ type NotifInvoice struct {
 }
 
 type ProgressReport struct {
-	Tahap   uint8  `json:"tahap" binding:"required,min=1"`
 	FileUrl string `json:"fileurl" binding:"required"`
 	Desc    string `json:"desc"`
 }

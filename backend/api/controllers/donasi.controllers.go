@@ -69,14 +69,14 @@ func (dc *Donasi) CreateDonasi(c *gin.Context) {
 		return
 	}
 
-	page, err := dc.Service.CreateInvoice(m, email.(string))
+	donasi_page, err := dc.Service.CreateInvoice(m, email.(string))
 	if err != nil {
 		c.JSON(http.StatusBadGateway, err.Error())
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": page,
+		"data": donasi_page,
 	})
 }
 

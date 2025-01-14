@@ -33,8 +33,8 @@ func Upload(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"pesan": "gagal mengambil file dari form html",
-			"error": err.Error(),
 		})
+		fmt.Println("error:" + err.Error())
 		return
 	}
 
@@ -59,9 +59,10 @@ func Upload(c *gin.Context) {
 		})
 		return
 	}
+	newPath := strings.Trim(newname, "./file/")
 	c.JSON(http.StatusOK, gin.H{
 		"pesan": "upload file sukses",
-		"url":   newname,
+		"url":   newPath,
 	})
 }
 

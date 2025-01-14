@@ -14,6 +14,7 @@ type Project struct {
 	ID            uint   `gorm:"primaryKey"`
 	Title         string `gorm:"size:50; not null"`
 	Desc          string
+	ImageUrl      *string   `json:"image" gorm:"size:170"`
 	ProposalUrl   *string   `gorm:"size:170"`
 	KlirensUrl    *string   `gorm:"size:170"`
 	FundUntil     time.Time `gorm:"not null"`
@@ -36,9 +37,8 @@ type Project struct {
 
 	Donasi        []Donasi
 	BudgetDetails []BudgetDetails
-	Tahapan       []Tahapan
-	Payout        []Payout
-	Progress      []Progress
+	Payout        []Payout //penarikan
+	Report        []Report
 }
 
 func (p *Project) BeforeCreate(tx *gorm.DB) error {

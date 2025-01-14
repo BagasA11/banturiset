@@ -9,23 +9,18 @@ import (
 )
 
 type User struct {
-	ID            uint   `gorm:"primaryKey"`
-	FName         string `gorm:"not null"`
-	Email         string `gorm:"type:string; size:20; not null; unique; <-:create"`
-	Password      string `gorm:"not null"`
-	Phone         string `gorm:"not null; unique"`
-	Role          string `gorm:"index; not null; <-:create"`
-	Institute     string `gorm:"not null"`
-	InstituteAddr string `gorm:"not null"`
-	PostCode      string `gorm:"not null; size:7"`
-	Bank          *string
-	NoRek         *string
-	ProfileUrl    *string
-	IsVerfied     bool       `gorm:"not null; default:false"`
-	IsBlock       bool       `gorm:"not null; default:false"`
-	Peneliti      Peneliti   `gorm:"foreignKey:UserID"`
-	Penyunting    Penyunting `gorm:"foreignKey:UserID"`
-	Donatur       Donatur    `gorm:"foreignKey:UserID"`
+	ID         uint   `gorm:"primaryKey"`
+	FName      string `gorm:"not null"`
+	Email      string `gorm:"type:string; size:20; not null; unique; <-:create"`
+	Password   string `gorm:"not null"`
+	Role       string `gorm:"index; not null; <-:create"`
+	PostCode   string `gorm:"not null; size:7"`
+	ProfileUrl *string
+	IsVerfied  bool       `gorm:"not null; default:false"`
+	IsBlock    bool       `gorm:"not null; default:false"`
+	Peneliti   Peneliti   `gorm:"foreignKey:UserID"`
+	Penyunting Penyunting `gorm:"foreignKey:UserID"`
+	Donatur    Donatur    `gorm:"foreignKey:UserID"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {

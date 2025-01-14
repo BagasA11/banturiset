@@ -92,11 +92,8 @@ func (pr *ProjectRepository) ProjectPreview(id uint, penelitiID uint) (models.Pr
 	var p models.Project
 	if err := pr.DB.
 		Where("peneliti_id = ? AND status > ? AND status <= ? AND fraud = ?",
-			penelitiID, models.Abort, models.Draft, false).
+			penelitiID, models.Abort, models.Tolak, false).
 		Preload("BudgetDetails").
-		Preload("Tahapan", func(db *gorm.DB) *gorm.DB {
-			return db.Order("tahapans.tahap DESC")
-		}).
 		First(&p, id).
 		Error; err != nil {
 
@@ -117,7 +114,12 @@ func (pr *ProjectRepository) Review(id uint) (models.Project, error) {
 
 	var p models.Project
 	err := pr.DB.Where("status = ? AND fraud = ?", models.Submit, !models.Fraud).
-		Preload("Pengajuan").Preload("Tahapan").Preload("BudgetDetails").Limit(1).Find(&p, id).Error
+		Preload("Pengajuan").
+		Preload("BudgetDetails").
+		Limit(1).
+		Find(&p, id).
+		Error
+
 	if err != nil {
 		fmt.Println("error project->Review(): ", err.Error())
 		return models.Project{}, errors.New("gagal mereview proyek")
@@ -142,42 +144,6 @@ func (pr *ProjectRepository) Detail(id uint) (models.Project, error) {
 	return p, nil
 }
 
-// tktlevel = tahap
-func (pr *ProjectRepository) Verifikasi(id uint, adminID uint) (models.Project, error) {
-	tx := pr.DB.Begin()
-	var p models.Project
-
-	// SELECT * FROM projects WHERE projects.id = $id AND projects.status = $submit AND fraud = false
-	// -> LEFT JOIN penyuntings ON projects.admin_id = penyuntings.id
-	// -> LEFT JOIN penelitis ON projects.peneliti_id = penelitis.id
-	// SELECT * FROM tahapans WHERE project_id = $id
-	// SELECT * FROM budgetdetails WHERE project_id = $id
-	if err := pr.DB.Where("status = ? AND fraud = ?", models.Submit, !models.Fraud).
-		Preload("Tahapan").
-		Preload("BudgetDetails").
-		Joins("Penyunting").
-		Joins("Peneliti").
-		First(&p, id).
-		Error; err != nil {
-
-		fmt.Println(err.Error())
-		return p, errors.New("gagal mendapatkan data proyek")
-	}
-	now := tz.GetTime(time.Now())
-	p.Status = models.Verifikasi
-	p.AdminID = &adminID
-	p.ValidatedAt = &now
-	// UPDATE projects SET status = p->Status, admin_id p->AdminID WHERE id = $id
-	if err := tx.Save(&p).Error; err != nil {
-		tx.Rollback()
-		fmt.Println(err.Error())
-		return p, errors.New("gagal memverifikasi proyek")
-	}
-
-	tx.Commit()
-	return p, nil
-}
-
 func (pr *ProjectRepository) Update(p *models.Project) error {
 	tx := pr.DB.Begin()
 	if err := tx.Model(&models.Project{}).
@@ -190,9 +156,22 @@ func (pr *ProjectRepository) Update(p *models.Project) error {
 	return nil
 }
 
+func (pr *ProjectRepository) Verifikasi(p *models.Project) error {
+	tx := pr.DB.Begin()
+	// mencari proyek berdasarkan id dan sudah di submit
+	if err := tx.Model(&models.Project{}).
+		Where("id = ? status >= ?", p.ID, models.Submit).
+		Updates(&p).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+}
+
 func (pr *ProjectRepository) SetStatusReject(id uint) error {
 	tx := pr.DB.Begin()
-	if err := tx.Model(&models.Project{}).Where("id = ? AND status = ?", id, models.Draft).Update("status", -1).Error; err != nil {
+	if err := tx.Model(&models.Project{}).Where("id = ? AND status = ?", id, models.Submit).Update("status", models.Tolak).Error; err != nil {
 		tx.Rollback()
 		return errors.New("gagal menset status -> tolak")
 	}
@@ -229,6 +208,18 @@ func (pr *ProjectRepository) UploadProposal(id uint, penelitiID uint, proposalUr
 	tx := pr.DB.Begin()
 	if err := tx.Model(&models.Project{}).Where("id = ? AND peneliti_id = ? AND status < ?", id, penelitiID, models.Submit).
 		Update("proposal_url", proposalUrl).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return nil
+}
+
+func (pr *ProjectRepository) UploadImage(id uint, penelitiID uint, imageUrl string) error {
+	tx := pr.DB.Begin()
+	if err := tx.Model(&models.Project{}).
+		Where("id = ? AND peneliti_id = ? AND status < ?", id, penelitiID, models.Submit).
+		Update("image_url", imageUrl).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -341,14 +332,11 @@ func (pr *ProjectRepository) MyContributeProject(userID uint, start uint, end ui
 	return p, nil
 }
 
-func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint, tahap uint8) (models.Project, error) {
+func (pr *ProjectRepository) MyProjectWasClosedDetail(id uint, penelitiID uint) (models.Project, error) {
 	var p models.Project
 	err := pr.DB.
 		Where("id = ? AND peneliti_id = ?", id, penelitiID).
-		Preload("Tahapan",
-			func(db *gorm.DB) *gorm.DB {
-				return db.Where("tahap = ?", tahap).Limit(1)
-			}).First(&p).Error
+		First(&p).Error
 
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
