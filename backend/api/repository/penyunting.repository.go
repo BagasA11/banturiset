@@ -20,7 +20,7 @@ func NewPenyuntingRepo() *PenyuntingRepo {
 
 func (ur *PenyuntingRepo) NotVerified(begin uint, last uint) ([]models.User, error) {
 	var users []models.User
-	var s = []string{"id", "f_name", "email", "role", "phone", "institute", "post_code"}
+	var s = []string{"id", "f_name", "email", "role", "post_code"}
 	err := ur.DB.Where("is_verfied = ?", false).Where("id BETWEEN ? AND ?", begin, last).Select(s).Find(&users).Error
 	return users, err
 }
