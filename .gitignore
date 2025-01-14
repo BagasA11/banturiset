@@ -4,3 +4,4 @@
 env.txt
 .gitignore
 # ./backend/.env.local
+.\backend\.env.local
